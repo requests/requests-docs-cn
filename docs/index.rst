@@ -6,15 +6,13 @@
 Requests: HTTP for Humans
 =========================
 
-Release v\ |version|. (:ref:`Installation <install>`)
+发行版本 v\ |version|. (:ref:`安装 <install>`)
 
-Requests is an :ref:`Apache2 Licensed <apache2>` HTTP library, written in Python, for human beings.
+Requests 是用Python语言编写，采用 :ref:`Apache2 Licensed <apache2>` 开源协议的 HTTP 库。
 
-Python's standard **urllib2** module provides most of
-the HTTP capabilities you need, but the API is thoroughly **broken**.
-It was built for a different time — and a different web. It requires an *enormous* amount of work (even method overrides) to perform the simplest of tasks.
-
-Things shouldn’t be this way. Not in Python.
+Python 标准库中的 **urllib2** 模块提供了大部分你需要的HTTP功能,但是它的API彻底地被 **破坏** 了。它是专为不同时间-不同网络而写的，这需要大量的工作（甚至是方法覆盖）去执行简单的任务。    
+     
+至少在Python中，事情不应该是这样的。    
 
 ::
 
@@ -30,9 +28,9 @@ Things shouldn’t be this way. Not in Python.
     >>> r.json()
     {u'private_gists': 419, u'total_private_repos': 77, ...}
 
-See `similar code, without Requests <https://gist.github.com/973705>`_.
+参见 `未使用 Requests 的相似代码 <https://gist.github.com/973705>`_.
 
-Requests takes all of the work out of Python HTTP/1.1 — making your integration with web services seamless. There's no need to manually add query strings to your URLs, or to form-encode your POST data. Keep-alive and HTTP connection pooling are 100%  automatic, powered by `urllib3 <https://github.com/shazow/urllib3>`_, which is embedded within Requests.
+Requests 取代了 Python HTTP/1.1 以外的一切工作——— 让你与Web服务无缝结合. 无需在你的 URL 或者已编码的 POST 数据中手动添加查询字符串。搭载着嵌入在 Requests `urllib3 <https://github.com/shazow/urllib3>`_,Keep-alive（持久链接） 和 HTTP 连接池已全部实现自动化。
 
 
 Testimonials
@@ -57,32 +55,30 @@ Her Majesty's Government, Amazon, Google, Twilio, Mozilla, Heroku, PayPal, NPR, 
     simple, Pythonic.
 
 
-Feature Support
+支持的功能
 ---------------
 
-Requests is ready for today's web.
+Requests 完全满足如今网络的需求。
 
-- International Domains and URLs
-- Keep-Alive & Connection Pooling
-- Sessions with Cookie Persistence
-- Browser-style SSL Verification
-- Basic/Digest Authentication
-- Elegant Key/Value Cookies
-- Automatic Decompression
-- Unicode Response Bodies
-- Multipart File Uploads
-- Connection Timeouts
-- ``.netrc`` support
-- Python 2.6—3.3
-- Thread-safe.
+- 国际化域名和 URLs
+- Keep-Alive & 连接池
+- 持续性的 Cookie 会话
+- 类浏览器式的 SSL 加密认证
+- 基本/精简式的身份认证
+- 优雅的键/值 Cookies
+- 自动解压
+- Unicode 编码的响应主体
+- 多段文件上传
+- 连接超时
+- 支持 ``.netrc`` 
+- 适用于 Python 2.6—3.3
+- 安全的线程使用
 
 
-User Guide
+用户指南
 ----------
 
-This part of the documentation, which is mostly prose, begins with some
-background information about Requests, then focuses on step-by-step
-instructions for getting the most out of Requests.
+这部分文档主要介绍了 Requests 的背景，然后对于 Requests 的应用做了一步一步的要点介绍。
 
 .. toctree::
    :maxdepth: 2
@@ -94,11 +90,10 @@ instructions for getting the most out of Requests.
    user/authentication
 
 
-Community Guide
+社区指南
 -----------------
 
-This part of the documentation, which is mostly prose, details the
-Requests ecosystem and community.
+这部分文档主要详细地介绍了Requests的社区支持情况
 
 .. toctree::
    :maxdepth: 1
@@ -108,11 +103,10 @@ Requests ecosystem and community.
    community/support
    community/updates
 
-API Documentation
+API 文档
 -----------------
 
-If you are looking for information on a specific function, class or method,
-this part of the documentation is for you.
+如果你正在寻找一个特殊函数，类或者方法的话，这部分文档刚好满足你。
 
 .. toctree::
    :maxdepth: 2
@@ -120,11 +114,10 @@ this part of the documentation is for you.
    api
 
 
-Contributor Guide
+贡献者指南
 -----------------
 
-If you want to contribute to the project, this part of the documentation is for
-you.
+如果你对这个项目有兴趣，想做一点贡献，请参考下面文档
 
 .. toctree::
    :maxdepth: 1
