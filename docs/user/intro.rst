@@ -1,6 +1,6 @@
 .. _introduction:
 
-Introduction
+简介
 ============
 
 Philosophy

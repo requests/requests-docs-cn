@@ -1,6 +1,6 @@
 .. _authentication:
 
-Authentication
+身份认证
 ==============
 
 This document discusses using various kinds of authentication with Requests.

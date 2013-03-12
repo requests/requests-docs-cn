@@ -1,6 +1,6 @@
 .. _advanced:
 
-Advanced Usage
+高级用法
 ==============
 
 This document covers some of Requests more advanced features.

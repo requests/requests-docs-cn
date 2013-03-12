@@ -1,6 +1,6 @@
 .. _quickstart:
 
-Quickstart
+快速上手
 ==========
 
 .. module:: requests.models
