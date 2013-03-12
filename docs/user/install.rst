@@ -1,24 +1,23 @@
 .. _install:
 
-Installation
+安装
 ============
 
-This part of the documentation covers the installation of Requests.
-The first step to using any software package is getting it properly installed.
+这部分文档包含了Requests的安装过程，使用任何软件的第一步就是合适的安装好它.
 
 
 Distribute & Pip
 ----------------
 
-Installing requests is simple with `pip <http://www.pip-installer.org/>`_::
+使用 `pip <http://www.pip-installer.org/>`_ 安装Requests非常简单 :: 
 
     $ pip install requests
 
-or, with `easy_install <http://pypi.python.org/pypi/setuptools>`_::
+或者使用 `easy_install <http://pypi.python.org/pypi/setuptools>`_ 安装 ::
 
     $ easy_install requests
 
-But, you really `shouldn't do that <http://www.pip-installer.org/en/latest/other-tools.html#pip-compared-to-easy-install>`_.
+但是你最好 `不要这样 <http://www.pip-installer.org/en/latest/other-tools.html#pip-compared-to-easy-install>`_.
 
 
 
