@@ -5,7 +5,7 @@
 
 .. module:: requests.models
 
-迫不及待了吗？本页内容将为如何入门Requests提供很好的指引。其假设你已经安装了Requests。如果还没有，
+迫不及待了吗？本页内容为如何入门Requests提供了很好的指引。其假设你已经安装了Requests。如果还没有，
 去 :ref:`安装 <install>` 一节看看吧。
 
 首先，确认一下：
@@ -28,7 +28,7 @@
 
     >>> r = requests.get('https://github.com/timeline.json')
 
-现在，我们有一个名为 ``r`` 的 :class::`Response` 对象。可以从这个对象中获取所有我们想要的信息。
+现在，我们有一个名为 ``r`` 的 :class:`Response` 对象。可以从这个对象中获取所有我们想要的信息。
 
 Requests简便的API意味着所有HTTP请求类型都是显而易见的。例如，你可以这样发送一个HTTP POST请求::
 
@@ -48,13 +48,13 @@ Requests简便的API意味着所有HTTP请求类型都是显而易见的。例�
 
 你也许经常想为URL的查询字符串(query string)传递某种数据。如果你是手工构建URL，那么数据会以键/值
 对的形式置于URL中，跟在一个问号的后面。例如， ``httpbin.org/get?key=val`` 。
-Requests允许你以一个字典作为 ``params`` 关键字形参的值来提供这些参数。举例来说，如果你想传递
+Requests允许你使用 ``params`` 关键字参数，以一个字典来提供这些参数。举例来说，如果你想传递
 ``key1=value1`` 和 ``key2=value2`` 到 ``httpbin.org/get`` ，那么你可以使用如下代码::
 
     >>> payload = {'key1': 'value1', 'key2': 'value2'}
     >>> r = requests.get("http://httpbin.org/get", params=payload)
 
-通过打印输出该URL，你就能看到URL已被正确编码::
+通过打印输出该URL，你能看到URL已被正确编码::
 
     >>> print r.url
     u'http://httpbin.org/get?key2=value2&key1=value1'
@@ -82,7 +82,7 @@ Requests会自动解码来自服务器的内容。大多数unicode字符集都�
 
 如果你改变了编码，每当你访问 ``r.text`` ，Request都将会使用 ``r.encoding`` 的新值。
 
-在你需要的情况下，Requests也可以使用定制的编码方法。如果你创建了自己的编码，并使用
+在你需要的情况下，Requests也可以使用定制的编码。如果你创建了自己的编码，并使用
 ``codecs`` 模块进行注册，你就可以轻松地使用这个解码器名称作为 ``r.encoding`` 的值，
 然后由Requests来为你处理编码。
 
@@ -95,14 +95,13 @@ Requests会自动解码来自服务器的内容。大多数unicode字符集都�
     >>> r.content
     b'[{"repository":{"open_issues":0,"url":"https://github.com/...
    
-Requests会自动为你解码以 ``gzip`` 和 ``deflate`` 传输编码的响应数据。
+Requests会自动为你解码 ``gzip`` 和 ``deflate`` 传输编码的响应数据。
 
 例如，以请求返回的二进制数据创建一张图片，你可以使用如下代码::
 
     >>> from PIL import Image
     >>> from StringIO import StringIO
     >>> i = Image.open(StringIO(r.content))
-
 
 
 JSON响应内容
@@ -174,7 +173,6 @@ Requests中也有一个内置的JSON解码器，助你处理JSON数据::
     >>> payload = {'some': 'data'}
 
     >>> r = requests.post(url, data=json.dumps(payload))
-
 
 
 POST一个多部分编码(Multipart-Encoded)的文件
@@ -265,7 +263,7 @@ Requests使得上传多部分编码文件变得很简单::
 响应头
 ----------
 
-通过一个Python字典，我们可以查看服务器的响应头::
+我们可以查看以一个Python字典形式展示的服务器响应头::
 
     >>> r.headers
     {
@@ -318,11 +316,11 @@ Cookies
 
 
 重定向与请求历史
------------------
+-------------------
 
 使用GET或OPTIONS时，Requests会自动处理位置重定向。
 
-Github将所有的HTTP请求重定向到HTTPS。我们可以使用响应对象的 ``history`` 方法来追踪重定向。
+Github将所有的HTTP请求重定向到HTTPS。可以使用响应对象的 ``history`` 方法来追踪重定向。
 我们来看看Github做了什么::
 
     >>> r = requests.get('http://github.com')
@@ -333,7 +331,7 @@ Github将所有的HTTP请求重定向到HTTPS。我们可以使用响应对象�
     >>> r.history
     [<Response [301]>]
 
-:class:`Response.history` 为一个:class:`Request` 对象的列表，为了完成请求而创建了这些对象。这个对象列表按照从最老到最近的请求进行排序。
+:class:`Response.history` 是一个:class:`Request` 对象的列表，为了完成请求而创建了这些对象。这个对象列表按照从最老到最近的请求进行排序。
 
 如果你使用的是GET或OPTIONS，那么你可以通过 ``allow_redirects`` 参数禁用重定向处理::
 
@@ -375,7 +373,7 @@ Github将所有的HTTP请求重定向到HTTPS。我们可以使用响应对象�
 
 遇到罕见的无效HTTP响应时，Requests则会抛出一个 :class:`HTTPError` 异常。
 
-如果请求超时，则抛出一个 :class:`Timeout` 异常。
+若请求超时，则抛出一个 :class:`Timeout` 异常。
 
 若请求超过了设定的最大重定向次数，则会抛出一个 :class:`TooManyRedirects` 异常。
 
