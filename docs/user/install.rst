@@ -21,35 +21,34 @@ Distribute & Pip
 
 
 
-Cheeseshop Mirror
+Cheeseshop 镜像
 -----------------
 
-If the Cheeseshop is down, you can also install Requests from one of the
-mirrors. `Crate.io <http://crate.io>`_ is one of them::
+如果 Cheeseshop 访问出问题了，你也可以从其他镜像网站安装 Requests
+比如： `Crate.io <http://crate.io>`_ ::
 
     $ pip install -i http://simple.crate.io/ requests
 
 
-Get the Code
+获得源码
 ------------
 
-Requests is actively developed on GitHub, where the code is
-`always available <https://github.com/kennethreitz/requests>`_.
+Requests 一直在Github上被积极的开发着，你可以在此获得代码，且总是
+`可用的 <https://github.com/kennethreitz/requests>`_.
 
-You can either clone the public repository::
+你也可以克隆公共版本库::
 
     git clone git://github.com/kennethreitz/requests.git
 
-Download the `tarball <https://github.com/kennethreitz/requests/tarball/master>`_::
+下载 `源码 <https://github.com/kennethreitz/requests/tarball/master>`_::
 
     $ curl -OL https://github.com/kennethreitz/requests/tarball/master
 
-Or, download the `zipball <https://github.com/kennethreitz/requests/zipball/master>`_::
+或者下载 `zipball <https://github.com/kennethreitz/requests/zipball/master>`_::
 
     $ curl -OL https://github.com/kennethreitz/requests/zipball/master
 
 
-Once you have a copy of the source, you can embed it in your Python package,
-or install it into your site-packages easily::
+一旦你获得了复本，你就可以轻松的将它嵌入到你的python包里或者安装到你的site-packages::
 
     $ python setup.py install
