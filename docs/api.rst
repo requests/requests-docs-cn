@@ -1,6 +1,6 @@
 .. _api:
 
-Developer Interface
+开发者接口
 ===================
 
 .. module:: requests
@@ -10,7 +10,7 @@ parts where Requests depends on external libraries, we document the most
 important right here and provide links to the canonical documentation.
 
 
-Main Interface
+主要接口
 --------------
 
 All of Request's functionality can be accessed by these 7 methods.
@@ -35,7 +35,7 @@ Lower-Level Classes
 .. autoclass:: Response
    :inherited-members:
 
-Request Sessions
+请求会话
 ----------------
 
 .. autoclass:: Session
@@ -105,7 +105,7 @@ Classes
    :inherited-members:
 
 
-Migrating to 1.x
+迁移到 1.x
 ----------------
 
 This section details the main differences between 0.x and 1.x and is meant
