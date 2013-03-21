@@ -3,31 +3,30 @@
 简介
 ============
 
-Philosophy
+开发理念
 ----------
 
-Requests was developed with a few :pep:`20` idioms in mind.
+Requests 是以 :pep:`20` 的习语为中心开发的
 
 
-#. Beautiful is better than ugly.
-#. Explicit is better than implicit.
-#. Simple is better than complex.
-#. Complex is better than complicated.
-#. Readability counts.
+#. Beautiful is better than ugly.(美丽由于丑陋)
+#. Explicit is better than implicit.(清楚优于含糊)
+#. Simple is better than complex.(简单优于复杂)
+#. Complex is better than complicated.(复杂优于繁琐)
+#. Readability counts.(重要的是可读性)
 
-All contributions to Requests should keep these important rules in mind.
+对于 Requests 所有的贡献都应牢记这些重要的准则。
 
 .. _`apache2`:
 
-Apache2 License
+Apache2 协议
 -----------
 
-A large number of open source projects you find today are `GPL Licensed`_.
-While the GPL has its time and place, it should most certainly not be your
-go-to license for your next open source project.
+现在你找到的许多开源项目都是以 `GPL Licensed`_ 发布的.
+虽然 GPL 有它自己的时间和空间，但应该确定的是它不会是你下一个开源项目的发布协议。
 
-A project that is released as GPL cannot be used in any commercial product
-without the product itself also being offered as open source.
+
+即使一个项目发行于GPL协议也不能用于任何本身没开源的商业产品。
 
 The MIT, BSD, ISC, and Apache2 licenses are great alternatives to the GPL
 that allow your open-source software to be used freely in proprietary,
@@ -39,7 +38,7 @@ Requests is released under terms of `Apache2 License`_.
 .. _`Apache2 License`: http://opensource.org/licenses/Apache-2.0
 
 
-Requests License
+Requests 协议
 ----------------
 
     .. include:: ../../LICENSE
