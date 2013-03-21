@@ -1,6 +1,6 @@
 .. _faq:
 
-Frequently Asked Questions
+常见问题
 ==========================
 
 This part of the documentation answers common questions about Requests.

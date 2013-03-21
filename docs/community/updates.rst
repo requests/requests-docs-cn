@@ -1,6 +1,6 @@
 .. _updates:
 
-Updates
+更新
 =======
 
 If you'd like to stay up to date on the community and development of Requests,
