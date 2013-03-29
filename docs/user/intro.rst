@@ -9,7 +9,7 @@
 Requests 是以 :pep:`20` 的习语为中心开发的
 
 
-#. Beautiful is better than ugly.(美丽由于丑陋)
+#. Beautiful is better than ugly.(美丽优于丑陋)
 #. Explicit is better than implicit.(清楚优于含糊)
 #. Simple is better than complex.(简单优于复杂)
 #. Complex is better than complicated.(复杂优于繁琐)
