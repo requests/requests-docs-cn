@@ -1,4 +1,4 @@
-How to Help
+如何帮助
 ===========
 
 Requests is under active development, and contributions are more than welcome!

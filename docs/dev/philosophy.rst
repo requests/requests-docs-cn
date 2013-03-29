@@ -1,4 +1,4 @@
-Development Philosophy
+开发理念
 ======================
 
 Requests is an open but opinionated library, created by an open but opinionated developer.

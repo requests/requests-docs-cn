@@ -1,6 +1,6 @@
 .. _support:
 
-Support
+支持
 =======
 
 If you have a questions or issues about Requests, there are several options:
