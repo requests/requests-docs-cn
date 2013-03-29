@@ -39,7 +39,7 @@
 
     有时你会想省略字典参数中一些会话层的键。要做到这一点，你只需简单地在方法层参数中将那个键的值设置为 ``None`` ，那个键就会被自动省略掉。
 
-包含在一个会话中的所有数据你都可以直接使用。学习更多细节请阅读 :ref: `会话API文档 <sessionapi>` 。
+包含在一个会话中的所有数据你都可以直接使用。学习更多细节请阅读 :ref:`会话API文档 <sessionapi>` 。
 
 请求与响应对象
 -------------------
@@ -123,7 +123,7 @@ Requests可以为HTTPS请求验证SSL证书，就像web浏览器一样。要想�
 你可以进一步使用 :class:`Response.iter_content` 和 :class:`Response.iter_lines` 方法来控制工作流，或者以 :class:`Response.raw` 从底层urllib3的 :class:`urllib3.HTTPResponse` 读取。
 
 
-保持活动状态（持久连接/长连接）
+保持活动状态（持久连接）
 ----------------------------------
 
 好消息 - 归功于urllib3，同一会话内的持久连接是完全自动处理的！同一会话内你发出的任何请求都会自动复用恰当的连接！
@@ -277,7 +277,7 @@ Requests在 ``requests.auth`` 中提供了两种常见的的身份验证方案�
     }
 
 
-依从性
+合规性
 ----------
 
 
@@ -298,7 +298,7 @@ Requests才不去猜测编码方式。
 在这种情况下，
 `RFC 2616 <http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7.1>`_ 指定默认字符集
 必须是 ``ISO-8859-1`` 。Requests遵从这一规范。如果你需要一种不同的编码方式，你可以手动设置 
- ``Response.encoding`` 属性，或使用原始的 ``Response.content`` 。
+``Response.encoding`` 属性，或使用原始的 ``Response.content`` 。
 
 
 HTTP动词
