@@ -95,7 +95,7 @@ Requests可以为HTTPS请求验证SSL证书，就像web浏览器一样。要想�
 
 默认情况下， ``verify`` 是设置为True的。选项 ``verify`` 仅应用于主机证书。
 
-你也可以指定一个本地证书用作客户端证书，可以是单个文件（包含密钥和证书）或一个两个文件路径的元组::
+你也可以指定一个本地证书用作客户端证书，可以是单个文件（包含密钥和证书）或一个包含两个文件路径的元组::
 
     >>> requests.get('https://kennethreitz.com', cert=('/path/server.crt', '/path/key'))
     <Response [200]>
@@ -198,8 +198,7 @@ Requests允许你使用自己指定的身份验证机制。
 
 自定义的身份验证机制是作为 ``requests.auth.AuthBase`` 的子类来实现的，也非常容易定义。
 
-Requests在 ``requests.auth`` 中提供了两种常见的的身份验证方案： ``HTTPBasicAuth`` 和
- ``HTTPDigestAuth`` 。
+Requests在 ``requests.auth`` 中提供了两种常见的的身份验证方案： ``HTTPBasicAuth`` 和 ``HTTPDigestAuth`` 。
 
 假设我们有一个web服务，仅在 ``X-Pizza`` 头被设置为一个密码值的情况下才会有响应。虽然这不太可能，
 但就以它为例好了
@@ -451,7 +450,7 @@ Cool，有3个评论。我们来看一下最后一个评论。
 
 
 很好。不见了。最后一件我想知道的事情是我已经使用了多少限额（ratelimit）。查查看，GitHub在响应头部发送这个信息，
-因此不必下载整个网页，我将一个HEAD请求来获取响应头。
+因此不必下载整个网页，我将使用一个HEAD请求来获取响应头。
 
 ::
 
