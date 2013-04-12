@@ -3,29 +3,26 @@
 常见问题
 ==========================
 
-This part of the documentation answers common questions about Requests.
+这部分的文档回答了有关requests的常见问题。
 
-Encoded Data?
+已编码的数据?
 -------------
 
-Requests automatically decompresses gzip-encoded responses, and does
-its best to decode response content to unicode when possible.
+Requests 自动解压缩的gzip编码的响应体，并在可能的情况下尽可能的将响应内容解码为unicode.
 
-You can get direct access to the raw response (and even the socket),
-if needed as well.
+如果需要的话，你可以直接访问原始响应内容（甚至是套接字）。
 
 
-Custom User-Agents?
+自定义 User-Agents?
 -------------------
 
-Requests allows you to easily override User-Agent strings, along with
-any other HTTP Header.
+Requests 允许你使用其它的HTTP Header来轻松的覆盖自带的User-Agent字符串。
 
 
-Why not Httplib2?
+怎么不是Httplib2?
 -----------------
 
-Chris Adams gave an excellent summary on
+Chris Adams 给出来一个很好的总结
 `Hacker News <http://news.ycombinator.com/item?id=2884406>`_:
 
     httplib2 is part of why you should use requests: it's far more respectable
@@ -48,11 +45,10 @@ Chris Adams gave an excellent summary on
     httplib2" would get the working version.
 
 
-Python 3 Support?
+支持 Python 3 吗?
 -----------------
 
-Yes! Here's a list of Python platforms that are officially
-supported:
+恭喜！回答是肯定的。下面是官方支持的python平台列表:
 
 * Python 2.6
 * Python 2.7
