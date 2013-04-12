@@ -5,16 +5,15 @@
 
 .. module:: requests
 
-This part of the documentation covers all the interfaces of Requests.  For
-parts where Requests depends on external libraries, we document the most
-important right here and provide links to the canonical documentation.
+这部分文档包含了Requests所有的接口。对于Requests依赖的外部库部分，我们介绍
+一些比较重要的并提供规范文档的链接。
 
 
 主要接口
 --------------
 
-All of Request's functionality can be accessed by these 7 methods.
-They all return an instance of the :class:`Response <Response>` object.
+Requests所有的功能都可以通过以下7个方法访问。
+它们全部都会返回 :class:`Response <Response>` 对象的一个实例。
 
 .. autofunction:: request
 
@@ -26,7 +25,7 @@ They all return an instance of the :class:`Response <Response>` object.
 .. autofunction:: delete
 
 
-Lower-Level Classes
+较低级别的类
 ~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: requests.Request
@@ -42,7 +41,7 @@ Lower-Level Classes
    :inherited-members:
 
 
-Exceptions
+异常
 ~~~~~~~~~~
 
 .. module:: requests
@@ -54,7 +53,7 @@ Exceptions
 .. autoexception:: TooManyRedirects
 
 
-Status Code Lookup
+状态码查询
 ~~~~~~~~~~~~~~~~~~
 
 .. autofunction:: requests.codes
@@ -78,7 +77,7 @@ Cookies
 .. autofunction:: add_dict_to_cookiejar
 
 
-Encodings
+编码
 ~~~~~~~~~
 
 .. autofunction:: get_encodings_from_content
@@ -87,7 +86,7 @@ Encodings
 .. autofunction:: decode_gzip
 
 
-Classes
+类
 ~~~~~~~
 
 .. autoclass:: requests.Response
@@ -108,14 +107,13 @@ Classes
 迁移到 1.x
 ----------------
 
-This section details the main differences between 0.x and 1.x and is meant
-to ease the pain of upgrading.
+本节详细介绍0.X和1.x的主要区别，减少升级带来的一些不便。
 
 
-API Changes
+API 改变
 ~~~~~~~~~~~
 
-* ``Response.json`` is now a callable and not a property of a response.
+* ``Response.json`` 现在是可调用的并且不再是响应体的属性。
 
   ::
 
@@ -123,9 +121,8 @@ API Changes
       r = requests.get('https://github.com/timeline.json')
       r.json()   # This *call* raises an exception if JSON decoding fails
 
-* The ``Session`` API has changed. Sessions objects no longer take parameters.
-  ``Session`` is also now capitalized, but it can still be
-  instantiated with a lowercase ``session`` for backwards compatibility.
+* ``Session`` API 也发生了变化. Sessions 对象不在需要参数了。
+  ``Session`` is also now capitalized,但为了向后兼容，它仍然能被小写的 ``session`` 实例化。
 
   ::
 
@@ -134,9 +131,9 @@ API Changes
       s.headers.update(headers)
       r = s.get('http://httpbin.org/headers')
 
-* All request hooks have been removed except 'response'.
+* 除了'response'，所有的请求挂钩已被移除、
 
-* Authentication helpers have been broken out into separate modules. See
+* 认证助手已经被分解成单独的模块了. 参见
   requests-oauthlib_ and requests-kerberos_.
 
 .. _requests-oauthlib: https://github.com/requests/requests-oauthlib
@@ -152,10 +149,7 @@ API Changes
       r = requests.get('https://github.com/timeline.json', stream=True)
       r.raw.read(10)
 
-* The ``config`` parameter to the requests method has been removed. Some of
-  these options are now configured on a ``Session`` such as keep-alive and
-  maximum number of redirects. The verbosity option should be handled by
-  configuring logging.
+* requests 方法的``config`` 参数已全部删除。 现在配置这些选项都在 ``Session`` ，比如 keep-alive 和最大数目的重定向。 详细程度选项应当由配置日志来处理。
 
   ::
 
@@ -164,13 +158,12 @@ API Changes
       requests.get('http://httpbin.org/headers', config=my_config)  # bad!
 
 
-Licensing
+许可
 ~~~~~~~~~
 
-One key difference that has nothing to do with the API is a change in the
-license from the ISC_ license to the `Apache 2.0`_ license. The Apache 2.0
-license ensures that contributions to requests are also covered by the Apache
-2.0 license.
+有一个关键的与 API 无关的区别是开放许可从 ISC_ 许可 变更到 `Apache 2.0`_ 许可.  Apache 2.0
+license 确保了对于requests的贡献也被涵盖在 Apache
+2.0 许可内.
 
 .. _ISC: http://opensource.org/licenses/ISC
 .. _Apache 2.0: http://opensource.org/licenses/Apache-2.0
