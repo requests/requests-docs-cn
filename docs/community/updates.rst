@@ -3,28 +3,27 @@
 更新
 =======
 
-If you'd like to stay up to date on the community and development of Requests,
-there are several options:
+如果你想和社区以及开发版的 Requests 保持最新的联系，
+这有几种方式:
 
 GitHub
 ------
 
-The best way to track the development of Requests is through
-`the GitHub repo <https://github.com/kennethreitz/requests>`_.
+最好的方式是追踪Requests开发版本的
+`GitHub 库 <https://github.com/kennethreitz/requests>`_.
 
 Twitter
 -------
 
-I often tweet about new features and releases of Requests.
+我经常推送关于Requests的新功能和新版本.
 
 Follow `@kennethreitz <https://twitter.com/kennethreitz>`_ for updates.
 
 
-Mailing List
+邮件列表
 ------------
 
-There's a low-volume mailing list for Requests. To subscribe to the
-mailing list, send an email to
-`requests@librelist.org <mailto:requests@librelist.org>`_.
+对于 Requests 的讨论有一个小容量的邮件列表。发送邮件到
+`requests@librelist.org <mailto:requests@librelist.org>`_ 订阅邮件。
 
 
