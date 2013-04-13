@@ -131,7 +131,7 @@ API 改变
       s.headers.update(headers)
       r = s.get('http://httpbin.org/headers')
 
-* 除了'response'，所有的请求挂钩已被移除、
+* 除了'response'，所有的请求挂钩已被移除。
 
 * 认证助手已经被分解成单独的模块了. 参见
   requests-oauthlib_ and requests-kerberos_.
@@ -139,9 +139,8 @@ API 改变
 .. _requests-oauthlib: https://github.com/requests/requests-oauthlib
 .. _requests-kerberos: https://github.com/requests/requests-kerberos
 
-* The parameter for streaming requests was changed from ``prefetch`` to
-  ``stream`` and the logic was inverted. In addition, ``stream`` is now
-  required for raw response reading.
+* 流请求的参数已从 ``prefetch`` 改变到
+  ``stream`` ，并且逻辑也被颠倒。除此之外, ``stream`` 现在对于原始响应读取也是必需的。
 
   ::
 
