@@ -3,35 +3,34 @@
 支持
 =======
 
-If you have a questions or issues about Requests, there are several options:
+对于Requests，如果你有疑问或者是问题的话，下面几种方法能解决：
 
-Send a Tweet
+发送推文
 ------------
 
-If your question is less than 140 characters, feel free to send a tweet to
+如果你的问题在140个字符内描述，欢迎在twitter上发送推文至
 `@kennethreitz <http://twitter.com/kennethreitz>`_.
 
 
-File an Issue
+修复问题
 -------------
 
-If you notice some unexpected behavior in Requests, or want to see support
-for a new feature,
+如果你在Requests中注意到了一些意想不到的行为，或者希望看到一个新的功能支持，请查看 
 `file an issue on GitHub <https://github.com/kennethreitz/requests/issues>`_.
 
 
-E-mail
+邮件
 ------
 
-I'm more than happy to answer any personal or in-depth questions about
-Requests. Feel free to email
+我更乐意回答关于Requests的个人或者更深入的问题。
+Feel free to email
 `requests@kennethreitz.com <mailto:requests@kennethreitz.com>`_.
 
 
 IRC
 ---
 
-The official Freenode channel for Requests is
+Requests 的官方Freenode 频道是 
 `#python-requests <irc://irc.freenode.net/python-requests>`_
 
-I'm also available as **kennethreitz** on Freenode.
+在 Freenode 上，你也能通过 **kennethreitz** 找到我。
