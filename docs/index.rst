@@ -12,7 +12,7 @@ Requests 是用Python语言编写，采用 :ref:`Apache2 Licensed <apache2>` 开
 
 Python 标准库中的 **urllib2** 模块提供了大部分你需要的HTTP功能,但是它的API彻底地被 **破坏** 了。它是专为不同时间-不同网络而写的，这需要大量的工作（甚至是方法覆盖）去执行简单的任务。    
      
-至少在Python中，事情不应该是这样的。    
+在Python中，事情不应该这么麻烦。    
 
 ::
 
