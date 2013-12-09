@@ -8,11 +8,11 @@ Requests: HTTP for Humans
 
 发行版本 v\ |version|. (:ref:`安装 <install>`)
 
-Requests 是用Python语言编写，采用 :ref:`Apache2 Licensed <apache2>` 开源协议的 HTTP 库。
+Requests 是使用 :ref:`Apache2 Licensed <apache2>` 许可证的 HTTP 库。用 Python 编写，为人类编写。
 
-Python 标准库中的 **urllib2** 模块提供了大部分你需要的HTTP功能,但是它的API彻底地被 **破坏** 了。它是专为不同时间-不同网络而写的，这需要大量的工作（甚至是方法覆盖）去执行简单的任务。    
+Python 标准库中的 **urllib2** 模块提供了你所需要的大多数 HTTP 功能，但是它的 API 烂出翔来了。它是为另一个时代、另一个互联网所创建的。它需要巨量的工作，甚至包括各种方法覆盖，来完成最简单的任务。    
      
-在Python中，事情不应该这么麻烦。    
+在Python的世界里，事情不应该这么麻烦。    
 
 ::
 
@@ -30,7 +30,7 @@ Python 标准库中的 **urllib2** 模块提供了大部分你需要的HTTP功�
 
 参见 `未使用 Requests 的相似代码 <https://gist.github.com/973705>`_.
 
-Requests 取代了 Python HTTP/1.1 以外的一切工作——— 让你与Web服务无缝结合. 无需在你的 URL 或者已编码的 POST 数据中手动添加查询字符串。搭载着嵌入在 Requests `urllib3 <https://github.com/shazow/urllib3>`_,Keep-alive（持久链接） 和 HTTP 连接池已全部实现自动化。
+Requests 使用的是 urllib3，因此继承了它的所有特性。Requests 支持 HTTP 连接保持和连接池，支持使用 cookie 保持会话，支持文件上传，支持自动确定响应内容的编码，支持国际化的 URL 和 POST 数据自动编码。现代、国际化、人性化。
 
 
 Testimonials
