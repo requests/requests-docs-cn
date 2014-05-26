@@ -61,7 +61,7 @@ def merge_kwargs(local_kwarg, default_kwarg):
         Finds the key from original_keys that case-insensitive matches new_key.
         """
         for original_key in original_keys:
-            if key.lower() == original_key.lower():
+            if new_key.lower() == original_key.lower():
                 return original_key
         return new_key
 
