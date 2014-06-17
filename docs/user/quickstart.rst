@@ -353,7 +353,7 @@ Github将所有的HTTP请求重定向到HTTPS。可以使用响应对象的 ``hi
 超时
 --------
 
-你可以告诉requests在经过以 ``timeout`` 参数设定的秒数时间之后停止等待响应::
+你可以告诉Requests在经过以 ``timeout`` 参数设定的秒数时间之后停止等待响应::
 
     >>> requests.get('http://github.com', timeout=0.001)
     Traceback (most recent call last):
