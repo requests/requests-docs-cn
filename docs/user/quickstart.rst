@@ -80,7 +80,7 @@ Requests会自动解码来自服务器的内容。大多数unicode字符集都�
     'utf-8'
     >>> r.encoding = 'ISO-8859-1'
 
-如果你改变了编码，每当你访问 ``r.text`` ，Request都将会使用 ``r.encoding`` 的新值。
+如果你改变了编码，每当你访问 ``r.text`` ，Requests都将会使用 ``r.encoding`` 的新值。
 
 在你需要的情况下，Requests也可以使用定制的编码。如果你创建了自己的编码，并使用
 ``codecs`` 模块进行注册，你就可以轻松地使用这个解码器名称作为 ``r.encoding`` 的值，
