@@ -161,7 +161,7 @@ API 改变
 ~~~~~~~~~
 
 有一个关键的与 API 无关的区别是开放许可从 ISC_ 许可 变更到 `Apache 2.0`_ 许可.  Apache 2.0
-license 确保了对于requests的贡献也被涵盖在 Apache
+license 确保了对于Requests的贡献也被涵盖在 Apache
 2.0 许可内.
 
 .. _ISC: http://opensource.org/licenses/ISC
