@@ -28,7 +28,7 @@
 
     >>> r = requests.get('https://github.com/timeline.json')
 
-现在，我们有一个名为 ``r`` 的 :class:`Response` 对象。可以从这个对象中获取所有我们想要的信息。
+现在，我们有一个名为 ``r`` 的 :class:`Response <requests.Response>` 对象。可以从这个对象中获取所有我们想要的信息。
 
 Requests简便的API意味着所有HTTP请求类型都是显而易见的。例如，你可以这样发送一个HTTP POST请求::
 
@@ -56,9 +56,10 @@ Requests允许你使用 ``params`` 关键字参数，以一个字典来提供这
 
 通过打印输出该URL，你能看到URL已被正确编码::
 
-    >>> print r.url
-    u'http://httpbin.org/get?key2=value2&key1=value1'
+    >>> print(r.url)
+    http://httpbin.org/get?key2=value2&key1=value1
 
+注意字典里值为 ``None`` 的键都不会被添加到 URL 的查血字符串里。
 
 响应内容
 --------------
@@ -68,7 +69,7 @@ Requests允许你使用 ``params`` 关键字参数，以一个字典来提供这
     >>> import requests
     >>> r = requests.get('https://github.com/timeline.json')
     >>> r.text
-    '[{"repository":{"open_issues":0,"url":"https://github.com/...
+    u'[{"repository":{"open_issues":0,"url":"https://github.com/...
 
 Requests会自动解码来自服务器的内容。大多数unicode字符集都能被无缝地解码。
 
@@ -80,7 +81,7 @@ Requests会自动解码来自服务器的内容。大多数unicode字符集都�
     'utf-8'
     >>> r.encoding = 'ISO-8859-1'
 
-如果你改变了编码，每当你访问 ``r.text`` ，Request都将会使用 ``r.encoding`` 的新值。
+如果你改变了编码，每当你访问 ``r.text`` ，Request都将会使用 ``r.encoding`` 的新值。你可能希望在使用特殊逻辑计算出文本的编码的情况下来修改编码。比如 HTTP 和 XML 自身可以指定编码。这样的话，你应该使用 ``r.content`` 来找到编码，然后设置 ``r.encoding`` 为相应的编码。这样就能使用正确的编码解析 ``r.text`` 了。
 
 在你需要的情况下，Requests也可以使用定制的编码。如果你创建了自己的编码，并使用
 ``codecs`` 模块进行注册，你就可以轻松地使用这个解码器名称作为 ``r.encoding`` 的值，
@@ -114,7 +115,8 @@ Requests中也有一个内置的JSON解码器，助你处理JSON数据::
     >>> r.json()
     [{u'repository': {u'open_issues': 0, u'url': 'https://github.com/...
 
-如果JSON解码失败， ``r.json`` 就会抛出一个异常。
+如果JSON解码失败， ``r.json`` 就会抛出一个异常。例如，相应内容是 401 (Unauthorized) ，尝试访问 ``r.json`` 将会抛出 ``ValueError:
+No JSON object could be decoded`` 异常。
 
 
 原始响应内容
@@ -129,6 +131,14 @@ Requests中也有一个内置的JSON解码器，助你处理JSON数据::
     >>> r.raw.read(10)
     '\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\x03'
 
+但一般情况下，你应该下面的模式将文本流保存到文件::
+
+    with open(filename, 'wb') as fd:
+        for chunk in r.iter_content(chunk_size):
+            fd.write(chunk)
+
+使用 ``Response.iter_content`` 将会处理大量你直接使用 ``Response.raw`` 不得不处理的。
+当流下载时，上面是优先推荐的获取内容方式。
 
 定制请求头
 -------------
@@ -193,10 +203,10 @@ Requests使得上传多部分编码文件变得很简单::
       ...
     }
 
-你可以显式地设置文件名::
+你可以显式地设置文件名，文件类型和请求头::
 
     >>> url = 'http://httpbin.org/post'
-    >>> files = {'file': ('report.xls', open('report.xls', 'rb'))}
+    >>> files = {'file': ('report.xls', open('report.xls', 'rb'), 'application/vnd.ms-excel', {'Expires': '0'})}
 
     >>> r = requests.post(url, files=files)
     >>> r.text
@@ -223,6 +233,12 @@ Requests使得上传多部分编码文件变得很简单::
       ...
     }
 
+如果你发送一个非常大的文件作为 ``multipart/form-data`` 请求，你可能希望流请求(?)。默认下 ``requests`` 不支持, 但有个第三方包支持 -
+``requests-toolbelt``. 你可以阅读 `toolbelt 文档
+<https://toolbelt.rtfd.org>`_ 来了解使用方法。
+
+在一个请求中发送多文件参考 :ref:`高级用法 <advanced>`
+一节.
 
 响应状态码
 --------------
@@ -267,14 +283,13 @@ Requests使得上传多部分编码文件变得很简单::
 
     >>> r.headers
     {
-        'status': '200 OK',
         'content-encoding': 'gzip',
         'transfer-encoding': 'chunked',
         'connection': 'close',
         'server': 'nginx/1.0.4',
         'x-runtime': '148ms',
         'etag': '"e1ca502697e5c9317743dc078f67693f"',
-        'content-type': 'application/json; charset=utf-8'
+        'content-type': 'application/json'
     }
 
 但是这个字典比较特殊：它是仅为HTTP头部而生的。根据 `RFC 2616 <http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html>`_ ，
@@ -283,15 +298,10 @@ HTTP头部是大小写不敏感的。
 因此，我们可以使用任意大写形式来访问这些响应头字段::
 
     >>> r.headers['Content-Type']
-    'application/json; charset=utf-8'
+    'application/json'
 
     >>> r.headers.get('content-type')
-    'application/json; charset=utf-8'
-
-如果某个响应头字段不存在，那么它的默认值为 ``None`` ::
-
-    >>> r.headers['X-Random']
-    None
+    'application/json'
 
 
 Cookies
@@ -318,10 +328,13 @@ Cookies
 重定向与请求历史
 -------------------
 
-使用GET或OPTIONS时，Requests会自动处理位置重定向。
+默认情况下，除了 HEAD, Requests会自动处理所有重定向。
 
-Github将所有的HTTP请求重定向到HTTPS。可以使用响应对象的 ``history`` 方法来追踪重定向。
-我们来看看Github做了什么::
+可以使用响应对象的 ``history`` 方法来追踪重定向。
+
+:class:`Response.history <requests.Response.history>` 是一个:class:`Response <requests.Response>` 对象的列表，为了完成请求而创建了这些对象。这个对象列表按照从最老到最近的请求进行排序。
+
+例如，Github将所有的HTTP请求重定向到HTTPS。::
 
     >>> r = requests.get('http://github.com')
     >>> r.url
@@ -331,9 +344,9 @@ Github将所有的HTTP请求重定向到HTTPS。可以使用响应对象的 ``hi
     >>> r.history
     [<Response [301]>]
 
-:class:`Response.history` 是一个:class:`Request` 对象的列表，为了完成请求而创建了这些对象。这个对象列表按照从最老到最近的请求进行排序。
 
-如果你使用的是GET或OPTIONS，那么你可以通过 ``allow_redirects`` 参数禁用重定向处理::
+
+如果你使用的是GET, OPTIONS, POST, PUT, PATCH 或者 DELETE,，那么你可以通过 ``allow_redirects`` 参数禁用重定向处理::
 
     >>> r = requests.get('http://github.com', allow_redirects=False)
     >>> r.status_code
@@ -341,9 +354,9 @@ Github将所有的HTTP请求重定向到HTTPS。可以使用响应对象的 ``hi
     >>> r.history
     []
 
-如果你使用的是POST，PUT，PATCH，DELETE或HEAD，你也可以启用重定向::
+如果你使用的是HEAD，你也可以启用重定向::
 
-    >>> r = requests.post('http://github.com', allow_redirects=True)
+    >>> r = requests.head('http://github.com', allow_redirects=True)
     >>> r.url
     'https://github.com/'
     >>> r.history
@@ -364,18 +377,21 @@ Github将所有的HTTP请求重定向到HTTPS。可以使用响应对象的 ``hi
 .. admonition:: 注:
 
     ``timeout`` 仅对连接过程有效，与响应体的下载无关。
-
+    ``timeout`` is not a time limit on the entire response download;
+    rather, an exception is raised if the server has not issued a
+    response for ``timeout`` seconds (more precisely, if no bytes have been
+    received on the underlying socket for ``timeout`` seconds).
 
 错误与异常
 --------------
 
-遇到网络问题（如：DNS查询失败、拒绝连接等）时，Requests会抛出一个 :class:`ConnectionError` 异常。
+遇到网络问题（如：DNS查询失败、拒绝连接等）时，Requests会抛出一个 :class:`~requests.exceptions.ConnectionError` 异常。
 
-遇到罕见的无效HTTP响应时，Requests则会抛出一个 :class:`HTTPError` 异常。
+遇到罕见的无效HTTP响应时，Requests则会抛出一个 :class:`~requests.exceptions.HTTPError` 异常。
 
-若请求超时，则抛出一个 :class:`Timeout` 异常。
+若请求超时，则抛出一个 :class:`~requests.exceptions.Timeout` 异常。
 
-若请求超过了设定的最大重定向次数，则会抛出一个 :class:`TooManyRedirects` 异常。
+若请求超过了设定的最大重定向次数，则会抛出一个 :class:`~requests.exceptions.TooManyRedirects` 异常。
 
 所有Requests显式抛出的异常都继承自 :class:`requests.exceptions.RequestException` 。
 
