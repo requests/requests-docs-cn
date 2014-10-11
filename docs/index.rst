@@ -8,9 +8,9 @@ Requests: HTTP for Humans
 
 发行版本 v\ |version|. (:ref:`安装 <install>`)
 
-Requests 是使用 :ref:`Apache2 Licensed <apache2>` 许可证的 HTTP 库。用 Python 编写，为人类编写。
+Requests 是使用 :ref:`Apache2 Licensed <apache2>` 许可证的 HTTP 库。用 Python 编写，真正的为人类着想。
 
-Python 标准库中的 **urllib2** 模块提供了你所需要的大多数 HTTP 功能，但是它的 API 烂出翔来了。它是为另一个时代、另一个互联网所创建的。它需要巨量的工作，甚至包括各种方法覆盖，来完成最简单的任务。    
+Python 标准库中的 **urllib2** 模块提供了你所需要的大多数 HTTP 功能，但是它的 API 太渣了。它是为另一个时代、另一个互联网所创建的。它需要巨量的工作，甚至包括各种方法覆盖，来完成最简单的任务。    
      
 在Python的世界里，事情不应该这么麻烦。    
 
@@ -55,24 +55,24 @@ Her Majesty's Government, Amazon, Google, Twilio, Mozilla, Heroku, PayPal, NPR, 
     simple, Pythonic.
 
 
-支持的功能
+功能特性
 ---------------
 
 Requests 完全满足如今网络的需求。
 
 - 国际化域名和 URLs
 - Keep-Alive & 连接池
-- 持续性的 Cookie 会话
+- 持久的 Cookie 会话
 - 类浏览器式的 SSL 加密认证
-- 基本/精简式的身份认证
+- 基本/摘要式的身份认证
 - 优雅的键/值 Cookies
 - 自动解压
-- Unicode 编码的响应主体
+- Unicode 编码的响应体
 - 多段文件上传
 - 连接超时
 - 支持 ``.netrc`` 
-- 适用于 Python 2.6—3.3
-- 安全的线程使用
+- 适用于 Python 2.6—3.4
+- 线程安全
 
 
 用户指南
@@ -123,6 +123,5 @@ API 文档
    :maxdepth: 1
 
    dev/philosophy
-   dev/internals
    dev/todo
    dev/authors

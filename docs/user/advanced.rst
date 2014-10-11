@@ -19,7 +19,7 @@
     s.get('http://httpbin.org/cookies/set/sessioncookie/123456789')
     r = s.get("http://httpbin.org/cookies")
 
-    print r.text
+    print(r.text)
     # '{"cookies": {"sessioncookie": "123456789"}}'
 
 
@@ -70,6 +70,75 @@
     {'Accept-Encoding': 'identity, deflate, compress, gzip',
     'Accept': '*/*', 'User-Agent': 'python-requests/0.13.1'}
 
+Prepared Requests
+-----------------
+
+Whenever you receive a :class:`Response <requests.Response>` object
+from an API call or a Session call, the ``request`` attribute is actually the
+``PreparedRequest`` that was used. In some cases you may wish to do some extra
+work to the body or headers (or anything else really) before sending a
+request. The simple recipe for this is the following::
+
+    from requests import Request, Session
+
+    s = Session()
+    req = Request('GET', url,
+        data=data,
+        headers=header
+    )
+    prepped = req.prepare()
+
+    # do something with prepped.body
+    # do something with prepped.headers
+
+    resp = s.send(prepped,
+        stream=stream,
+        verify=verify,
+        proxies=proxies,
+        cert=cert,
+        timeout=timeout
+    )
+
+    print(resp.status_code)
+
+Since you are not doing anything special with the ``Request`` object, you
+prepare it immediately and modify the ``PreparedRequest`` object. You then
+send that with the other parameters you would have sent to ``requests.*`` or
+``Session.*``.
+
+However, the above code will lose some of the advantages of having a Requests
+:class:`Session <requests.Session>` object. In particular,
+:class:`Session <requests.Session>`-level state such as cookies will
+not get applied to your request. To get a
+:class:`PreparedRequest <requests.PreparedRequest>` with that state
+applied, replace the call to :meth:`Request.prepare()
+<requests.Request.prepare>` with a call to
+:meth:`Session.prepare_request() <requests.Session.prepare_request>`, like this::
+
+    from requests import Request, Session
+
+    s = Session()
+    req = Request('GET',  url,
+        data=data
+        headers=headers
+    )
+
+    prepped = s.prepare_request(req)
+
+    # do something with prepped.body
+    # do something with prepped.headers
+
+    resp = s.send(prepped,
+        stream=stream,
+        verify=verify,
+        proxies=proxies,
+        cert=cert,
+        timeout=timeout
+    )
+
+    print(resp.status_code)
+
+.. _verification:
 
 SSL证书验证
 --------------
@@ -120,7 +189,21 @@ Requests可以为HTTPS请求验证SSL证书，就像web浏览器一样。要想�
       content = r.content
       ...
 
-你可以进一步使用 :class:`Response.iter_content` 和 :class:`Response.iter_lines` 方法来控制工作流，或者以 :class:`Response.raw` 从底层urllib3的 :class:`urllib3.HTTPResponse` 读取。
+你可以进一步使用 :class:`Response.iter_content <requests.Response.iter_content>` 和 :class:`Response.iter_lines <requests.Response.iter_lines>` 方法来控制工作流，或者以 :class:`Response.raw <requests.Response.raw>` 从底层urllib3的 :class:`urllib3.HTTPResponse <urllib3.response.HTTPResponse` 读取。
+
+If you set ``stream`` to ``True`` when making a request, Requests cannot
+release the connection back to the pool unless you consume all the data or call
+:class:`Response.close <requests.Response.close>`. This can lead to
+inefficiency with connections. If you find yourself partially reading request
+bodies (or not reading them at all) while using ``stream=True``, you should
+consider using ``contextlib.closing`` (`documented here`_), like this::
+
+    from contextlib import closing
+
+    with closing(requests.get('http://httpbin.org/get', stream=True)) as r:
+        # Do things with the response here.
+
+.. _`documented here`: http://docs.python.org/2/library/contextlib.html#contextlib.closing
 
 
 保持活动状态（持久连接）
@@ -152,6 +235,28 @@ Requests支持流式上传，这允许你发送大的数据流或文件而无需
 
     requests.post('http://some.url/chunked', data=gen())
 
+
+POST Multiple Multipart-Encoded Files
+-------------------------------------
+
+You can send multiple files in one request. For example, suppose you want to
+upload image files to an HTML form with a multiple file field 'images':
+
+    <input type="file" name="images" multiple="true" required="true"/>
+
+To do that, just set files to a list of tuples of (form_field_name, file_info):
+
+    >>> url = 'http://httpbin.org/post'
+    >>> multiple_files = [('images', ('foo.png', open('foo.png', 'rb'), 'image/png')),
+                          ('images', ('bar.png', open('bar.png', 'rb'), 'image/png'))]
+    >>> r = requests.post(url, files=multiple_files)
+    >>> r.text
+    {
+      ...
+      'files': {'images': 'data:image/png;base64,iVBORw ....'}
+      'Content-Type': 'multipart/form-data; boundary=3131623adb2043caaeb5538cc7aa0b3a',
+      ...
+    }
 
 
 事件挂钩
@@ -223,25 +328,23 @@ Requests在 ``requests.auth`` 中提供了两种常见的的身份验证方案�
     >>> requests.get('http://pizzabin.org/admin', auth=PizzaAuth('kenneth'))
     <Response [200]>
 
+.. _streaming-requests:
 
 流式请求
 --------------
 
-使用 ``requests.Response.iter_lines()`` 你可以很方便地对流式API（例如 `Twitter的流式API <https://dev.twittercom/docs/streaming-api>`_ ）进行迭代。
+使用 :class:`requests.Response.iter_lines()` 你可以很方便地对流式API（例如 `Twitter的流式API <https://dev.twittercom/docs/streaming-api>`_ ）进行迭代。简单地设置 ``stream`` 为 ``True`` 便可以使用 :class:`~requests.Response.iter_lines()` 对相应进行迭代::
 
-
-使用Twitter流式API来追踪关键字“requests”::
-
-    import requests
     import json
+    import requests
 
-    r = requests.post('https://stream.twitter.com/1/statuses/filter.json',
-        data={'track': 'requests'}, auth=('username', 'password'), stream=True)
+    r = requests.get('http://httpbin.org/stream/20', stream=True)
 
     for line in r.iter_lines():
-        if line: # filter out keep-alive new lines
-            print json.loads(line)
 
+        # filter out keep-alive new lines
+        if line:
+            print(json.loads(line))
 
 
 代理
@@ -419,7 +522,7 @@ Cool，有3个评论。我们来看一下最后一个评论。
     >>> r.status_code
     201
     >>> content = r.json()
-    >>> print content[u'body']
+    >>> print(content[u'body'])
     Sounds great! I'll get right on it.
 
 
@@ -428,7 +531,7 @@ Cool，有3个评论。我们来看一下最后一个评论。
 
 ::
 
-    >>> print content[u"id"]
+    >>> print(content[u"id"])
     5804413
     >>> body = json.dumps({u"body": u"Sounds great! I'll get right on it once I feed my cat."})
     >>> url = u"https://api.github.com/repos/kennethreitz/requests/issues/comments/5804413"
@@ -485,3 +588,143 @@ Requests会自动解析这些响应头链接字段，并使得它们非常易于
     >>> r.links["last"]
     {'url': 'https://api.github.com/users/kennethreitz/repos?page=7&per_page=10', 'rel': 'last'}
 
+Transport Adapters
+------------------
+
+As of v1.0.0, Requests has moved to a modular internal design. Part of the
+reason this was done was to implement Transport Adapters, originally
+`described here`_. Transport Adapters provide a mechanism to define interaction
+methods for an HTTP service. In particular, they allow you to apply per-service
+configuration.
+
+Requests ships with a single Transport Adapter, the :class:`HTTPAdapter
+<requests.adapters.HTTPAdapter>`. This adapter provides the default Requests
+interaction with HTTP and HTTPS using the powerful `urllib3`_ library. Whenever
+a Requests :class:`Session <requests.Session>` is initialized, one of these is
+attached to the :class:`Session <requests.Session>` object for HTTP, and one
+for HTTPS.
+
+Requests enables users to create and use their own Transport Adapters that
+provide specific functionality. Once created, a Transport Adapter can be
+mounted to a Session object, along with an indication of which web services
+it should apply to.
+
+::
+
+    >>> s = requests.Session()
+    >>> s.mount('http://www.github.com', MyAdapter())
+
+The mount call registers a specific instance of a Transport Adapter to a
+prefix. Once mounted, any HTTP request made using that session whose URL starts
+with the given prefix will use the given Transport Adapter.
+
+Many of the details of implementing a Transport Adapter are beyond the scope of
+this documentation, but take a look at the next example for a simple SSL use-
+case. For more than that, you might look at subclassing
+``requests.adapters.BaseAdapter``.
+
+Example: Specific SSL Version
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Requests team has made a specific choice to use whatever SSL version is
+default in the underlying library (`urllib3`_). Normally this is fine, but from
+time to time, you might find yourself needing to connect to a service-endpoint
+that uses a version that isn't compatible with the default.
+
+You can use Transport Adapters for this by taking most of the existing
+implementation of HTTPAdapter, and adding a parameter *ssl_version* that gets
+passed-through to `urllib3`. We'll make a TA that instructs the library to use
+SSLv3:
+
+::
+
+    import ssl
+
+    from requests.adapters import HTTPAdapter
+    from requests.packages.urllib3.poolmanager import PoolManager
+
+
+    class Ssl3HttpAdapter(HTTPAdapter):
+        """"Transport adapter" that allows us to use SSLv3."""
+
+        def init_poolmanager(self, connections, maxsize, block=False):
+            self.poolmanager = PoolManager(num_pools=connections,
+                                           maxsize=maxsize,
+                                           block=block,
+                                           ssl_version=ssl.PROTOCOL_SSLv3)
+
+.. _`described here`: http://www.kennethreitz.org/essays/the-future-of-python-http
+.. _`urllib3`: https://github.com/shazow/urllib3
+
+Blocking Or Non-Blocking?
+-------------------------
+
+With the default Transport Adapter in place, Requests does not provide any kind
+of non-blocking IO. The :attr:`Response.content <requests.Response.content>`
+property will block until the entire response has been downloaded. If
+you require more granularity, the streaming features of the library (see
+:ref:`streaming-requests`) allow you to retrieve smaller quantities of the
+response at a time. However, these calls will still block.
+
+If you are concerned about the use of blocking IO, there are lots of projects
+out there that combine Requests with one of Python's asynchronicity frameworks.
+Two excellent examples are `grequests`_ and `requests-futures`_.
+
+.. _`grequests`: https://github.com/kennethreitz/grequests
+.. _`requests-futures`: https://github.com/ross/requests-futures
+
+Timeouts
+--------
+
+Most requests to external servers should have a timeout attached, in case the
+server is not responding in a timely manner. Without a timeout, your code may
+hang for minutes or more.
+
+The **connect** timeout is the number of seconds Requests will wait for your
+client to establish a connection to a remote machine (corresponding to the
+`connect()`_) call on the socket. It's a good practice to set connect timeouts
+to slightly larger than a multiple of 3, which is the default `TCP packet
+retransmission window <http://www.hjp.at/doc/rfc/rfc2988.txt>`_.
+
+Once your client has connected to the server and sent the HTTP request, the
+**read** timeout is the number of seconds the client will wait for the server
+to send a response. (Specifically, it's the number of seconds that the client
+will wait *between* bytes sent from the server. In 99.9% of cases, this is the
+time before the server sends the first byte).
+
+If you specify a single value for the timeout, like this::
+
+    r = requests.get('https://github.com', timeout=5)
+
+The timeout value will be applied to both the ``connect`` and the ``read``
+timeouts. Specify a tuple if you would like to set the values separately::
+
+    r = requests.get('https://github.com', timeout=(3.05, 27))
+
+If the remote server is very slow, you can tell Requests to wait forever for
+a response, by passing None as a timeout value and then retrieving a cup of
+coffee.
+
+.. code-block:: python
+
+    r = requests.get('https://github.com', timeout=None)
+
+.. _`connect()`: http://linux.die.net/man/2/connect
+
+CA Certificates
+---------------
+
+By default Requests bundles a set of root CAs that it trusts, sourced from the
+`Mozilla trust store`_. However, these are only updated once for each Requests
+version. This means that if you pin a Requests version your certificates can
+become extremely out of date.
+
+From Requests version 2.4.0 onwards, Requests will attempt to use certificates
+from `certifi`_ if it is present on the system. This allows for users to update
+their trusted certificates without having to change the code that runs on their
+system.
+
+For the sake of security we recommend upgrading certifi frequently!
+
+.. _certifi: http://certifi.io/
+.. _Mozilla trust store: https://hg.mozilla.org/mozilla-central/raw-file/tip/security/nss/lib/ckfw/builtins/certdata.txt
