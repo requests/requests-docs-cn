@@ -59,7 +59,7 @@ Requests允许你使用 ``params`` 关键字参数，以一个字典来提供这
     >>> print(r.url)
     http://httpbin.org/get?key2=value2&key1=value1
 
-注意字典里值为 ``None`` 的键都不会被添加到 URL 的查血字符串里。
+注意字典里值为 ``None`` 的键都不会被添加到 URL 的查询字符串里。
 
 响应内容
 --------------

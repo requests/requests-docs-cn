@@ -21,13 +21,6 @@ Distribute & Pip
 
 
 
-Cheeseshop 镜像
------------------
-
-如果 Cheeseshop 访问出问题了，你也可以从其他镜像网站安装 Requests
-比如： `Crate.io <http://crate.io>`_ ::
-
-    $ pip install -i http://simple.crate.io/ requests
 
 
 获得源码
