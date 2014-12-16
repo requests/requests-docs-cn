@@ -131,7 +131,7 @@ No JSON object could be decoded`` 异常。
     >>> r.raw.read(10)
     '\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\x03'
 
-但一般情况下，你应该下面的模式将文本流保存到文件::
+但一般情况下，你应该以下面的模式将文本流保存到文件::
 
     with open(filename, 'wb') as fd:
         for chunk in r.iter_content(chunk_size):
