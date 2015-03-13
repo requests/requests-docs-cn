@@ -377,10 +377,8 @@ Cookies
 .. admonition:: 注:
 
     ``timeout`` 仅对连接过程有效，与响应体的下载无关。
-    ``timeout`` is not a time limit on the entire response download;
-    rather, an exception is raised if the server has not issued a
-    response for ``timeout`` seconds (more precisely, if no bytes have been
-    received on the underlying socket for ``timeout`` seconds).
+    ``timeout`` 并不是整个下载响应的时间限制，而是如果服务器在``timeout``秒内没有应答，
+    将会引发一个异常（更精确地说，是在``timeout``秒内没有从基础套接字上接收到任何字节的数据时）
 
 错误与异常
 --------------
