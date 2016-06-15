@@ -1,19 +1,18 @@
 .. _api:
 
-开发者接口
+开发接口
 ===================
 
 .. module:: requests
 
-这部分文档包含了Requests所有的接口。对于Requests依赖的外部库部分，我们介绍
-一些比较重要的并提供规范文档的链接。
+这部分文档包含了 Requests 所有的接口。对于 Requests 依赖的外部库部分，我们在这里介绍最重要的部分，并提供了规范文档的链接。
 
 
 主要接口
 --------------
 
-Requests所有的功能都可以通过以下7个方法访问。
-它们全部都会返回 :class:`Response <Response>` 对象的一个实例。
+Requests所有的功能都可以通过以下 7 个方法访问。
+它们全部都会返回一个 :class:`Response <Response>` 对象的实例。
 
 .. autofunction:: request
 
@@ -25,8 +24,30 @@ Requests所有的功能都可以通过以下7个方法访问。
 .. autofunction:: delete
 
 
-较低级别的类
-~~~~~~~~~~~~~~~~~~~
+异常
+----------
+
+.. autoexception:: requests.RequestException
+.. autoexception:: requests.ConnectionError
+.. autoexception:: requests.HTTPError
+.. autoexception:: requests.URLRequired
+.. autoexception:: requests.TooManyRedirects
+.. autoexception:: requests.ConnectTimeout
+.. autoexception:: requests.ReadTimeout
+.. autoexception:: requests.Timeout
+
+
+请求会话
+----------------
+
+.. _sessionapi:
+
+.. autoclass:: Session
+   :inherited-members:
+
+
+低级类
+-------------------
 
 .. autoclass:: requests.Request
    :inherited-members:
@@ -34,29 +55,55 @@ Requests所有的功能都可以通过以下7个方法访问。
 .. autoclass:: Response
    :inherited-members:
 
-请求会话
-----------------
 
-.. autoclass:: Session
+更低级的类
+-------------------------
+
+.. autoclass:: requests.PreparedRequest
+   :inherited-members:
+
+.. autoclass:: requests.adapters.HTTPAdapter
+   :inherited-members:
+
+身份验证
+--------------
+
+.. autoclass:: requests.auth.AuthBase
+.. autoclass:: requests.auth.HTTPBasicAuth
+.. autoclass:: requests.auth.HTTPProxyAuth
+.. autoclass:: requests.auth.HTTPDigestAuth
+
+
+
+编码
+---------
+
+.. autofunction:: requests.utils.get_encodings_from_content
+.. autofunction:: requests.utils.get_encoding_from_headers
+.. autofunction:: requests.utils.get_unicode_from_response
+
+
+.. _api-cookies:
+
+Cookie
+-------
+
+.. autofunction:: requests.utils.dict_from_cookiejar
+.. autofunction:: requests.utils.cookiejar_from_dict
+.. autofunction:: requests.utils.add_dict_to_cookiejar
+
+.. autoclass:: requests.cookies.RequestsCookieJar
+   :inherited-members:
+
+.. autoclass:: requests.cookies.CookieConflictError
    :inherited-members:
 
 
-异常
-~~~~~~~~~~
 
-.. module:: requests
+状态吗查询
+------------------
 
-.. autoexception:: RequestException
-.. autoexception:: ConnectionError
-.. autoexception:: HTTPError
-.. autoexception:: URLRequired
-.. autoexception:: TooManyRedirects
-
-
-状态码查询
-~~~~~~~~~~~~~~~~~~
-
-.. autofunction:: requests.codes
+.. autoclass:: requests.codes
 
 ::
 
@@ -69,45 +116,22 @@ Requests所有的功能都可以通过以下7个方法访问。
     >>> requests.codes['\o/']
     200
 
-Cookies
-~~~~~~~
-
-.. autofunction:: dict_from_cookiejar
-.. autofunction:: cookiejar_from_dict
-.. autofunction:: add_dict_to_cookiejar
 
 
-编码
-~~~~~~~~~
-
-.. autofunction:: get_encodings_from_content
-.. autofunction:: get_encoding_from_headers
-.. autofunction:: get_unicode_from_response
-.. autofunction:: decode_gzip
-
-
-类
-~~~~~~~
-
-.. autoclass:: requests.Response
-   :inherited-members:
+~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: requests.Request
    :inherited-members:
 
-.. autoclass:: requests.PreparedRequest
+.. autoclass:: Response
    :inherited-members:
 
-.. _sessionapi:
-
-.. autoclass:: requests.Session
-   :inherited-members:
 
 
 迁移到 1.x
 ----------------
 
-本节详细介绍0.X和1.x的主要区别，减少升级带来的一些不便。
+本节详细介绍 0.x 和 1.x 的主要区别，减少升级带来的一些不便。
 
 
 API 改变
@@ -146,24 +170,92 @@ API 改变
 
       # in 0.x, passing prefetch=False would accomplish the same thing
       r = requests.get('https://github.com/timeline.json', stream=True)
-      r.raw.read(10)
+      for chunk in r.iter_content(8192):
+          ...
 
 * requests 方法的``config`` 参数已全部删除。 现在配置这些选项都在 ``Session`` ，比如 keep-alive 和最大数目的重定向。 详细程度选项应当由配置日志来处理。
 
   ::
 
-      # Verbosity should now be configured with logging
-      my_config = {'verbose': sys.stderr}
-      requests.get('http://httpbin.org/headers', config=my_config)  # bad!
+      import requests
+      import logging
+
+      # Enabling debugging at http.client level (requests->urllib3->http.client)
+      # you will see the REQUEST, including HEADERS and DATA, and RESPONSE with HEADERS but without DATA.
+      # the only thing missing will be the response.body which is not logged.
+      try: # for Python 3
+          from http.client import HTTPConnection
+      except ImportError:
+          from httplib import HTTPConnection
+      HTTPConnection.debuglevel = 1
+
+      logging.basicConfig() # you need to initialize logging, otherwise you will not see anything from requests
+      logging.getLogger().setLevel(logging.DEBUG)
+      requests_log = logging.getLogger("requests.packages.urllib3")
+      requests_log.setLevel(logging.DEBUG)
+      requests_log.propagate = True
+
+      requests.get('http://httpbin.org/headers')
 
 
 许可
 ~~~~~~~~~
 
 有一个关键的与 API 无关的区别是开放许可从 ISC_ 许可 变更到 `Apache 2.0`_ 许可.  Apache 2.0
-license 确保了对于requests的贡献也被涵盖在 Apache
-2.0 许可内.
+license 确保了对于requests的贡献也被涵盖在 Apache 2.0 许可内.
 
 .. _ISC: http://opensource.org/licenses/ISC
 .. _Apache 2.0: http://opensource.org/licenses/Apache-2.0
 
+Migrating to 2.x
+----------------
+
+
+Compared with the 1.0 release, there were relatively few backwards
+incompatible changes, but there are still a few issues to be aware of with
+this major release.
+
+For more details on the changes in this release including new APIs, links
+to the relevant GitHub issues and some of the bug fixes, read Cory's blog_
+on the subject.
+
+.. _blog: http://lukasa.co.uk/2013/09/Requests_20/
+
+
+API Changes
+~~~~~~~~~~~
+
+* There were a couple changes to how Requests handles exceptions.
+  ``RequestException`` is now a subclass of ``IOError`` rather than
+  ``RuntimeError`` as that more accurately categorizes the type of error.
+  In addition, an invalid URL escape sequence now raises a subclass of
+  ``RequestException`` rather than a ``ValueError``.
+
+  ::
+
+      requests.get('http://%zz/')   # raises requests.exceptions.InvalidURL
+
+  Lastly, ``httplib.IncompleteRead`` exceptions caused by incorrect chunked
+  encoding will now raise a Requests ``ChunkedEncodingError`` instead.
+
+* The proxy API has changed slightly. The scheme for a proxy URL is now
+  required.
+
+  ::
+
+      proxies = {
+        "http": "10.10.1.10:3128",    # use http://10.10.1.10:3128 instead
+      }
+
+      # In requests 1.x, this was legal, in requests 2.x,
+      #  this raises requests.exceptions.MissingSchema
+      requests.get("http://example.org", proxies=proxies)
+
+
+Behavioural Changes
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* Keys in the ``headers`` dictionary are now native strings on all Python
+  versions, i.e. bytestrings on Python 2 and unicode on Python 3. If the
+  keys are not native strings (unicode on Python2 or bytestrings on Python 3)
+  they will be converted to the native string type assuming UTF-8 encoding.

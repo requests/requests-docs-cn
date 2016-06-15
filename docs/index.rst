@@ -6,14 +6,13 @@
 Requests: HTTP for Humans
 =========================
 
-发行版本 v\ |version|. (:ref:`安装 <install>`)
+发行版本 v\ |version|. (:ref:`安装说明 <install>`)
 
-Requests 是使用 :ref:`Apache2 Licensed <apache2>` 许可证的 HTTP 库。用 Python 编写，真正的为人类着想。
+Requests 唯一的一个**非转基因**的 Python HTTP 库，人类可以安全享用。
 
-Python 标准库中的 **urllib2** 模块提供了你所需要的大多数 HTTP 功能，但是它的 API 太渣了。它是为另一个时代、另一个互联网所创建的。它需要巨量的工作，甚至包括各种方法覆盖，来完成最简单的任务。    
-     
-在Python的世界里，事情不应该这么麻烦。    
+**警告**: 非专业使用其他 HTTP 库会导致危险的副作用，包括：安全缺陷症、冗余代码症、重新发明轮子症、啃文档症、抑郁、头疼、甚至死亡。
 
+看吧，这就是 Requests 的威力：
 ::
 
     >>> r = requests.get('https://api.github.com/user', auth=('user', 'pass'))
@@ -30,55 +29,106 @@ Python 标准库中的 **urllib2** 模块提供了你所需要的大多数 HTTP 
 
 参见 `未使用 Requests 的相似代码 <https://gist.github.com/973705>`_.
 
-Requests 使用的是 urllib3，因此继承了它的所有特性。Requests 支持 HTTP 连接保持和连接池，支持使用 cookie 保持会话，支持文件上传，支持自动确定响应内容的编码，支持国际化的 URL 和 POST 数据自动编码。现代、国际化、人性化。
+Requests 允许你发送**纯天然，植物饲养**的 HTTP/1.1 请求，无需手工劳动。你不需要手动为 URL 添加查询字串，也不需要对 POST 数据进行表单编码。Keep-alive 和 HTTP 连接池的功能是100%自动化的，一切动力都来自于根植在 Requests 内部的 `urllib3 <https://github.com/shazow/urllib3>`_。
 
-
-Testimonials
+用户见证
 ------------
 
-Her Majesty's Government, Amazon, Google, Twilio, Mozilla, Heroku, PayPal, NPR, Obama for America, Transifex, Native Instruments, The Washington Post, Twitter, SoundCloud, Kippt, Readability, and Federal US Institutions use Requests internally. It has been downloaded over 2,000,000 times from PyPI.
+女王殿下的政府、Amazon、Google、Twilio、Mozilla、Heroku、PayPal、NPR、Obama for America、Transifex、Native Instruments、华盛顿邮报、Twitter、SoundCloud、Kippt、Readability、以及若干不愿公开身份的联邦政府机构都在内部使用
 
 **Armin Ronacher**
-    Requests is the perfect example how beautiful an API can be with the
-    right level of abstraction.
+    Requests 是一个完美的例子，它证明了通过恰到好处的抽象，一个 API 可以写得多么美。
 
 **Matt DeBoard**
-    I'm going to get @kennethreitz's Python requests module tattooed
-    on my body, somehow. The whole thing.
+    我要想个办法，把 @kennethreitz 写的 Python requests 模块做成纹身。一字不漏。
 
 **Daniel Greenfeld**
-    Nuked a 1200 LOC spaghetti code library with 10 lines of code thanks to
-    @kennethreitz's request library. Today has been AWESOME.
+    感谢@kennethreitz的request库，刚刚用10行代码炸掉了1200行意大利面代码。今天真是爽呆了！
 
 **Kenny Meyers**
-    Python HTTP: When in doubt, or when not in doubt, use Requests. Beautiful,
-    simple, Pythonic.
+    Python HTTP: 疑惑与否，都去用requests吧。简单美妙，而且符合Python风格。
 
 
 功能特性
 ---------------
 
-Requests 完全满足如今网络的需求。
+Requests 完全满足今日 web 的需求。
 
-- 国际化域名和 URLs
+- 国际化域名和 URL
 - Keep-Alive & 连接池
-- 持久的 Cookie 会话
-- 类浏览器式的 SSL 加密认证
+- 带持久Cookie 的会话
+- 浏览器式的 SSL 认证
 - 基本/摘要式的身份认证
-- 优雅的键/值 Cookies
+- 优雅的键/值 Cookie
 - 自动解压
-- Unicode 编码的响应体
-- 多段文件上传
+- 自动内容解码
+- Unicode 响应体
+- 文件分块上传
 - 连接超时
-- 支持 ``.netrc`` 
-- 适用于 Python 2.6—3.4
+- 流下载
+- 支持 ``.netrc``
+- 分块请求
 - 线程安全
 
+Requests 支持 Python 2.6—3.5，而且能在PyPy下完美运行。
 
 用户指南
 ----------
 
-这部分文档主要介绍了 Requests 的背景，然后对于 Requests 的应用做了一步一步的要点介绍。
+这部分文档是以文字为主，从 Requests 的背景讲起，然后对于 Requests 的重点功能做了逐一的介绍。
+
+.. toctree::
+   :maxdepth: 2
+
+   user/intro
+   user/install
+   user/quickstart
+   user/advanced
+   user/authentication
+
+社区指南
+----------
+
+这部分文档也是文字为主，详细介绍了 requests 生态和社区。
+
+.. toctree::
+   :maxdepth: 1
+
+   community/faq
+   community/recommended
+   community/out-there
+   community/support
+   community/vulnerabilities
+   community/updates
+   community/release-process
+
+API 文档/指南
+----------------
+
+如果你要了解具体的函数、类、方法，这部分文档就是为你准备的。
+
+.. toctree::
+   :maxdepth: 2
+
+   api
+
+贡献指南
+---------
+
+如果你要为项目做出贡献，请参考这部分文档。
+
+.. toctree::
+   :maxdepth: 3
+
+   dev/contributing
+   dev/philosophy
+   dev/todo
+   dev/authors
+
+没有别的指南了，你现在要靠自己了。
+
+祝你好运。
+
 
 .. toctree::
    :maxdepth: 2
