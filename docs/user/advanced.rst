@@ -11,12 +11,10 @@
 -----------
 
 会话对象让你能够跨请求保持某些参数。它也会在同一个Session实例发出的所有请求之间保持cookies，
-期间使用 ``urllib3`` 的 `connection pooling`_ 功能。So if
-you're making several requests to the same host, the underlying TCP
-connection will be reused, which can result in a significant performance
-increase (see `HTTP persistent connection`_).
+期间使用 ``urllib3`` 的 `connection pooling`_ 功能。所以如果你向同意主机发送多个请求，\
+底层的 TCP 连接将会被重用，从而带来显著的性能提升。 (参见 `HTTP persistent connection`_).
 
-会话对象具有主要的Requests API的所有方法。
+会话对象具有主要的 Requests API 的所有方法。
 
 我们来跨请求保持一些 cookie::
 
@@ -41,9 +39,8 @@ increase (see `HTTP persistent connection`_).
 
 任何你传递给请求方法的字典都会与已设置会话层数据合并。方法层的参数覆盖会话的参数。
 
-Note, however, that method-level parameters will *not* be persisted across
-requests, even if using a session. This example will only send the cookies
-with the first request, but not the second::
+不过需要注意，就算使用了会话，方法级别的参数也不会被跨请求保持。下面的例子只会和第一个请求发送 cookie
+，而非第二个::
 
     s = requests.Session()
 
@@ -55,17 +52,16 @@ with the first request, but not the second::
     print(r.text)
     # '{"cookies": {}}'
 
-If you want to manually add cookies to your session, use the
-:ref:`Cookie utility functions <api-cookies>` to manipulate
+如果你要手动为会话添加 cookie，就是用
+:ref:`Cookie utility 函数 <api-cookies>` 来操纵
 :attr:`Session.cookies <requests.Session.cookies>`.
 
-Sessions can also be used as context managers::
+会话还可以用作前后文管理器::
 
     with requests.Session() as s:
         s.get('http://httpbin.org/cookies/set/sessioncookie/123456789')
 
-This will make sure the session is closed as soon as the ``with`` block is
-exited, even if unhandled exceptions occurred.
+这样就能确保 ``with`` 区块退出后会话能被关闭，即使发生了异常也一样。
 
 .. admonition:: 从字典参数中移除一个值
 
@@ -106,14 +102,12 @@ exited, even if unhandled exceptions occurred.
 
 .. _prepared-requests:
 
-Prepared Requests
+准备过的请求
 -----------------
 
-Whenever you receive a :class:`Response <requests.Response>` object
-from an API call or a Session call, the ``request`` attribute is actually the
-``PreparedRequest`` that was used. In some cases you may wish to do some extra
-work to the body or headers (or anything else really) before sending a
-request. The simple recipe for this is the following::
+当你从 API 或者会话调用中收到一个 :class:`Response <requests.Response>`
+对象时，``request`` 属性其实是使用了 ``PreparedRequest``。有时在发送请求之前，你需要对
+body 或者 header （或者别的什么东西）做一些额外处理，下面演示了一个简单的做法::
 
     from requests import Request, Session
 
@@ -137,19 +131,14 @@ request. The simple recipe for this is the following::
 
     print(resp.status_code)
 
-Since you are not doing anything special with the ``Request`` object, you
-prepare it immediately and modify the ``PreparedRequest`` object. You then
-send that with the other parameters you would have sent to ``requests.*`` or
-``Session.*``.
+由于你没有对 ``Request`` 对象做什么特殊事情，你立即准备和修改了 ``PreparedRequest``
+对象，然后把它和别的参数一起发送到 ``requests.*`` 或者 ``Session.*``.
 
-However, the above code will lose some of the advantages of having a Requests
-:class:`Session <requests.Session>` object. In particular,
-:class:`Session <requests.Session>`-level state such as cookies will
-not get applied to your request. To get a
-:class:`PreparedRequest <requests.PreparedRequest>` with that state
-applied, replace the call to :meth:`Request.prepare()
-<requests.Request.prepare>` with a call to
-:meth:`Session.prepare_request() <requests.Session.prepare_request>`, like this::
+然而，上述代码会失去 Requests :class:`Session <requests.Session>` 对象的一些优势，
+尤其 :class:`Session <requests.Session>` 级别的状态，例如 cookie 就不会被应用到你的\
+请求上去。要获取一个带有状态的 :class:`PreparedRequest <requests.PreparedRequest>` ，
+请用 :meth:`Session.prepare_request() <requests.Session.prepare_request>` 取代
+:meth:`Request.prepare() <requests.Request.prepare>` 的调用，如下所示::
 
     from requests import Request, Session
 
@@ -212,12 +201,11 @@ Requests 可以为 HTTPS 请求验证 SSL 证书，就像 web 浏览器一样。
     >>> requests.get('https://kennethreitz.com', cert='/wrong_path/server.pem')
     SSLError: [Errno 336265225] _ssl.c:347: error:140B0009:SSL routines:SSL_CTX_use_PrivateKey_file:PEM lib
 
-.. warning:: The private key to your local certificate *must* be unencrypted.
-   Currently, Requests does not support using encrypted keys.
+.. warning:: 本地证书的私有 key 必须是解密状态。目前，Requests 不支持使用加密的 key。
 
 .. _ca-certificates:
 
-CA Certificates
+CA 证书
 ---------------
 
 By default Requests bundles a set of root CAs that it trusts, sourced from the
