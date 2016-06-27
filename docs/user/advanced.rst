@@ -208,17 +208,14 @@ Requests 可以为 HTTPS 请求验证 SSL 证书，就像 web 浏览器一样。
 CA 证书
 ---------------
 
-By default Requests bundles a set of root CAs that it trusts, sourced from the
-`Mozilla trust store`_. However, these are only updated once for each Requests
-version. This means that if you pin a Requests version your certificates can
-become extremely out of date.
+Requests 默认附带了一套它信任的根证书，来自于 `Mozilla trust store`_。然而它们在每次
+Requests 更新时才会更新。这意味着如果你固定使用某一版本的 Requests，你的证书有可能已经
+太旧了。
 
-From Requests version 2.4.0 onwards, Requests will attempt to use certificates
-from `certifi`_ if it is present on the system. This allows for users to update
-their trusted certificates without having to change the code that runs on their
-system.
+从 Requests 2.4.0 版之后，如果系统中装了 `certifi`_  包，Requests 会试图使用它里边的
+证书。这样用户就可以在不修改代码的情况下更新他们的可信任证书。
 
-For the sake of security we recommend upgrading certifi frequently!
+为了安全起见，我们建议你经常更新 certifi！
 
 .. _HTTP persistent connection: https://en.wikipedia.org/wiki/HTTP_persistent_connection
 .. _connection pooling: https://urllib3.readthedocs.io/en/latest/pools.html
@@ -246,19 +243,18 @@ For the sake of security we recommend upgrading certifi frequently!
 方法来控制工作流，或者以 :class:`Response.raw <requests.Response.raw>`
 从底层 urllib3 的 :class:`urllib3.HTTPResponse <urllib3.response.HTTPResponse` 读取。
 
-If you set ``stream`` to ``True`` when making a request, Requests cannot
-release the connection back to the pool unless you consume all the data or call
-:class:`Response.close <requests.Response.close>`. This can lead to
-inefficiency with connections. If you find yourself partially reading request
-bodies (or not reading them at all) while using ``stream=True``, you should
-consider using ``contextlib.closing`` (`documented here`_), like this::
+如果你在请求中把 ``stream`` 设为 ``True``，Requests 无法将连接释放回连接池，除非你
+消耗了所有的数据，或者调用了 :class:`Response.close <requests.Response.close>`。
+这样会带来连接效率低下的问题。如果你发现你在使用 ``stream=True`` 的同时还在部分读取请求的
+body（或者完全没有读取 body），那么你就应该考虑使用 ``contextlib.closing`` (`文档`_)，
+如下所示::
 
     from contextlib import closing
 
     with closing(requests.get('http://httpbin.org/get', stream=True)) as r:
         # Do things with the response here.
 
-.. _`documented here`: http://docs.python.org/2/library/contextlib.html#contextlib.closing
+.. _`文档`: http://docs.python.org/2/library/contextlib.html#contextlib.closing
 
 .. _keep-alive:
 
@@ -280,11 +276,9 @@ Requests支持流式上传，这允许你发送大的数据流或文件而无需
     with open('massive-body') as f:
         requests.post('http://some.url/streamed', data=f)
 
-.. warning:: It is strongly recommended that you open files in `binary mode`_.
-             This is because Requests may attempt to provide the
-             ``Content-Length`` header for you, and if it does this value will
-             be set to the number of *bytes* in the file. Errors may occur if
-             you open the file in *text mode*.
+.. warning:: 我们强烈建议你用二进制模式（`binary mode`_）打开文件。这是因为 requests
+             可能会为你提供 header 中的 ``Content-Length``，在这种情况下该值会被设为
+             文件的**字节数**。如果你用**文本模式**打开文件，就可能碰到错误。
 
 .. _binary mode: https://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
 
@@ -821,20 +815,17 @@ SSLv3:
 .. _`grequests`: https://github.com/kennethreitz/grequests
 .. _`requests-futures`: https://github.com/ross/requests-futures
 
-Header Ordering
+Header 排序
 ---------------
 
-In unusual circumstances you may want to provide headers in an ordered manner.
-If you pass an ``OrderedDict`` to the ``headers`` keyword argument, that will
-provide the headers with an ordering. *However*, the ordering of the default
-headers used by Requests will be preferred, which means that if you override
-default headers in the ``headers`` keyword argument, they may appear out of
-order compared to other headers in that keyword argument.
+在某些特殊情况下你也许需要按照次序来提供 header，如果你向 ``headers`` 关键字参数传入一个
+``OrderedDict``，就可以向提供一个带排序的 header。**然而**，Requests 使用的默认
+header 的次序会被优先选择，这意味着如果你在 ``headers`` 关键字参数中覆盖了默认 header，
+和关键字参数中别的 header 相比，它们也许看上去会是次序错误的。
 
-If this is problematic, users should consider setting the default headers on
-a :class:`Session <requests.Session>` object, by setting
-:data:`Session <requests.Session.headers>` to a custom ``OrderedDict``. That
-ordering will always be preferred.
+如果这个对你来说是个问题，那么用户应该考虑在 :class:`Session <requests.Session>`
+对象上面设置默认 header，只要将 :data:`Session <requests.Session.headers>`
+设为一个定制的  ``OrderedDict`` 即可。这样就会让它成为优选的次序。
 
 .. _timeouts:
 
