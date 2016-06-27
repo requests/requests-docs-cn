@@ -807,19 +807,16 @@ SSLv3:
 
 .. _blocking-or-nonblocking:
 
-Blocking Or Non-Blocking?
+阻塞和非阻塞
 -------------------------
 
-With the default Transport Adapter in place, Requests does not provide any kind
-of non-blocking IO. The :attr:`Response.content <requests.Response.content>`
-property will block until the entire response has been downloaded. If
-you require more granularity, the streaming features of the library (see
-:ref:`streaming-requests`) allow you to retrieve smaller quantities of the
-response at a time. However, these calls will still block.
+使用默认的传输适配器，Requests不提供任何形式的非阻塞IO。
+:attr:`Response.content <requests.Response.content>` 属性会阻塞，直到整个响应\
+下载完成。如果你需要更多精细控制，该库的数据流功能（见 :ref:`streaming-requests`）
+允许你每次接受少量的一部分响应，不过这些调用依然是阻塞式的。
 
-If you are concerned about the use of blocking IO, there are lots of projects
-out there that combine Requests with one of Python's asynchronicity frameworks.
-Two excellent examples are `grequests`_ and `requests-futures`_.
+如果你对于阻塞式 IO 有所顾虑，还有很多项目可以供你使用，它们结合了 Requests 和 Python
+的某个异步框架。典型的优秀例子是 `grequests`_ 和 `requests-futures`_ 。
 
 .. _`grequests`: https://github.com/kennethreitz/grequests
 .. _`requests-futures`: https://github.com/ross/requests-futures
@@ -852,24 +849,21 @@ Request 会等待的秒数。一个很好的实践方法是把连接超时设为
 因为 `TCP（数据包重传窗口）TCP packet
 retransmission window <http://www.hjp.at/doc/rfc/rfc2988.txt>`_ 的默认大小是 3。
 
-Once your client has connected to the server and sent the HTTP request, the
-**read** timeout is the number of seconds the client will wait for the server
-to send a response. (Specifically, it's the number of seconds that the client
-will wait *between* bytes sent from the server. In 99.9% of cases, this is the
-time before the server sends the first byte).
+一旦你的客户端连接到了服务器并且发送了 HTTP 请求，**读取** 超时指的就是客户端等待服务器发送请求的时间。
+（特定地，它指的是客户端要等待服务器发送字节*之间*的时间。在 99.9%
+的情况下这指的是服务器发送第一个字节之前的时间）。
 
-If you specify a single value for the timeout, like this::
+如果你制订了一个单一的值作为 timeout，如下所示::
 
     r = requests.get('https://github.com', timeout=5)
 
-The timeout value will be applied to both the ``connect`` and the ``read``
-timeouts. Specify a tuple if you would like to set the values separately::
+这一 timeout 值将会用作 ``connect`` 和 ``read`` 二者的 timeout。如果要分别制定，
+就传入一个元组::
 
     r = requests.get('https://github.com', timeout=(3.05, 27))
 
-If the remote server is very slow, you can tell Requests to wait forever for
-a response, by passing None as a timeout value and then retrieving a cup of
-coffee.
+如果远端服务器很慢，你可以让 Request 永远等待，传入一个 None 作为 timeout 值，然后\
+倒你的咖啡去吧。
 
 .. code-block:: python
 
