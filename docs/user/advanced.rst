@@ -827,24 +827,30 @@ Two excellent examples are `grequests`_ and `requests-futures`_.
 Header Ordering
 ---------------
 
-In unusual circumstances you may want to provide headers in an ordered manner. If you pass an ``OrderedDict`` to the ``headers`` keyword argument, that will provide the headers with an ordering. *However*, the ordering of the default headers used by Requests will be preferred, which means that if you override default headers in the ``headers`` keyword argument, they may appear out of order compared to other headers in that keyword argument.
+In unusual circumstances you may want to provide headers in an ordered manner.
+If you pass an ``OrderedDict`` to the ``headers`` keyword argument, that will
+provide the headers with an ordering. *However*, the ordering of the default
+headers used by Requests will be preferred, which means that if you override
+default headers in the ``headers`` keyword argument, they may appear out of
+order compared to other headers in that keyword argument.
 
-If this is problematic, users should consider setting the default headers on a :class:`Session <requests.Session>` object, by setting :data:`Session <requests.Session.headers>` to a custom ``OrderedDict``. That ordering will always be preferred.
+If this is problematic, users should consider setting the default headers on
+a :class:`Session <requests.Session>` object, by setting
+:data:`Session <requests.Session.headers>` to a custom ``OrderedDict``. That
+ordering will always be preferred.
 
 .. _timeouts:
 
-Timeouts
---------
+超时（timeout）
+--------------
 
-Most requests to external servers should have a timeout attached, in case the
-server is not responding in a timely manner. Without a timeout, your code may
-hang for minutes or more.
+为防止服务器不能及时响应，大部分发至外部服务器的请求都应该带着 timeout 参数。\
+如果没有 timeout，你的代码可能会挂起若干分钟甚至更长时间。
 
-The **connect** timeout is the number of seconds Requests will wait for your
-client to establish a connection to a remote machine (corresponding to the
-`connect()`_) call on the socket. It's a good practice to set connect timeouts
-to slightly larger than a multiple of 3, which is the default `TCP packet
-retransmission window <http://www.hjp.at/doc/rfc/rfc2988.txt>`_.
+**连接** 超时指的是在你的客户端实现到远端机器端口的连接时（对应的是`connect()`_），
+Request 会等待的秒数。一个很好的实践方法是把连接超时设为比 3 的倍数略大的一个数值，
+因为 `TCP（数据包重传窗口）TCP packet
+retransmission window <http://www.hjp.at/doc/rfc/rfc2988.txt>`_ 的默认大小是 3。
 
 Once your client has connected to the server and sent the HTTP request, the
 **read** timeout is the number of seconds the client will wait for the server
