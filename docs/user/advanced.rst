@@ -304,15 +304,15 @@ Requests支持流式上传，这允许你发送大的数据流或文件而无需
 
 .. _multipart:
 
-POST Multiple Multipart-Encoded Files
+POST 多个分块编码的文件
 -------------------------------------
 
-You can send multiple files in one request. For example, suppose you want to
-upload image files to an HTML form with a multiple file field 'images'::
+你可以在一个请求中发送多个文件。例如，假设你要上传多个图像文件到一个 HTML 表单，使用一个\
+多文件 field 叫做 "images"::
 
     <input type="file" name="images" multiple="true" required="true"/>
 
-To do that, just set files to a list of tuples of ``(form_field_name, file_info)``::
+要实现，只要把文件设到一个元组的列表中，其中元组结构为 ``(form_field_name, file_info)``::
 
     >>> url = 'http://httpbin.org/post'
     >>> multiple_files = [
@@ -327,11 +327,9 @@ To do that, just set files to a list of tuples of ``(form_field_name, file_info)
       ...
     }
 
-.. warning:: It is strongly recommended that you open files in `binary mode`_.
-             This is because Requests may attempt to provide the
-             ``Content-Length`` header for you, and if it does this value will
-             be set to the number of *bytes* in the file. Errors may occur if
-             you open the file in *text mode*.
+.. warning:: 我们强烈建议你用二进制模式（`binary mode`_）打开文件。这是因为 requests
+             可能会为你提供 header 中的 ``Content-Length``，在这种情况下该值会被设为
+             文件的**字节数**。如果你用**文本模式**打开文件，就可能碰到错误。
 
 .. _binary mode: https://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
 
@@ -411,7 +409,10 @@ Requests允许你使用自己指定的身份验证机制。
 流式请求
 --------------
 
-使用 :class:`requests.Response.iter_lines()` 你可以很方便地对流式API（例如 `Twitter的流式API <https://dev.twittercom/docs/streaming-api>`_ ）进行迭代。简单地设置 ``stream`` 为 ``True`` 便可以使用 :class:`~requests.Response.iter_lines()` 对相应进行迭代::
+使用 :class:`requests.Response.iter_lines()` 你可以很方便地对流式API
+（例如 `Twitter的流式API <https://dev.twittercom/docs/streaming-api>`_ ）
+进行迭代。简单地设置 ``stream`` 为 ``True`` 便可以使用 :class:`~requests.Response.iter_lines()`
+对相应进行迭代::
 
     import json
     import requests
@@ -426,10 +427,8 @@ Requests允许你使用自己指定的身份验证机制。
 
 .. warning::
 
-    :class:`~requests.Response.iter_lines()` is not reentrant safe.
-    Calling this method multiple times causes some of the received data
-    being lost. In case you need to call it from multiple places, use
-    the resulting iterator object instead::
+    :class:`~requests.Response.iter_lines()` 不保证重进入时的安全性。多次调用该方法
+    会导致部分收到的数据丢失。如果你要在多处调用它，就应该使用生成的迭代器对象::
 
         lines = r.iter_lines()
         # Save the first line for later or just skip it
@@ -473,33 +472,32 @@ Requests允许你使用自己指定的身份验证机制。
         "http": "http://user:pass@10.10.1.10:3128/",
     }
 
-To give a proxy for a specific scheme and host, use the
-`scheme://hostname` form for the key.  This will match for
-any request to the given scheme and exact hostname.
+要为某个特定的连接方式或者主机设置代理，使用 `scheme://hostname` 作为 key，
+它会针对指定的主机和连接方式进行匹配。
 
 ::
 
     proxies = {'http://10.20.1.128': 'http://10.10.1.10:5323'}
 
-Note that proxy URLs must include the scheme.
+注意，代理 URL 必须包含连接方式。
 
 SOCKS
 ^^^^^
 
 .. versionadded:: 2.10.0
 
-In addition to basic HTTP proxies, Requests also supports proxies using the
-SOCKS protocol. This is an optional feature that requires that additional
-third-party libraries be installed before use.
+除了基本的 HTTP 代理，Request 还支持 SOCKS 协议的代理。这是一个可选功能，若要使用，
+你需要安装第三方库。
 
-You can get the dependencies for this feature from ``pip``:
+你可以用 ``pip`` 获取依赖:
 
 .. code-block:: bash
 
     $ pip install requests[socks]
 
-Once you've installed those dependencies, using a SOCKS proxy is just as easy
-as using a HTTP one::
+安装好依赖以后，使用 SOCKS 代理和使用 HTTP 代理一样简单：
+
+::
 
     proxies = {
         'http': 'socks5://user:pass@host:port',
@@ -729,53 +727,42 @@ Requests 会自动解析这些响应头链接字段，并使得它们非常易�
 
 .. _transport-adapters:
 
-Transport Adapters
+传输适配器
 ------------------
 
-As of v1.0.0, Requests has moved to a modular internal design. Part of the
-reason this was done was to implement Transport Adapters, originally
-`described here`_. Transport Adapters provide a mechanism to define interaction
-methods for an HTTP service. In particular, they allow you to apply per-service
-configuration.
+从 v1.0.0 以后，Requests 的内部采用了模块化设计。部分原因是为了实现传输适配器
+（Transport Adapter），你可以看看关于它的`最早描述`_。传输适配器提供了一个机制，
+让你可以为 HTTP 服务定义交互方法。尤其是它允许你应用服务前的配置。
 
-Requests ships with a single Transport Adapter, the :class:`HTTPAdapter
-<requests.adapters.HTTPAdapter>`. This adapter provides the default Requests
-interaction with HTTP and HTTPS using the powerful `urllib3`_ library. Whenever
-a Requests :class:`Session <requests.Session>` is initialized, one of these is
-attached to the :class:`Session <requests.Session>` object for HTTP, and one
-for HTTPS.
+Requests 自带了一个传输适配器，也就是 :class:`HTTPAdapter <requests.adapters.HTTPAdapter>`。
+这个适配器使用了强大的 `urllib3`_ ，为 Requests 提供了默认的 HTTP 和 HTTPS 交互。
+每当 :class:`Session <requests.Session>` 被初始化，就会有适配器附着在 :class:`Session <requests.Session>`
+上，其中一个供 HTTP 使用，另一个供 HTTPS 使用。
 
-Requests enables users to create and use their own Transport Adapters that
-provide specific functionality. Once created, a Transport Adapter can be
-mounted to a Session object, along with an indication of which web services
-it should apply to.
+Request 允许用户创建和使用他们自己的传输适配器，实现他们需要的特殊功能。创建好以后，
+传输适配器可以被加载到一个会话对象上，附带着一个说明，告诉会话适配器应该应用在哪个 web
+服务上。
 
 ::
 
     >>> s = requests.Session()
     >>> s.mount('http://www.github.com', MyAdapter())
 
-The mount call registers a specific instance of a Transport Adapter to a
-prefix. Once mounted, any HTTP request made using that session whose URL starts
-with the given prefix will use the given Transport Adapter.
+这个 mount 调用会注册一个传输适配器的特定实例到一个前缀上面。加载以后，任何使用该会话
+的 HTTP 请求，只要其 URL 是以给定的前缀开头，该传输适配器就会被使用到。
 
-Many of the details of implementing a Transport Adapter are beyond the scope of
-this documentation, but take a look at the next example for a simple SSL use-
-case. For more than that, you might look at subclassing
-``requests.adapters.BaseAdapter``.
+传输适配器的众多实现细节不在本文档的覆盖范围内，不过你可以看看接下来这个简单的 SSL
+用例。更多的用法，你也许该考虑为``requests.adapters.BaseAdapter`` 创建子类。
 
-Example: Specific SSL Version
+示例: 指定的 SSL 版本
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The Requests team has made a specific choice to use whatever SSL version is
-default in the underlying library (`urllib3`_). Normally this is fine, but from
-time to time, you might find yourself needing to connect to a service-endpoint
-that uses a version that isn't compatible with the default.
+Requests 开发团队刻意指定了内部库（`urllib3`_）的默认 SSL 版本。一般情况下这样做没有问题，
+不过是不是你可能会需要连接到一个服务节点，而该节点使用了和默认不同的 SSL 版本。
 
-You can use Transport Adapters for this by taking most of the existing
-implementation of HTTPAdapter, and adding a parameter *ssl_version* that gets
-passed-through to `urllib3`. We'll make a TA that instructs the library to use
-SSLv3:
+你可以使用传输适配器解决这个问题，通过利用 HTTPAdapter 现有的大部分实现，再加上一个
+*ssl_version* 参数并将它传递到 ``urllib3`` 中。我们会创建一个传输适配器，用来告诉
+``urllib3`` 让它使用 SSLv3：
 
 ::
 
@@ -794,7 +781,7 @@ SSLv3:
                                            block=block,
                                            ssl_version=ssl.PROTOCOL_SSLv3)
 
-.. _`described here`: http://www.kennethreitz.org/essays/the-future-of-python-http
+.. _`最早描述`: http://www.kennethreitz.org/essays/the-future-of-python-http
 .. _`urllib3`: https://github.com/shazow/urllib3
 
 .. _blocking-or-nonblocking:
