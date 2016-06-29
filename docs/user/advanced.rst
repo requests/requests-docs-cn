@@ -288,7 +288,7 @@ Requests支持流式上传，这允许你发送大的数据流或文件而无需
 块编码请求
 ---------------
 
-对于出去和进来的请求，Requests 也支持分块传输编码。要发送一个块编码的请求，仅需为你的请求体提供一个生成器（或任意没有具体长度(without a length)的迭代器）::
+对于出去和进来的请求，Requests 也支持分块传输编码。要发送一个块编码的请求，仅需为你的请求体提供一个生成器（或任意没有具体长度的迭代器）::
 
     def gen():
         yield 'hi'
@@ -296,12 +296,10 @@ Requests支持流式上传，这允许你发送大的数据流或文件而无需
 
     requests.post('http://some.url/chunked', data=gen())
 
-For chunked encoded responses, it's best to iterate over the data using
-:meth:`Response.iter_content() <requests.models.Response.iter_content>`. In
-an ideal situation you'll have set ``stream=True`` on the request, in which
-case you can iterate chunk-by-chunk by calling ``iter_content`` with a chunk
-size parameter of ``None``. If you want to set a maximum size of the chunk,
-you can set a chunk size parameter to any integer.
+对于分块的编码请求，我们最好使用 :meth:`Response.iter_content() <requests.models.Response.iter_content>`
+对其数据进行迭代。在理想情况下，你的 request 会设置 ``stream=True``，这样你就可以通过调用
+``iter_content`` 并将分块大小参数设为 ``None``，从而进行分块的迭代。如果你要设置分块的最大体积，
+你可以把分块大小参数设为任意整数。
 
 
 .. _multipart:
