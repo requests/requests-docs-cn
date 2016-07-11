@@ -20,10 +20,7 @@ Twitter
 Follow `@kennethreitz <https://twitter.com/kennethreitz>`_ for updates.
 
 
-邮件列表
-------------
+Release and Version History
+===========================
 
-对于 Requests 的讨论有一个小容量的邮件列表。发送邮件到
-`requests@librelist.org <mailto:requests@librelist.org>`_ 订阅邮件。
-
-
+.. include:: ../../HISTORY.rst

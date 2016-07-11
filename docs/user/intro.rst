@@ -31,7 +31,7 @@ MIT、BSD、ISC、Apache2 许可都是优秀的替代品，它们允许你的开
 
 Requests 的发布许可为 `Apache2 License`_.
 
-.. _`GPL Licensed`: http://www.opensource.org/licenses/gpl-license.php
+.. _`GPL 协议`: http://www.opensource.org/licenses/gpl-license.php
 .. _`Apache2 License`: http://opensource.org/licenses/Apache-2.0
 
 
