@@ -252,3 +252,8 @@ API 变化
   中都是如此。也就是说，Python 2 中是 bytestring，Python 3 中是 unicode。
   如果 key 不是原声字符串（Python 2 中 unicode，或 Python 3 中 bytestring）
   它们会被以 UTF-8 编码转成原生字符串。
+
+* Values in the ``headers`` dictionary should always be strings. This has
+  been the project's position since before 1.0 but a recent change
+  (since version 2.11.0) enforces this more strictly. It's advised to avoid
+  passing header values as unicode when possible.

@@ -178,6 +178,8 @@ Note: Custom headers are given less precedence than more specific sources of inf
 
 Furthermore, Requests does not change its behavior at all based on which custom headers are specified. The headers are simply passed on into the final request.
 
+Note: All header values must be a ``string``, bytestring, or unicode. While permitted, it's advised to avoid passing unicode header values.
+
 更加复杂的 POST 请求
 ----------------------
 
