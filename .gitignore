@@ -5,12 +5,15 @@ nosetests.xml
 junit-report.xml
 pylint.txt
 toy.py
+tox.ini
 violations.pyflakes.txt
 cover/
+build/
 docs/_build
 requests.egg-info/
 *.pyc
 *.swp
+*.egg
 env/
 
 .workon
@@ -18,3 +21,4 @@ env/
 t.py
 
 t2.py
+dist
