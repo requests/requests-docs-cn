@@ -10,10 +10,10 @@ Requests 是以 :pep:`20` 的箴言为中心开发的
 
 
 #. Beautiful is better than ugly.(美丽优于丑陋)
-#. Explicit is better than implicit.(清楚优于含糊)
+#. Explicit is better than implicit.(直白优于含蓄)
 #. Simple is better than complex.(简单优于复杂)
 #. Complex is better than complicated.(复杂优于繁琐)
-#. Readability counts.(重要的是可读性)
+#. Readability counts.(可读性很重要)
 
 对于 Requests 所有的贡献都应牢记这些重要的准则。
 

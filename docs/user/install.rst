@@ -3,7 +3,7 @@
 安装
 ============
 
-这部分文档包含了Requests的安装过程，使用任何软件的第一步就是正确地安装它。
+这部分文档包含了 Requests 的安装过程，使用任何软件的第一步就是正确地安装它。
 
 
 Pip Install Requests
@@ -24,7 +24,9 @@ Pip Install Requests
 Requests 一直在 Github 上积极地开发，你可以一直从
 `这里 <https://github.com/kennethreitz/requests>`_ 获取到代码。
 
-你可以克隆公共版本库::
+你可以克隆公共版本库：
+
+::
 
     git clone git://github.com/kennethreitz/requests.git
 
