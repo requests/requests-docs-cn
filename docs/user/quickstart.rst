@@ -167,18 +167,17 @@ No JSON object could be decoded`` 异常。
 
     >>> r = requests.get(url, headers=headers)
 
-Note: Custom headers are given less precedence than more specific sources of information. For instance:
+Note: 定制 header 的优先级低于某些特定的信息源，例如:
 
-* Authorization headers set with `headers=` will be overridden if credentials
-  are specified in ``.netrc``, which in turn will be overridden by the  ``auth=``
-  parameter.
-* Authorization headers will be removed if you get redirected off-host.
-* Proxy-Authorization headers will be overridden by proxy credentials provided in the URL.
-* Content-Length headers will be overridden when we can determine the length of the content.
+* 如果在 ``.netrc`` 中设置了用户认证信息，使用 `headers=` 设置的授权就不会生效。而如果设置了
+  ``auth=`` 参数， ``.netrc``的设置就无效了。
+* 如果被重定向到别的主机，授权 header 就会被删除。
+* 代理授权 header 会被 URL 中提供的代理身份覆盖掉。
+* 在我们能判断内容长度的情况下，header 的 Content-Length 会被改写。
 
-Furthermore, Requests does not change its behavior at all based on which custom headers are specified. The headers are simply passed on into the final request.
+更进一步讲，Requests 不会基于定制 header 的具体情况改变自己的行为。只不过在最后的请求中，所有的 header 信息都会被传递进去。
 
-Note: All header values must be a ``string``, bytestring, or unicode. While permitted, it's advised to avoid passing unicode header values.
+Note: 所有的 header 值必须是 ``string``、bytestring 或者 unicode。尽管传递 unicode header 也是允许的，但不建议这样做。
 
 更加复杂的 POST 请求
 ----------------------
@@ -211,8 +210,7 @@ Note: All header values must be a ``string``, bytestring, or unicode. While perm
 
     >>> r = requests.post(url, data=json.dumps(payload))
 
-Instead of encoding the ``dict`` yourself, you can also pass it directly using
-the ``json`` parameter (added in version 2.4.2) and it will be encoded automatically::
+此处除了可以自行对 ``dict`` 进行编码，你还可以使用 ``json`` 参数直接传递，然后它就会被自动编码。这是 2.4.2 版的新加功能::
 
     >>> url = 'https://api.github.com/some/endpoint'
     >>> payload = {'some': 'data'}
@@ -274,11 +272,9 @@ Requests 使得上传多部分编码文件变得很简单::
 
 在一个请求中发送多文件参考 :ref:`高级用法 <advanced>` 一节.
 
-.. warning:: It is strongly recommended that you open files in `binary mode`_.
-             This is because Requests may attempt to provide the
-             ``Content-Length`` header for you, and if it does this value will
-             be set to the number of *bytes* in the file. Errors may occur if
-             you open the file in *text mode*.
+.. warning:: 我们强烈建议你用二进制模式(`binary mode`_)打开文件。这是因为 Requests
+             可能会试图为你提供 ``Content-Length`` header，在它这样做的时候，这个值
+             会被设为文件的字节数（*bytes*）。如果用 *文本模式(text mode)* 打开文件，就可能会发生错误。
 
 .. _binary mode: https://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
 
@@ -346,16 +342,17 @@ HTTP 头部是大小写不敏感的。
     >>> r.headers.get('content-type')
     'application/json'
 
-It is also special in that the server could have sent the same header multiple
-times with different values, but requests combines them so they can be
-represented in the dictionary within a single mapping, as per
+它还有一个特殊点，那就是服务器可以多次接受同一 header，每次都使用不同的值。但 Requests
+会将它们合并，这样它们就可以用一个映射来表示出来，参见
 `RFC 7230 <http://tools.ietf.org/html/rfc7230#section-3.2>`_:
 
     A recipient MAY combine multiple header fields with the same field name
     into one "field-name: field-value" pair, without changing the semantics
     of the message, by appending each subsequent field value to the combined
     field value in order, separated by a comma.
-
+    
+    接收者可以合并多个相同名称的 header 栏位，把它们合为一个 "field-name: field-value"
+    配对，将每个后续的栏位值依次追加到合并的栏位值中，用逗号隔开即可，这样做不会改变信息的语义。
 
 Cookies
 ---------
