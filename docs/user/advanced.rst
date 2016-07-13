@@ -115,7 +115,7 @@
 .. _prepared-requests:
 
 准备的请求 （Prepared Request）
------------------------------
+--------------------------------
 
 当你从 API 或者会话调用中收到一个 :class:`Response <requests.Response>`
 对象时，``request`` 属性其实是使用了 ``PreparedRequest``。有时在发送请求之前，你需要对
