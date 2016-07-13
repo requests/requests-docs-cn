@@ -6,7 +6,7 @@
 .. module:: requests.models
 
 迫不及待了吗？本页内容为如何入门 Requests 提供了很好的指引。其假设你已经安装了 Requests。\
-如果还没有，去\:ref:`安装 <install>`\ 一节看看吧。
+如果还没有，去\ :ref:`安装 <install>`\ 一节看看吧。
 
 首先，确认一下：
 
@@ -53,12 +53,12 @@ HTTP POST 请求：
 
 都很不错吧，但这也仅是 Requests 的冰山一角呢。
 
-为 URL 传递参数
+传递 URL 参数
 -------------------
 
 你也许经常想为 URL 的查询字符串(query string)传递某种数据。如果你是手工构建 URL，那么数据会以键/值\
 对的形式置于 URL 中，跟在一个问号的后面。例如， ``httpbin.org/get?key=val``\。
-Requests允许你使用 ``params`` 关键字参数，以一个字典来提供这些参数。举例来说，如果你想传递
+Requests 允许你使用 ``params`` 关键字参数，以一个字典来提供这些参数。举例来说，如果你想传递
 ``key1=value1`` 和 ``key2=value2`` 到 ``httpbin.org/get`` ，那么你可以使用如下代码：
 
 ::
@@ -195,7 +195,7 @@ Requests 中也有一个内置的 JSON 解码器，助你处理 JSON 数据：
 
     >>> r = requests.get(url, headers=headers)
 
-Note: 定制 header 的优先级低于某些特定的信息源，例如：
+注意: 定制 header 的优先级低于某些特定的信息源，例如：
 
 * 如果在 ``.netrc`` 中设置了用户认证信息，使用 `headers=` 设置的授权就不会生效。而如果设置了
   ``auth=`` 参数，\``.netrc`` 的设置就无效了。
@@ -206,7 +206,7 @@ Note: 定制 header 的优先级低于某些特定的信息源，例如：
 更进一步讲，Requests 不会基于定制 header 的具体情况改变自己的行为。只不过在最后的请求中，所有的
 header 信息都会被传递进去。
 
-Note: 所有的 header 值必须是 ``string``、bytestring 或者 unicode。尽管传递 unicode 
+注意: 所有的 header 值必须是 ``string``、bytestring 或者 unicode。尽管传递 unicode 
 header 也是允许的，但不建议这样做。
 
 更加复杂的 POST 请求
@@ -315,9 +315,11 @@ Requests 使得上传多部分编码文件变得很简单：
 
 在一个请求中发送多文件参考 :ref:`高级用法 <advanced>` 一节。
 
-.. warning:: 我们强烈建议你用二进制模式(`binary mode`_)打开文件。这是因为 Requests
-             可能会试图为你提供 ``Content-Length`` header，在它这样做的时候，这个值\
-             会被设为文件的字节数（*bytes*）。如果用 *文本模式(text mode)* 打开文件，就可能会发生错误。
+.. admonition:: 警告
+
+    我们强烈建议你用二进制模式(`binary mode`_)打开文件。这是因为 Requests 可能会试图为你提供
+    ``Content-Length`` header，在它这样做的时候，这个值会被设为文件的字节数（*bytes*）。\
+    如果用文本模式(text mode)打开文件，就可能会发生错误。
 
 .. _binary mode: https://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
 
@@ -340,7 +342,7 @@ Requests 使得上传多部分编码文件变得很简单：
     >>> r.status_code == requests.codes.ok
     True
 
-如果发送了一个错误请求(一个4XX客户端错误，或者5XX服务器错误响应)，我们可以通过 
+如果发送了一个错误请求(一个 4XX 客户端错误，或者 5XX 服务器错误响应)，我们可以通过 
 :meth:`Response.raise_for_status() <requests.Response.raise_for_status>`
 来抛出异常：
 
@@ -443,7 +445,7 @@ Cookie
 
 可以使用响应对象的 ``history`` 方法来追踪重定向。
 
-:meth:`Response.history <requests.Response.history>` 是一个:class:`Response <requests.Response>` 对象的列表，为了完成请求而创建了这些对象。这个对象列表按照从最老到最近的请求进行排序。
+:meth:`Response.history <requests.Response.history>` 是一个 :class:`Response <requests.Response>` 对象的列表，为了完成请求而创建了这些对象。这个对象列表按照从最老到最近的请求进行排序。
 
 例如，Github 将所有的 HTTP 请求重定向到 HTTPS：
 
@@ -496,7 +498,7 @@ Cookie
     requests.exceptions.Timeout: HTTPConnectionPool(host='github.com', port=80): Request timed out. (timeout=0.001)
 
 
-.. admonition:: Note
+.. admonition:: 注意
 
     ``timeout`` 仅对连接过程有效，与响应体的下载无关。 ``timeout`` 并不是整个下载响应的\
     时间限制，而是如果服务器在 ``timeout`` 秒内没有应答，将会引发一个异常（更精确地说，是在

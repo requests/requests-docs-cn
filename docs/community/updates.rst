@@ -9,18 +9,18 @@
 GitHub
 ------
 
-最好的方式是追踪Requests开发版本的
+最好的方式是追踪 Requests 开发版本的
 `GitHub 库 <https://github.com/kennethreitz/requests>`_.
 
 Twitter
 -------
 
-我经常推送关于Requests的新功能和新版本.
+我经常推送关于 Requests 的新功能和新版本.
 
-Follow `@kennethreitz <https://twitter.com/kennethreitz>`_ for updates.
+关注 `@kennethreitz <https://twitter.com/kennethreitz>`_ 即可获得更新。
 
 
-Release and Version History
+版本历史
 ===========================
 
 .. include:: ../../HISTORY.rst

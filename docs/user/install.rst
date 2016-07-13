@@ -21,8 +21,8 @@ Pip Install Requests
 获得源码
 ------------
 
-Requests 一直在 Github 上积极地开发，你可以一直从
-`这里 <https://github.com/kennethreitz/requests>`_ 获取到代码。
+Requests 一直在 Github 上积极地开发，你可以一直从\
+`这里 <https://github.com/kennethreitz/requests>`_\获取到代码。
 
 你可以克隆公共版本库：
 
