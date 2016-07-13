@@ -5,41 +5,47 @@
 
 .. module:: requests.models
 
-迫不及待了吗？本页内容为如何入门 Requests 提供了很好的指引。其假设你已经安装了 Requests。如果还没有，
-去 :ref:`安装 <install>` 一节看看吧。
+迫不及待了吗？本页内容为如何入门 Requests 提供了很好的指引。其假设你已经安装了 Requests。\
+如果还没有，去\ :ref:`安装 <install>`\ 一节看看吧。
 
 首先，确认一下：
 
 * Requests :ref:`已安装 <install>`
-* Requests是 :ref:`最新的 <updates>`
+* Requests :ref:`是最新的 <updates>`
 
 让我们从一些简单的示例开始吧。
 
 发送请求
 ----------
 
-使用Requests发送网络请求非常简单。
+使用 Requests 发送网络请求非常简单。
 
-一开始要导入Requests模块：
+一开始要导入 Requests 模块：
 
 ::
+
     >>> import requests
 
-然后，尝试获取某个网页。本例子中，我们来获取Github的公共时间线：
+然后，尝试获取某个网页。本例子中，我们来获取 Github 的公共时间线：
 
 ::
+
     >>> r = requests.get('https://github.com/timeline.json')
 
-现在，我们有一个名为 ``r`` 的 :class:`Response <requests.Response>` 对象。我们可以从这个对象中获取所有我们想要的信息。
+现在，我们有一个名为 ``r`` 的 :class:`Response <requests.Response>` 
+对象。我们可以从这个对象中获取所有我们想要的信息。
 
-Requests 简便的 API 意味着所有 HTTP 请求类型都是显而易见的。例如，你可以这样发送一个 HTTP POST 请求：
+Requests 简便的 API 意味着所有 HTTP 请求类型都是显而易见的。例如，你可以这样发送一个
+HTTP POST 请求：
 
 ::
+
     >>> r = requests.post("http://httpbin.org/post")
 
 漂亮，对吧？那么其他 HTTP 请求类型：PUT，DELETE，HEAD 以及 OPTIONS 又是如何的呢？都是一样的简单：
 
 ::
+
     >>> r = requests.put("http://httpbin.org/put")
     >>> r = requests.delete("http://httpbin.org/delete")
     >>> r = requests.head("http://httpbin.org/get")
@@ -47,12 +53,12 @@ Requests 简便的 API 意味着所有 HTTP 请求类型都是显而易见的。
 
 都很不错吧，但这也仅是 Requests 的冰山一角呢。
 
-为 URL 传递参数
+传递 URL 参数
 -------------------
 
 你也许经常想为 URL 的查询字符串(query string)传递某种数据。如果你是手工构建 URL，那么数据会以键/值\
 对的形式置于 URL 中，跟在一个问号的后面。例如， ``httpbin.org/get?key=val``\。
-Requests允许你使用 ``params`` 关键字参数，以一个字典来提供这些参数。举例来说，如果你想传递
+Requests 允许你使用 ``params`` 关键字参数，以一个字典来提供这些参数。举例来说，如果你想传递
 ``key1=value1`` 和 ``key2=value2`` 到 ``httpbin.org/get`` ，那么你可以使用如下代码：
 
 ::
@@ -72,6 +78,7 @@ Requests允许你使用 ``params`` 关键字参数，以一个字典来提供这
 你还可以将一个列表作为值传入：
 
 ::
+
   >>> payload = {'key1': 'value1', 'key2': ['value2', 'value3']}
 
   >>> r = requests.get('http://httpbin.org/get', params=payload)
@@ -81,7 +88,9 @@ Requests允许你使用 ``params`` 关键字参数，以一个字典来提供这
 响应内容
 --------------
 
-我们能读取服务器响应的内容。再次以 GitHub 时间线为例::
+我们能读取服务器响应的内容。再次以 GitHub 时间线为例：
+
+::
 
     >>> import requests
     >>> r = requests.get('https://github.com/timeline.json')
@@ -92,7 +101,9 @@ Requests 会自动解码来自服务器的内容。大多数 unicode 字符集�
 
 请求发出后，Requests 会基于 HTTP 头部对响应的编码作出有根据的推测。当你访问 ``r.text``
 之时，Requests 会使用其推测的文本编码。你可以找出 Requests 使用了什么编码，并且能够使用
-``r.encoding`` 属性来改变它::
+``r.encoding`` 属性来改变它：
+
+::
 
     >>> r.encoding
     'utf-8'
@@ -111,7 +122,9 @@ Requests 会自动解码来自服务器的内容。大多数 unicode 字符集�
 二进制响应内容
 -------------------
 
-你也能以字节的方式访问请求响应体，对于非文本请求::
+你也能以字节的方式访问请求响应体，对于非文本请求：
+
+::
 
     >>> r.content
     b'[{"repository":{"open_issues":0,"url":"https://github.com/...
@@ -182,10 +195,10 @@ Requests 中也有一个内置的 JSON 解码器，助你处理 JSON 数据：
 
     >>> r = requests.get(url, headers=headers)
 
-Note: 定制 header 的优先级低于某些特定的信息源，例如：
+注意: 定制 header 的优先级低于某些特定的信息源，例如：
 
 * 如果在 ``.netrc`` 中设置了用户认证信息，使用 `headers=` 设置的授权就不会生效。而如果设置了
-  ``auth=`` 参数， ``.netrc``的设置就无效了。
+  ``auth=`` 参数，\``.netrc`` 的设置就无效了。
 * 如果被重定向到别的主机，授权 header 就会被删除。
 * 代理授权 header 会被 URL 中提供的代理身份覆盖掉。
 * 在我们能判断内容长度的情况下，header 的 Content-Length 会被改写。
@@ -193,7 +206,7 @@ Note: 定制 header 的优先级低于某些特定的信息源，例如：
 更进一步讲，Requests 不会基于定制 header 的具体情况改变自己的行为。只不过在最后的请求中，所有的
 header 信息都会被传递进去。
 
-Note: 所有的 header 值必须是 ``string``、bytestring 或者 unicode。尽管传递 unicode 
+注意: 所有的 header 值必须是 ``string``、bytestring 或者 unicode。尽管传递 unicode 
 header 也是允许的，但不建议这样做。
 
 更加复杂的 POST 请求
@@ -302,9 +315,11 @@ Requests 使得上传多部分编码文件变得很简单：
 
 在一个请求中发送多文件参考 :ref:`高级用法 <advanced>` 一节。
 
-.. warning:: 我们强烈建议你用二进制模式(`binary mode`_)打开文件。这是因为 Requests
-             可能会试图为你提供 ``Content-Length`` header，在它这样做的时候，这个值\
-             会被设为文件的字节数（*bytes*）。如果用 *文本模式(text mode)* 打开文件，就可能会发生错误。
+.. admonition:: 警告
+
+    我们强烈建议你用二进制模式(`binary mode`_)打开文件。这是因为 Requests 可能会试图为你提供
+    ``Content-Length`` header，在它这样做的时候，这个值会被设为文件的字节数（*bytes*）。\
+    如果用文本模式(text mode)打开文件，就可能会发生错误。
 
 .. _binary mode: https://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
 
@@ -327,7 +342,7 @@ Requests 使得上传多部分编码文件变得很简单：
     >>> r.status_code == requests.codes.ok
     True
 
-如果发送了一个错误请求(一个4XX客户端错误，或者5XX服务器错误响应)，我们可以通过 
+如果发送了一个错误请求(一个 4XX 客户端错误，或者 5XX 服务器错误响应)，我们可以通过 
 :meth:`Response.raise_for_status() <requests.Response.raise_for_status>`
 来抛出异常：
 
@@ -430,7 +445,7 @@ Cookie
 
 可以使用响应对象的 ``history`` 方法来追踪重定向。
 
-:meth:`Response.history <requests.Response.history>` 是一个:class:`Response <requests.Response>` 对象的列表，为了完成请求而创建了这些对象。这个对象列表按照从最老到最近的请求进行排序。
+:meth:`Response.history <requests.Response.history>` 是一个 :class:`Response <requests.Response>` 对象的列表，为了完成请求而创建了这些对象。这个对象列表按照从最老到最近的请求进行排序。
 
 例如，Github 将所有的 HTTP 请求重定向到 HTTPS：
 
@@ -483,18 +498,19 @@ Cookie
     requests.exceptions.Timeout: HTTPConnectionPool(host='github.com', port=80): Request timed out. (timeout=0.001)
 
 
-.. admonition::
+.. admonition:: 注意
 
-    ``timeout`` 仅对连接过程有效，与响应体的下载无关。
-    ``timeout`` 并不是整个下载响应的时间限制，而是如果服务器在``timeout`` 秒内没有应答，\
-    将会引发一个异常（更精确地说，是在 ``timeout`` 秒内没有从基础套接字上接收到任何字节的数据时）
+    ``timeout`` 仅对连接过程有效，与响应体的下载无关。 ``timeout`` 并不是整个下载响应的\
+    时间限制，而是如果服务器在 ``timeout`` 秒内没有应答，将会引发一个异常（更精确地说，是在
+    ``timeout`` 秒内没有从基础套接字上接收到任何字节的数据时）
 
 错误与异常
 --------------
 
-遇到网络问题（如：DNS 查询失败、拒绝连接等）时，Requests 会抛出一个 :class:`~requests.exceptions.ConnectionError` 异常。
+遇到网络问题（如：DNS 查询失败、拒绝连接等）时，Requests 会抛出一个 
+:class:`~requests.exceptions.ConnectionError` 异常。
 
-如果 HTTP 请求反悔了不成功的状态码， :meth:`Response.raise_for_status() <requests.Response.raise_for_status>` 
+如果 HTTP 请求返回了不成功的状态码， :meth:`Response.raise_for_status() <requests.Response.raise_for_status>` 
 会抛出一个 :class:`~requests.exceptions.HTTPError` 异常。
 
 若请求超时，则抛出一个 :class:`~requests.exceptions.Timeout` 异常。

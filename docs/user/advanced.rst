@@ -115,7 +115,7 @@
 .. _prepared-requests:
 
 准备的请求 （Prepared Request）
------------------------------
+--------------------------------
 
 当你从 API 或者会话调用中收到一个 :class:`Response <requests.Response>`
 对象时，``request`` 属性其实是使用了 ``PreparedRequest``。有时在发送请求之前，你需要对
@@ -217,7 +217,9 @@ Requests 可以为 HTTPS 请求验证 SSL 证书，就像 web 浏览器一样。
     >>> requests.get('https://kennethreitz.com', cert='/wrong_path/server.pem')
     SSLError: [Errno 336265225] _ssl.c:347: error:140B0009:SSL routines:SSL_CTX_use_PrivateKey_file:PEM lib
 
-.. warning:: 本地证书的私有 key 必须是解密状态。目前，Requests 不支持使用加密的 key。
+.. admonition:: 警告
+	
+	本地证书的私有 key 必须是解密状态。目前，Requests 不支持使用加密的 key。
 
 .. _ca-certificates:
 
@@ -302,9 +304,11 @@ Requests支持流式上传，这允许你发送大的数据流或文件而无需
     with open('massive-body') as f:
         requests.post('http://some.url/streamed', data=f)
 
-.. warning:: 我们强烈建议你用二进制模式（`binary mode`_）打开文件。这是因为 requests
-             可能会为你提供 header 中的 ``Content-Length``，在这种情况下该值会被设为
-             文件的**字节数**。如果你用**文本模式**打开文件，就可能碰到错误。
+.. admonition:: 警告
+
+	我们强烈建议你用二进制模式（`binary mode`_）打开文件。这是因为 requests 可能会为你提供 header 
+	中的 ``Content-Length``，在这种情况下该值会被设为文件的\ **字节数**\。如果你用\ **文本模式**\
+	打开文件，就可能碰到错误。
 
 .. _binary mode: https://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
 
@@ -356,9 +360,11 @@ POST 多个分块编码的文件
       ...
     }
 
-.. warning:: 我们强烈建议你用二进制模式（`binary mode`_）打开文件。这是因为 requests
-             可能会为你提供 header 中的 ``Content-Length``，在这种情况下该值会被设为
-             文件的**字节数**。如果你用**文本模式**打开文件，就可能碰到错误。
+.. admonition:: 警告
+	
+	我们强烈建议你用二进制模式（`binary mode`_）打开文件。这是因为 requests 可能会为你提供 header 
+	中的 ``Content-Length``，在这种情况下该值会被设为文件的\ **字节数**\。如果你用\ **文本模式**\
+	打开文件，就可能碰到错误。
 
 .. _binary mode: https://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
 
@@ -373,13 +379,13 @@ Requests有一个钩子系统，你可以用来操控部分请求过程，或信
 可用的钩子:
 
 ``response``:
-
     从一个请求产生的响应
 
 你可以通过传递一个 ``{hook_name: callback_function}`` 字典给 ``hooks`` 请求参数
 为每个请求分配一个钩子函数：
 
 ::
+
     hooks=dict(response=print_url)
 
 
@@ -460,7 +466,7 @@ Requests 允许你使用自己指定的身份验证机制。
         if line:
             print(json.loads(line))
 
-.. warning::
+.. admonition:: 警告
 
     :class:`~requests.Response.iter_lines()` 不保证重进入时的安全性。多次调用该方法
     会导致部分收到的数据丢失。如果你要在多处调用它，就应该使用生成的迭代器对象::
@@ -703,7 +709,7 @@ Cool，有 3 个评论。我们来看一下最后一个评论。
     Sounds great! I'll get right on it.
 
 
-太棒了！噢，不！我原本是想说等我一会，因为我得去喂我的猫。如果我能够编辑这条评论那就好了！
+太棒了！噢，不！我原本是想说等我一会，因为我得去喂我的猫。如果我能够编辑这条评论那就好了！\
 幸运的是，GitHub 允许我们使用另一个 HTTP 动词 PATCH 来编辑评论。我们来试试。
 
 ::
@@ -847,8 +853,8 @@ Header 排序
 ---------------
 
 在某些特殊情况下你也许需要按照次序来提供 header，如果你向 ``headers`` 关键字参数传入一个
-``OrderedDict``，就可以向提供一个带排序的 header。**然而**，Requests 使用的默认
-header 的次序会被优先选择，这意味着如果你在 ``headers`` 关键字参数中覆盖了默认 header，
+``OrderedDict``，就可以向提供一个带排序的 header。\ **然而**\，Requests 使用的默认
+header 的次序会被优先选择，这意味着如果你在 ``headers`` 关键字参数中覆盖了默认 header，\
 和关键字参数中别的 header 相比，它们也许看上去会是次序错误的。
 
 如果这个对你来说是个问题，那么用户应该考虑在 :class:`Session <requests.Session>`
@@ -863,21 +869,25 @@ header 的次序会被优先选择，这意味着如果你在 ``headers`` 关键
 为防止服务器不能及时响应，大部分发至外部服务器的请求都应该带着 timeout 参数。\
 如果没有 timeout，你的代码可能会挂起若干分钟甚至更长时间。
 
-**连接** 超时指的是在你的客户端实现到远端机器端口的连接时（对应的是`connect()`_），
-Request 会等待的秒数。一个很好的实践方法是把连接超时设为比 3 的倍数略大的一个数值，
-因为 `TCP 数据包重传窗口 (TCP packet
-retransmission window) <http://www.hjp.at/doc/rfc/rfc2988.txt>`_ 的默认大小是 3。
+**连接**\超时指的是在你的客户端实现到远端机器端口的连接时（对应的是`connect()`_），\
+Request 会等待的秒数。一个很好的实践方法是把连接超时设为比 3 的倍数略大的一个数值，\
+因为 `TCP 数据包重传窗口 (TCP packet retransmission window) <http://www.hjp.at/doc/rfc/rfc2988.txt>`_
+的默认大小是 3。
 
-一旦你的客户端连接到了服务器并且发送了 HTTP 请求，**读取** 超时指的就是客户端等待服务器发送请求的时间。
-（特定地，它指的是客户端要等待服务器发送字节*之间*的时间。在 99.9%
+一旦你的客户端连接到了服务器并且发送了 HTTP 请求，\ **读取**\超时指的就是客户端等待服务器发送\
+请求的时间。（特定地，它指的是客户端要等待服务器发送字节\ **之间**\的时间。在 99.9%
 的情况下这指的是服务器发送第一个字节之前的时间）。
 
-如果你制订了一个单一的值作为 timeout，如下所示::
+如果你制订了一个单一的值作为 timeout，如下所示：
+
+::
 
     r = requests.get('https://github.com', timeout=5)
 
-这一 timeout 值将会用作 ``connect`` 和 ``read`` 二者的 timeout。如果要分别制定，
-就传入一个元组::
+这一 timeout 值将会用作 ``connect`` 和 ``read`` 二者的 timeout。如果要分别制定，\
+就传入一个元组：
+
+::
 
     r = requests.get('https://github.com', timeout=(3.05, 27))
 

@@ -8,25 +8,24 @@
 StackOverflow
 -------------
 
-If your question does not contain sensitive (possibly proprietary)
-information or can be properly anonymized, please ask a question on
+如果你的问题不包含敏感或私有信息，或者你能将这些信息匿名化，那你就可以在
 `StackOverflow <https://stackoverflow.com/questions/tagged/python-requests>`_
-and use the tag ``python-requests``.
+上使用 ``python-requests`` 标签提问。
 
 发送推文
 ------------
 
-如果你的问题在140个字符内描述，欢迎在twitter上发送推文至
+如果你的问题在140个字符内描述，欢迎在 twitter 上发送推文至
 `@kennethreitz <https://twitter.com/kennethreitz>`_,
 `@sigmavirus24 <https://twitter.com/sigmavirus24>`_, 或
-`@lukasaoz <https://twitter.com/lukasaoz>`_.
+`@lukasaoz <https://twitter.com/lukasaoz>`_\。
 
 
-提交问题
+提交 issue
 -------------
 
-如果你在Requests中注意到了一些意想不到的行为，或者希望看到一个新的功能支持，请 
-`在 GitHub 上提交问题<https://github.com/kennethreitz/requests/issues>`_.
+如果你在 Requests 中注意到了一些意想不到的行为，或者希望看到一个新的功能支持，请 
+`在 GitHub 上提交 issue <https://github.com/kennethreitz/requests/issues>`_.
 
 
 邮件
@@ -39,11 +38,10 @@ and use the tag ``python-requests``.
 IRC
 ---
 
-Requests 的官方Freenode 频道是 
+Requests 的官方 Freenode 频道是 
 `#python-requests <irc://irc.freenode.net/python-requests>`_
 
-The core developers of requests are on IRC throughout the day.
-You can find them in ``#python-requests`` as:
+Requests 的核心开发人员白天会在 IRC 中出没，你可以在 ``#python-requests`` 中找到他们：
 
 - kennethreitz
 - lukasa
