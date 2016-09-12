@@ -101,7 +101,7 @@ Cookie
 
 
 
-状态吗查询
+状态码查询
 ------------------
 
 .. autoclass:: requests.codes
