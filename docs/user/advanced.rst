@@ -11,7 +11,7 @@
 -----------
 
 会话对象让你能够跨请求保持某些参数。它也会在同一个 Session 实例发出的所有请求之间保持 cookie，
-期间使用 ``urllib3`` 的 `connection pooling`_ 功能。所以如果你向同意主机发送多个请求，\
+期间使用 ``urllib3`` 的 `connection pooling`_ 功能。所以如果你向同一主机发送多个请求，\
 底层的 TCP 连接将会被重用，从而带来显著的性能提升。 (参见 `HTTP persistent connection`_).
 
 会话对象具有主要的 Requests API 的所有方法。
