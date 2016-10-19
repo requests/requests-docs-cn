@@ -136,9 +136,9 @@ Requests 会自动为你解码 ``gzip`` 和 ``deflate`` 传输编码的响应数
 ::
 
     >>> from PIL import Image
-    >>> from io import StringIO
+    >>> from io import BytesIO
 
-    >>> i = Image.open(StringIO(r.content))
+    >>> i = Image.open(BytesIO(r.content))
 
 
 JSON 响应内容
