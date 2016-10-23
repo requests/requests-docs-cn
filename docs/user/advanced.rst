@@ -393,7 +393,7 @@ Requests有一个钩子系统，你可以用来操控部分请求过程，或信
 
 ::
 
-    def print_url(r):
+    def print_url(r, *args, **kwargs):
         print(r.url)
 
 若执行你的回调函数期间发生错误，系统会给出一个警告。
