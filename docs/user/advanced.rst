@@ -56,7 +56,7 @@
     print(r.text)
     # '{"cookies": {}}'
 
-如果你要手动为会话添加 cookie，就是用 :ref:`Cookie utility 函数 <api-cookies>` 来操纵
+如果你要手动为会话添加 cookie，就使用 :ref:`Cookie utility 函数 <api-cookies>` 来操纵
 :attr:`Session.cookies <requests.Session.cookies>`\。
 
 会话还可以用作前后文管理器：
