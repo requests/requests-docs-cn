@@ -63,6 +63,9 @@ Requests 所有的功能都可以通过以下 7 个方法访问。它们全部�
 .. autoclass:: requests.PreparedRequest
    :inherited-members:
 
+.. autoclass:: requests.adapters.BaseAdapter
+   :inherited-members:
+
 .. autoclass:: requests.adapters.HTTPAdapter
    :inherited-members:
 
@@ -89,9 +92,8 @@ Requests 所有的功能都可以通过以下 7 个方法访问。它们全部�
 Cookie
 -------
 
-.. autofunction:: requests.utils.dict_from_cookiejar
-.. autofunction:: requests.utils.cookiejar_from_dict
 .. autofunction:: requests.utils.add_dict_to_cookiejar
+.. autofunction:: requests.utils.cookiejar_from_dict
 
 .. autoclass:: requests.cookies.RequestsCookieJar
    :inherited-members:
@@ -224,8 +226,8 @@ license 确保了对于 Requests 的贡献也被涵盖在 Apache 2.0 许可内.
 API 变化
 ~~~~~~~~~~~
 
-* Requests 处理异常的行为有部分更改。 ``RequestException`` 现在是 ``IOError`` 
-  的子类，而非 ``RuntimeError`` 的子类，新的归类更为合理。此外，无效的 URL 
+* Requests 处理异常的行为有部分更改。 ``RequestException`` 现在是 ``IOError``
+  的子类，而非 ``RuntimeError`` 的子类，新的归类更为合理。此外，无效的 URL
   转义序列现在会引发 ``RequestException`` 的一个子类，而非一个 ``ValueError``\。
 
   ::
