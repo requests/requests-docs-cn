@@ -10,7 +10,7 @@ GitHub
 ------
 
 最好的方式是追踪 Requests 开发版本的
-`GitHub 库 <https://github.com/kennethreitz/requests>`_.
+`GitHub 库 <https://github.com/requests/requests>`_.
 
 Twitter
 -------

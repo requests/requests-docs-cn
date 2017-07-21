@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Requests: 让 HTTP 服务人类
-=========================
+============================
 
 发行版本 v\ |version|. (:ref:`安装说明 <install>`)
 
