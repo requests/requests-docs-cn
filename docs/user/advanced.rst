@@ -80,10 +80,10 @@
 请求与响应对象
 -------------------
 
-任何时候调用 requests.*() 你都在做两件主要的事情。其一，你在构建一个 `Request` 对象，
-该对象将被发送到某个服务器请求或查询一些资源。其二，一旦 ``requests`` 得到一个从
-服务器返回的响应就会产生一个 ``Response`` 对象。该响应对象包含服务器返回的所有信息，
-也包含你原来创建的 ``Request`` 对象。如下是一个简单的请求，从 Wikipedia 的服务器得到
+任何时候进行了类似 requests.get() 的调用，你都在做两件主要的事情。其一，你在构建一个 `Request` 对象，
+该对象将被发送到某个服务器请求或查询一些资源。其二，一旦 ``requests`` 得到一个从\
+服务器返回的响应就会产生一个 ``Response`` 对象。该响应对象包含服务器返回的所有信息，\
+也包含你原来创建的 ``Request`` 对象。如下是一个简单的请求，从 Wikipedia 的服务器得到\
 一些非常重要的信息：
 
 ::
@@ -184,41 +184,65 @@ body 或者 header （或者别的什么东西）做一些额外处理，下面�
 SSL 证书验证
 --------------
 
-Requests 可以为 HTTPS 请求验证 SSL 证书，就像 web 浏览器一样。要想检查某个主机的 SSL
-证书，你可以使用 ``verify`` 参数::
+Requests 可以为 HTTPS 请求验证 SSL 证书，就像 web 浏览器一样。By default, SSL verification is enabled, and Requests will throw a SSLError if
+it's unable to verify the certificate::
 
-    >>> requests.get('https://kennethreitz.com', verify=True)
-    requests.exceptions.SSLError: hostname 'kennethreitz.com' doesn't match either of '*.herokuapp.com', 'herokuapp.com'
+    >>> requests.get('https://requestb.in')
+    requests.exceptions.SSLError: hostname 'requestb.in' doesn't match either of '*.herokuapp.com', 'herokuapp.com'
 
 在该域名上我没有设置 SSL，所以失败了。但 Github 设置了 SSL::
 
     >>> requests.get('https://github.com', verify=True)
     <Response [200]>
 
-对于私有证书，你也可以传递一个 CA_BUNDLE 文件的路径给 ``verify``\。你也可以设置
-``REQUEST_CA_BUNDLE`` 环境变量。
+You can pass ``verify`` the path to a CA_BUNDLE file or directory with certificates of trusted CAs::
+
+    >>> requests.get('https://github.com', verify='/path/to/certfile')
+
+or persistent::
+
+    s = requests.Session()
+    s.verify = '/path/to/certfile'
+
+.. note:: If ``verify`` is set to a path to a directory, the directory must have been processed using
+  the c_rehash utility supplied with OpenSSL.
+
+This list of trusted CAs can also be specified through the ``REQUESTS_CA_BUNDLE`` environment variable.
 
 如果你将 ``verify`` 设置为 False，Requests 也能忽略对 SSL 证书的验证。
 
 ::
 
-    >>> requests.get('https://kennethreitz.com', verify=False)
+    >>> requests.get('https://kennethreitz.org', verify=False)
     <Response [200]>
 
 默认情况下， ``verify`` 是设置为 True 的。选项 ``verify`` 仅应用于主机证书。
 
-你也可以指定一个本地证书用作客户端证书，可以是单个文件（包含密钥和证书）或一个包含两个文件路径的元组::
+# 对于私有证书，你也可以传递一个 CA_BUNDLE 文件的路径给 ``verify``\。你也可以设置
+# ``REQUEST_CA_BUNDLE`` 环境变量。
 
-    >>> requests.get('https://kennethreitz.com', cert=('/path/server.crt', '/path/key'))
+客户端证书
+------------------------
+
+你也可以指定一个本地证书用作客户端证书，可以是单个文件（包含密钥和证书）或一个包含两个文件路径的元组：
+
+::
+
+    >>> requests.get('https://kennethreitz.org', cert=('/path/client.cert', '/path/client.key'))
     <Response [200]>
+
+or persistent::
+
+    s = requests.Session()
+    s.cert = '/path/client.cert'
 
 如果你指定了一个错误路径或一个无效的证书::
 
-    >>> requests.get('https://kennethreitz.com', cert='/wrong_path/server.pem')
+    >>> requests.get('https://kennethreitz.org', cert='/wrong_path/client.pem')
     SSLError: [Errno 336265225] _ssl.c:347: error:140B0009:SSL routines:SSL_CTX_use_PrivateKey_file:PEM lib
 
-.. admonition:: 警告
-	
+.. warning:: 警告
+
 	本地证书的私有 key 必须是解密状态。目前，Requests 不支持使用加密的 key。
 
 .. _ca-certificates:
@@ -236,7 +260,7 @@ Requests 更新时才会更新。这意味着如果你固定使用某一版本�
 为了安全起见，我们建议你经常更新 certifi！
 
 .. _HTTP persistent connection: https://en.wikipedia.org/wiki/HTTP_persistent_connection
-.. _connection pooling: https://urllib3.readthedocs.io/en/latest/pools.html
+.. _connection pooling: http://urllib3.readthedocs.io/en/latest/reference/index.html#module-urllib3.connectionpool
 .. _certifi: http://certifi.io/
 .. _Mozilla trust store: https://hg.mozilla.org/mozilla-central/raw-file/tip/security/nss/lib/ckfw/builtins/certdata.txt
 
@@ -246,7 +270,7 @@ Requests 更新时才会更新。这意味着如果你固定使用某一版本�
 -----------------------
 
 默认情况下，当你进行网络请求后，响应体会立即被下载。你可以通过 ``stream`` 参数覆盖这个行为，\
-推迟下载响应体直到访问 :class:`Response.content` 属性：
+推迟下载响应体直到访问 :attr:`Response.content <requests.Response.content>` 属性：
 
 ::
 
@@ -264,19 +288,16 @@ Requests 更新时才会更新。这意味着如果你固定使用某一版本�
 你可以进一步使用 :class:`Response.iter_content <requests.Response.iter_content>`
 和 :class:`Response.iter_lines <requests.Response.iter_lines>`
 方法来控制工作流，或者以 :class:`Response.raw <requests.Response.raw>`
-从底层 urllib3 的 :class:`urllib3.HTTPResponse <urllib3.response.HTTPResponse` 读取。
+从底层 urllib3 的 :class:`urllib3.HTTPResponse <urllib3.response.HTTPResponse` 读取未解码的相应体。
 
 如果你在请求中把 ``stream`` 设为 ``True``，Requests 无法将连接释放回连接池，除非你
 消耗了所有的数据，或者调用了 :class:`Response.close <requests.Response.close>`。
 这样会带来连接效率低下的问题。如果你发现你在使用 ``stream=True`` 的同时还在部分读取请求的
-body（或者完全没有读取 body），那么你就应该考虑使用 ``contextlib.closing`` (`文档`_)，
-如下所示：
+body（或者完全没有读取 body），那么你就应该考虑使用 with 语句发送请求，这样可以保证请求一定会被关闭：
 
 ::
 
-    from contextlib import closing
-
-    with closing(requests.get('http://httpbin.org/get', stream=True)) as r:
+    with requests.get('http://httpbin.org/get', stream=True) as r:
         # 在此处理响应。
 
 .. _`文档`: http://docs.python.org/2/library/contextlib.html#contextlib.closing
@@ -304,9 +325,9 @@ Requests支持流式上传，这允许你发送大的数据流或文件而无需
     with open('massive-body') as f:
         requests.post('http://some.url/streamed', data=f)
 
-.. admonition:: 警告
+.. warning:: 警告
 
-	我们强烈建议你用二进制模式（`binary mode`_）打开文件。这是因为 requests 可能会为你提供 header 
+	我们强烈建议你用二进制模式（`binary mode`_）打开文件。这是因为 requests 可能会为你提供 header
 	中的 ``Content-Length``，在这种情况下该值会被设为文件的\ **字节数**\。如果你用\ **文本模式**\
 	打开文件，就可能碰到错误。
 
@@ -360,9 +381,9 @@ POST 多个分块编码的文件
       ...
     }
 
-.. admonition:: 警告
-	
-	我们强烈建议你用二进制模式（`binary mode`_）打开文件。这是因为 requests 可能会为你提供 header 
+.. warning:: 警告
+
+	我们强烈建议你用二进制模式（`binary mode`_）打开文件。这是因为 requests 可能会为你提供 header
 	中的 ``Content-Length``，在这种情况下该值会被设为文件的\ **字节数**\。如果你用\ **文本模式**\
 	打开文件，就可能碰到错误。
 
@@ -381,7 +402,7 @@ Requests有一个钩子系统，你可以用来操控部分请求过程，或信
 ``response``:
     从一个请求产生的响应
 
-你可以通过传递一个 ``{hook_name: callback_function}`` 字典给 ``hooks`` 请求参数
+你可以通过传递一个 ``{hook_name: callback_function}`` 字典给 ``hooks`` 请求参数\
 为每个请求分配一个钩子函数：
 
 ::
@@ -398,7 +419,7 @@ Requests有一个钩子系统，你可以用来操控部分请求过程，或信
 
 若执行你的回调函数期间发生错误，系统会给出一个警告。
 
-若回调函数返回一个值，默认以该值替换传进来的数据。若函数未返回任何东西，
+若回调函数返回一个值，默认以该值替换传进来的数据。若函数未返回任何东西，\
 也没有什么其他的影响。
 
 我们来在运行期间打印一些请求方法的参数：
@@ -448,9 +469,9 @@ Requests 允许你使用自己指定的身份验证机制。
 流式请求
 --------------
 
-使用 :class:`requests.Response.iter_lines()` 你可以很方便地对流式 API
+使用 :meth:`Response.iter_lines() <requests.Response.iter_lines>` 你可以很方便地对流式 API
 （例如 `Twitter 的流式 API <https://dev.twittercom/docs/streaming-api>`_ ）
-进行迭代。简单地设置 ``stream`` 为 ``True`` 便可以使用 :class:`~requests.Response.iter_lines()`
+进行迭代。简单地设置 ``stream`` 为 ``True`` 便可以使用 :meth:`~requests.Response.iter_lines()`
 对相应进行迭代：
 
 ::
@@ -464,11 +485,27 @@ Requests 允许你使用自己指定的身份验证机制。
 
         # filter out keep-alive new lines
         if line:
+            decoded_line = line.decode('utf-8')
+            print(json.loads(decoded_line))
+
+When using `decode_unicode=True` with
+:meth:`Response.iter_lines() <requests.Response.iter_lines>` or
+:meth:`Response.iter_content() <requests.Response.iter_content>`, you'll want
+to provide a fallback encoding in the event the server doesn't provide one::
+
+
+    r = requests.get('http://httpbin.org/stream/20', stream=True)
+
+    if r.encoding is None:
+        r.encoding = 'utf-8'
+
+    for line in r.iter_lines(decode_unicode=True):
+        if line:
             print(json.loads(line))
 
-.. admonition:: 警告
+.. warning:: 警告
 
-    :class:`~requests.Response.iter_lines()` 不保证重进入时的安全性。多次调用该方法
+    :meth:`~requests.Response.iter_lines()` 不保证重进入时的安全性。多次调用该方法
     会导致部分收到的数据丢失。如果你要在多处调用它，就应该使用生成的迭代器对象::
 
         lines = r.iter_lines()
@@ -566,7 +603,7 @@ Requests 符合所有相关的规范和 RFC，这样不会为用户造成不必�
 
 只有当 HTTP 头部不存在明确指定的字符集，并且 ``Content-Type`` 头部字段包含 ``text`` 值之时，
 Requests 才不去猜测编码方式。在这种情况下，
-`RFC 2616 <http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7.1>`_ 
+`RFC 2616 <http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7.1>`_
 指定默认字符集必须是 ``ISO-8859-1`` 。Requests 遵从这一规范。如果你需要一种不同的编码方式，\
 你可以手动设置 :attr:`Response.encoding <requests.Response.encoding>` 属性，或使用原始的
 :attr:`Response.content <requests.Response.content>`\。
@@ -581,13 +618,13 @@ Requests 提供了几乎所有HTTP动词的功能：GET、OPTIONS、HEAD、POST�
 
 我将从最常使用的动词 GET 开始。HTTP GET 是一个幂等方法，从给定的 URL 返回一个资源。因而，\
 当你试图从一个 web 位置获取数据之时，你应该使用这个动词。一个使用示例是尝试从 Github 上获取\
-关于一个特定 commit 的信息。假设我们想获取Requests的commit ``a050faf`` 的信息。我们可以\
+关于一个特定 commit 的信息。假设我们想获取 Requests 的 commit ``a050faf`` 的信息。我们可以\
 这样去做：
 
 ::
 
     >>> import requests
-    >>> r = requests.get('https://api.github.com/repos/kennethreitz/requests/git/commits/a050faf084662f3a352dd1a941f2c7c9f886d4ad')
+    >>> r = requests.get('https://api.github.com/repos/requests/requests/git/commits/a050faf084662f3a352dd1a941f2c7c9f886d4ad')
 
 
 我们应该确认 GitHub 是否正确响应。如果正确响应，我们想弄清响应内容是什么类型的。像这样去做：
@@ -643,11 +680,12 @@ GitHub 正确实现了 OPTIONS，那么服务器应该在响应头中返回允�
 玩玩 GitHub 的 Issue 特性。
 
 
-本篇文档是回应 Issue #482 而添加的。鉴于该问题已经存在，我们就以它为例。先获取它。
+本篇文档是回应 `Issue #482 <https://github.com/requests/requests/issues/482>`_
+而添加的。鉴于该问题已经存在，我们就以它为例。先获取它。
 
 ::
 
-    >>> r = requests.get('https://api.github.com/repos/kennethreitz/requests/issues/482')
+    >>> r = requests.get('https://api.github.com/requests/kennethreitz/requests/issues/482')
     >>> r.status_code
     200
 
@@ -686,7 +724,7 @@ Cool，有 3 个评论。我们来看一下最后一个评论。
 ::
 
     >>> body = json.dumps({u"body": u"Sounds great! I'll get right on it!"})
-    >>> url = u"https://api.github.com/repos/kennethreitz/requests/issues/482/comments"
+    >>> url = u"https://api.github.com/repos/requests/requests/issues/482/comments"
 
     >>> r = requests.post(url=url, data=body)
     >>> r.status_code
@@ -718,7 +756,7 @@ Cool，有 3 个评论。我们来看一下最后一个评论。
     5804413
 
     >>> body = json.dumps({u"body": u"Sounds great! I'll get right on it once I feed my cat."})
-    >>> url = u"https://api.github.com/repos/kennethreitz/requests/issues/comments/5804413"
+    >>> url = u"https://api.github.com/repos/requests/requests/issues/comments/5804413"
 
     >>> r = requests.patch(url=url, data=body, auth=auth)
     >>> r.status_code
@@ -737,7 +775,7 @@ Cool，有 3 个评论。我们来看一下最后一个评论。
     '204 No Content'
 
 
-很好。不见了。最后一件我想知道的事情是我已经使用了多少限额（ratelimit）。查查看，GitHub 
+很好。不见了。最后一件我想知道的事情是我已经使用了多少限额（ratelimit）。查查看，GitHub
 在响应头部发送这个信息，因此不必下载整个网页，我将使用一个 HEAD 请求来获取响应头。
 
 ::
@@ -751,6 +789,21 @@ Cool，有 3 个评论。我们来看一下最后一个评论。
 
 
 很好。是时候写个 Python 程序以各种刺激的方式滥用 GitHub 的 API，还可以使用 4995 次呢。
+
+Custom Verbs
+------------
+
+From time to time you may be working with a server that, for whatever reason,
+allows use or even requires use of HTTP verbs not covered above. One example of
+this would be the MKCOL method some WEBDAV servers use. Do not fret, these can
+still be used with Requests. These make use of the built-in ``.request``
+method. For example::
+
+    >>> r = requests.request('MKCOL', url, data=data)
+    >>> r.status_code
+    200 # Assuming your call was correct
+
+Utilising this, you can make use of any method verb that your server allows.
 
 .. _link-headers:
 
@@ -797,11 +850,11 @@ Request 允许用户创建和使用他们自己的传输适配器，实现他们
     >>> s = requests.Session()
     >>> s.mount('http://www.github.com', MyAdapter())
 
-这个 mount 调用会注册一个传输适配器的特定实例到一个前缀上面。加载以后，任何使用该会话的 HTTP 
+这个 mount 调用会注册一个传输适配器的特定实例到一个前缀上面。加载以后，任何使用该会话的 HTTP
 请求，只要其 URL 是以给定的前缀开头，该传输适配器就会被使用到。
 
 传输适配器的众多实现细节不在本文档的覆盖范围内，不过你可以看看接下来这个简单的 SSL
-用例。更多的用法，你也许该考虑为``requests.adapters.BaseAdapter`` 创建子类。
+用例。更多的用法，你也许该考虑为 :class:`BaseAdapter <requests.adapters.BaseAdapter>` 创建子类。
 
 示例: 指定的 SSL 版本
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -866,7 +919,8 @@ header 的次序会被优先选择，这意味着如果你在 ``headers`` 关键
 超时（timeout）
 -----------------
 
-为防止服务器不能及时响应，大部分发至外部服务器的请求都应该带着 timeout 参数。\
+为防止服务器不能及时响应，大部分发至外部服务器的请求都应该带着 timeout 参数。在默认情况\
+下，除非显式指定了 timeout 值，requests 是不会自动进行超时处理的。\
 如果没有 timeout，你的代码可能会挂起若干分钟甚至更长时间。
 
 **连接**\超时指的是在你的客户端实现到远端机器端口的连接时（对应的是`connect()`_），\
