@@ -50,6 +50,7 @@ Chris Adams 给出了一个很好的总结
 * Python 3.3
 * Python 3.4
 * Python 3.5
+* Python 3.6
 * PyPy
 
 "hostname doesn't match" 错误是怎么回事？

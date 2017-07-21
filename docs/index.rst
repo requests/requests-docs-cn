@@ -4,9 +4,25 @@
    contain the root `toctree` directive.
 
 Requests: 让 HTTP 服务人类
-=========================
+============================
 
 发行版本 v\ |version|. (:ref:`安装说明 <install>`)
+
+.. image:: https://img.shields.io/pypi/l/requests.svg
+    :target: https://pypi.python.org/pypi/requests
+
+.. image:: https://img.shields.io/pypi/wheel/requests.svg
+    :target: https://pypi.python.org/pypi/requests
+
+.. image:: https://img.shields.io/pypi/pyversions/requests.svg
+    :target: https://pypi.python.org/pypi/requests
+
+.. image:: https://codecov.io/github/requests/requests/coverage.svg?branch=master
+    :target: https://codecov.io/github/requests/requests
+    :alt: codecov.io
+
+.. image:: https://img.shields.io/badge/Say%20Thanks!-🦉-1EAEDB.svg
+    :target: https://saythanks.io/to/kennethreitz
 
 Requests 唯一的一个\ **非转基因**\的 Python HTTP 库，人类可以安全享用。
 
@@ -37,7 +53,8 @@ URL 添加查询字串，也不需要对 POST 数据进行表单编码。Keep-al
 用户见证
 ------------
 
-女王殿下的政府、Amazon、Google、Twilio、Mozilla、Heroku、PayPal、NPR、Obama for America、\
+Twitter、Spotify、Microsoft、Amazon、Lyft、BuzzFeed、Reddit、NSA、女王殿下的政府、\
+Amazon、Google、Twilio、Mozilla、Heroku、PayPal、NPR、Obama for America、\
 Transifex、Native Instruments、Washington Post、Twitter、SoundCloud、Kippt、Readability、\
 以及若干不愿公开身份的联邦政府机构都在内部使用。
 
@@ -60,23 +77,23 @@ Transifex、Native Instruments、Washington Post、Twitter、SoundCloud、Kippt�
 
 Requests 完全满足今日 web 的需求。
 
-- 国际化域名和 URL
 - Keep-Alive & 连接池
+- 国际化域名和 URL
 - 带持久 Cookie 的会话
 - 浏览器式的 SSL 认证
+- 自动内容解码
 - 基本/摘要式的身份认证
 - 优雅的 key/value Cookie
 - 自动解压
-- 自动内容解码
 - Unicode 响应体
+- HTTP(S) 代理支持
 - 文件分块上传
-- 连接超时
 - 流下载
-- 支持 ``.netrc``
+- 连接超时
 - 分块请求
-- 线程安全
+- 支持 ``.netrc``
 
-Requests 支持 Python 2.6—3.5，而且能在PyPy下完美运行。
+Requests 支持 Python 2.6—2.7以及3.3—3.7，而且能在 PyPy 下完美运行。
 
 用户指南
 ----------

@@ -24,8 +24,8 @@ StackOverflow
 提交 issue
 -------------
 
-如果你在 Requests 中注意到了一些意想不到的行为，或者希望看到一个新的功能支持，请 
-`在 GitHub 上提交 issue <https://github.com/kennethreitz/requests/issues>`_.
+如果你在 Requests 中注意到了一些意想不到的行为，或者希望看到一个新的功能支持，请
+`在 GitHub 上提交 issue <https://github.com/requests/requests/issues>`_.
 
 
 邮件
@@ -38,7 +38,7 @@ StackOverflow
 IRC
 ---
 
-Requests 的官方 Freenode 频道是 
+Requests 的官方 Freenode 频道是
 `#python-requests <irc://irc.freenode.net/python-requests>`_
 
 Requests 的核心开发人员白天会在 IRC 中出没，你可以在 ``#python-requests`` 中找到他们：
