@@ -3,12 +3,356 @@
 Release History
 ---------------
 
+dev
++++
+
+**Improvements**
+
+**Bugfixes**
+
+2.18.1 (2017-06-14)
++++++++++++++++++++
+
+**Bugfixes**
+
+- Fix an error in the packaging whereby the *.whl contained incorrect data that
+  regressed the fix in v2.17.3.
+
+2.18.0 (2017-06-14)
++++++++++++++++++++
+
+**Improvements**
+
+- ``Response`` is now a context manager, so can be used directly in a ``with`` statement
+  without first having to be wrapped by ``contextlib.closing()``.
+
+**Bugfixes**
+
+- Resolve installation failure if multiprocessing is not available
+- Resolve tests crash if multiprocessing is not able to determine the number of CPU cores
+- Resolve error swallowing in utils set_environ generator
+
+
+2.17.3 (2017-05-29)
++++++++++++++++++++
+
+**Improvements**
+
+- Improved ``packages`` namespace identity support, for monkeypatching libraries.
+
+
+2.17.2 (2017-05-29)
++++++++++++++++++++
+
+**Improvements**
+
+- Improved ``packages`` namespace identity support, for monkeypatching libraries.
+
+
+2.17.1 (2017-05-29)
++++++++++++++++++++
+
+**Improvements**
+
+- Improved ``packages`` namespace identity support, for monkeypatching libraries.
+
+
+2.17.0 (2017-05-29)
++++++++++++++++++++
+
+**Improvements**
+
+- Removal of the 301 redirect cache. This improves thread-safety.
+
+
+2.16.5 (2017-05-28)
++++++++++++++++++++
+
+- Improvements to ``$ python -m requests.help``.
+
+2.16.4 (2017-05-27)
++++++++++++++++++++
+
+- Introduction of the ``$ python -m requests.help`` command, for debugging with maintainers!
+
+2.16.3 (2017-05-27)
++++++++++++++++++++
+
+- Further restored the ``requests.packages`` namespace for compatibility reasons.
+
+2.16.2 (2017-05-27)
++++++++++++++++++++
+
+- Further restored the ``requests.packages`` namespace for compatibility reasons.
+
+No code modification (noted below) should be neccessary any longer.
+
+2.16.1 (2017-05-27)
++++++++++++++++++++
+
+- Restored the ``requests.packages`` namespace for compatibility reasons.
+- Bugfix for ``urllib3`` version parsing.
+
+**Note**: code that was written to import against the ``requests.packages``
+namespace previously will have to import code that rests at this module-level
+now.
+
+For example::
+
+    from requests.packages.urllib3.poolmanager import PoolManager
+
+Will need to be re-written to be::
+
+    from requests.packages import urllib3
+    urllib3.poolmanager.PoolManager
+
+Or, even better::
+
+    from urllib3.poolmanager import PoolManager
+
+2.16.0 (2017-05-26)
++++++++++++++++++++
+
+- Unvendor ALL the things!
+
+2.15.1 (2017-05-26)
++++++++++++++++++++
+
+- Everyone makes mistakes.
+
+2.15.0 (2017-05-26)
++++++++++++++++++++
+
+**Improvements**
+
+- Introduction of the ``Response.next`` property, for getting the next
+  ``PreparedResponse`` from a redirect chain (when ``allow_redirects=False``).
+- Internal refactoring of ``__version__`` module.
+
+**Bugfixes**
+
+- Restored once-optional parameter for ``requests.utils.get_environ_proxies()``.
+
+2.14.2 (2017-05-10)
++++++++++++++++++++
+
+**Bugfixes**
+
+- Changed a less-than to an equal-to and an or in the dependency markers to
+  widen compatibility with older setuptools releases.
+
+2.14.1 (2017-05-09)
++++++++++++++++++++
+
+**Bugfixes**
+
+- Changed the dependency markers to widen compatibility with older pip
+  releases.
+
+2.14.0 (2017-05-09)
++++++++++++++++++++
+
+**Improvements**
+
+- It is now possible to pass ``no_proxy`` as a key to the ``proxies``
+  dictionary to provide handling similar to the ``NO_PROXY`` environment
+  variable.
+- When users provide invalid paths to certificate bundle files or directories
+  Requests now raises ``IOError``, rather than failing at the time of the HTTPS
+  request with a fairly inscrutable certificate validation error.
+- The behavior of ``SessionRedirectMixin`` was slightly altered.
+  ``resolve_redirects`` will now detect a redirect by calling
+  ``get_redirect_target(response)`` instead of directly
+  querying ``Response.is_redirect`` and ``Response.headers['location']``.
+  Advanced users will be able to process malformed redirects more easily.
+- Changed the internal calculation of elapsed request time to have higher
+  resolution on Windows.
+- Added ``win_inet_pton`` as conditional dependency for the ``[socks]`` extra
+  on Windows with Python 2.7.
+- Changed the proxy bypass implementation on Windows: the proxy bypass
+  check doesn't use forward and reverse DNS requests anymore
+- URLs with schemes that begin with ``http`` but are not ``http`` or ``https``
+  no longer have their host parts forced to lowercase.
+
+**Bugfixes**
+
+- Much improved handling of non-ASCII ``Location`` header values in redirects.
+  Fewer ``UnicodeDecodeErrors`` are encountered on Python 2, and Python 3 now
+  correctly understands that Latin-1 is unlikely to be the correct encoding.
+- If an attempt to ``seek`` file to find out its length fails, we now
+  appropriately handle that by aborting our content-length calculations.
+- Restricted ``HTTPDigestAuth`` to only respond to auth challenges made on 4XX
+  responses, rather than to all auth challenges.
+- Fixed some code that was firing ``DeprecationWarning`` on Python 3.6.
+- The dismayed person emoticon (``/o\\``) no longer has a big head. I'm sure
+  this is what you were all worrying about most.
+
+
+**Miscellaneous**
+
+- Updated bundled urllib3 to v1.21.1.
+- Updated bundled chardet to v3.0.2.
+- Updated bundled idna to v2.5.
+- Updated bundled certifi to 2017.4.17.
+
+2.13.0 (2017-01-24)
++++++++++++++++++++
+
+**Features**
+
+- Only load the ``idna`` library when we've determined we need it. This will
+  save some memory for users.
+
+**Miscellaneous**
+
+- Updated bundled urllib3 to 1.20.
+- Updated bundled idna to 2.2.
+
+2.12.5 (2017-01-18)
++++++++++++++++++++
+
+**Bugfixes**
+
+- Fixed an issue with JSON encoding detection, specifically detecting
+  big-endian UTF-32 with BOM.
+
+2.12.4 (2016-12-14)
++++++++++++++++++++
+
+**Bugfixes**
+
+- Fixed regression from 2.12.2 where non-string types were rejected in the
+  basic auth parameters. While support for this behaviour has been readded,
+  the behaviour is deprecated and will be removed in the future.
+
+2.12.3 (2016-12-01)
++++++++++++++++++++
+
+**Bugfixes**
+
+- Fixed regression from v2.12.1 for URLs with schemes that begin with "http".
+  These URLs have historically been processed as though they were HTTP-schemed
+  URLs, and so have had parameters added. This was removed in v2.12.2 in an
+  overzealous attempt to resolve problems with IDNA-encoding those URLs. This
+  change was reverted: the other fixes for IDNA-encoding have been judged to
+  be sufficient to return to the behaviour Requests had before v2.12.0.
+
+2.12.2 (2016-11-30)
++++++++++++++++++++
+
+**Bugfixes**
+
+- Fixed several issues with IDNA-encoding URLs that are technically invalid but
+  which are widely accepted. Requests will now attempt to IDNA-encode a URL if
+  it can but, if it fails, and the host contains only ASCII characters, it will
+  be passed through optimistically. This will allow users to opt-in to using
+  IDNA2003 themselves if they want to, and will also allow technically invalid
+  but still common hostnames.
+- Fixed an issue where URLs with leading whitespace would raise
+  ``InvalidSchema`` errors.
+- Fixed an issue where some URLs without the HTTP or HTTPS schemes would still
+  have HTTP URL preparation applied to them.
+- Fixed an issue where Unicode strings could not be used in basic auth.
+- Fixed an issue encountered by some Requests plugins where constructing a
+  Response object would cause ``Response.content`` to raise an
+  ``AttributeError``.
+
+2.12.1 (2016-11-16)
++++++++++++++++++++
+
+**Bugfixes**
+
+- Updated setuptools 'security' extra for the new PyOpenSSL backend in urllib3.
+
+**Miscellaneous**
+
+- Updated bundled urllib3 to 1.19.1.
+
+2.12.0 (2016-11-15)
++++++++++++++++++++
+
+**Improvements**
+
+- Updated support for internationalized domain names from IDNA2003 to IDNA2008.
+  This updated support is required for several forms of IDNs and is mandatory
+  for .de domains.
+- Much improved heuristics for guessing content lengths: Requests will no
+  longer read an entire ``StringIO`` into memory.
+- Much improved logic for recalculating ``Content-Length`` headers for
+  ``PreparedRequest`` objects.
+- Improved tolerance for file-like objects that have no ``tell`` method but
+  do have a ``seek`` method.
+- Anything that is a subclass of ``Mapping`` is now treated like a dictionary
+  by the ``data=`` keyword argument.
+- Requests now tolerates empty passwords in proxy credentials, rather than
+  stripping the credentials.
+- If a request is made with a file-like object as the body and that request is
+  redirected with a 307 or 308 status code, Requests will now attempt to
+  rewind the body object so it can be replayed.
+
+**Bugfixes**
+
+- When calling ``response.close``, the call to ``close`` will be propagated
+  through to non-urllib3 backends.
+- Fixed issue where the ``ALL_PROXY`` environment variable would be preferred
+  over scheme-specific variables like ``HTTP_PROXY``.
+- Fixed issue where non-UTF8 reason phrases got severely mangled by falling
+  back to decoding using ISO 8859-1 instead.
+- Fixed a bug where Requests would not correctly correlate cookies set when
+  using custom Host headers if those Host headers did not use the native
+  string type for the platform.
+
+**Miscellaneous**
+
+- Updated bundled urllib3 to 1.19.
+- Updated bundled certifi certs to 2016.09.26.
+
+2.11.1 (2016-08-17)
++++++++++++++++++++
+
+**Bugfixes**
+
+- Fixed a bug when using ``iter_content`` with ``decode_unicode=True`` for
+  streamed bodies would raise ``AttributeError``. This bug was introduced in
+  2.11.
+- Strip Content-Type and Transfer-Encoding headers from the header block when
+  following a redirect that transforms the verb from POST/PUT to GET.
+
+2.11.0 (2016-08-08)
++++++++++++++++++++
+
+**Improvements**
+
+- Added support for the ``ALL_PROXY`` environment variable.
+- Reject header values that contain leading whitespace or newline characters to
+  reduce risk of header smuggling.
+
+**Bugfixes**
+
+- Fixed occasional ``TypeError`` when attempting to decode a JSON response that
+  occurred in an error case. Now correctly returns a ``ValueError``.
+- Requests would incorrectly ignore a non-CIDR IP address in the ``NO_PROXY``
+  environment variables: Requests now treats it as a specific IP.
+- Fixed a bug when sending JSON data that could cause us to encounter obscure
+  OpenSSL errors in certain network conditions (yes, really).
+- Added type checks to ensure that ``iter_content`` only accepts integers and
+  ``None`` for chunk sizes.
+- Fixed issue where responses whose body had not been fully consumed would have
+  the underlying connection closed but not returned to the connection pool,
+  which could cause Requests to hang in situations where the ``HTTPAdapter``
+  had been configured to use a blocking connection pool.
+
+**Miscellaneous**
+
+- Updated bundled urllib3 to 1.16.
+- Some previous releases accidentally accepted non-strings as acceptable header values. This release does not.
+
 2.10.0 (2016-04-29)
 +++++++++++++++++++
 
 **New Features**
 
-- SOCKS Proxy Support! (requires PySocks; $ pip install requests[socks])
+- SOCKS Proxy Support! (requires PySocks; ``$ pip install requests[socks]``)
 
 **Miscellaneous**
 
@@ -310,7 +654,7 @@ This is the first release that follows our new release process. For more, see
 
 - Unicode URL improvements for Python 2.
 - Re-order JSON param for backwards compat.
-- Automatically defrag authentication schemes from host/pass URIs. (`#2249 <https://github.com/kennethreitz/requests/issues/2249>`_)
+- Automatically defrag authentication schemes from host/pass URIs. (`#2249 <https://github.com/requests/requests/issues/2249>`_)
 
 
 2.4.2 (2014-10-05)
@@ -318,19 +662,19 @@ This is the first release that follows our new release process. For more, see
 
 **Improvements**
 
-- FINALLY! Add json parameter for uploads! (`#2258 <https://github.com/kennethreitz/requests/pull/2258>`_)
-- Support for bytestring URLs on Python 3.x (`#2238 <https://github.com/kennethreitz/requests/pull/2238>`_)
+- FINALLY! Add json parameter for uploads! (`#2258 <https://github.com/requests/requests/pull/2258>`_)
+- Support for bytestring URLs on Python 3.x (`#2238 <https://github.com/requests/requests/pull/2238>`_)
 
 **Bugfixes**
 
-- Avoid getting stuck in a loop (`#2244 <https://github.com/kennethreitz/requests/pull/2244>`_)
-- Multiple calls to iter* fail with unhelpful error. (`#2240 <https://github.com/kennethreitz/requests/issues/2240>`_, `#2241 <https://github.com/kennethreitz/requests/issues/2241>`_)
+- Avoid getting stuck in a loop (`#2244 <https://github.com/requests/requests/pull/2244>`_)
+- Multiple calls to iter* fail with unhelpful error. (`#2240 <https://github.com/requests/requests/issues/2240>`_, `#2241 <https://github.com/requests/requests/issues/2241>`_)
 
 **Documentation**
 
-- Correct redirection introduction (`#2245 <https://github.com/kennethreitz/requests/pull/2245/>`_)
-- Added example of how to send multiple files in one request. (`#2227 <https://github.com/kennethreitz/requests/pull/2227/>`_)
-- Clarify how to pass a custom set of CAs (`#2248 <https://github.com/kennethreitz/requests/pull/2248/>`_)
+- Correct redirection introduction (`#2245 <https://github.com/requests/requests/pull/2245/>`_)
+- Added example of how to send multiple files in one request. (`#2227 <https://github.com/requests/requests/pull/2227/>`_)
+- Clarify how to pass a custom set of CAs (`#2248 <https://github.com/requests/requests/pull/2248/>`_)
 
 
 
@@ -1153,4 +1497,3 @@ This is not a backwards compatible change.
 
 * Frustration
 * Conception
-

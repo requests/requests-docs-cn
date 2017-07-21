@@ -1,12 +1,13 @@
 Requests is written and maintained by Kenneth Reitz and
 various contributors:
 
-Keepers of the Three Crystals
-`````````````````````````````
+Keepers of the Four Crystals
+````````````````````````````
 
 - Kenneth Reitz <me@kennethreitz.org> `@kennethreitz <https://github.com/kennethreitz>`_, Keeper of the Master Crystal.
 - Cory Benfield <cory@lukasa.co.uk> `@lukasa <https://github.com/lukasa>`_
 - Ian Cordasco <graffatcolmingov@gmail.com> `@sigmavirus24 <https://github.com/sigmavirus24>`_
+- Nate Prewitt <nate.prewitt@gmail.com> `@nateprewitt <https://github.com/nateprewitt>`_
 
 
 
@@ -167,3 +168,20 @@ Patches and Suggestions
 - piotrjurkiewicz
 - Jesse Shapiro <jesse@jesseshapiro.net> (`@haikuginger <https://github.com/haikuginger>`_)
 - Nate Prewitt <nate.prewitt@gmail.com> (`@nateprewitt <https://github.com/nateprewitt>`_)
+- Maik Himstedt
+- Michael Hunsinger
+- Brian Bamsch <bbamsch32@gmail.com> (`@bbamsch <https://github.com/bbamsch>`_)
+- Om Prakash Kumar <omprakash070@gmail.com> (`@iamprakashom <https://github.com/iamprakashom>`_)
+- Philipp Konrad <gardiac2002@gmail.com> (`@gardiac2002 <https://github.com/gardiac2002>`_)
+- Hussain Tamboli <hussaintamboli18@gmail.com> (`@hussaintamboli <https://github.com/hussaintamboli>`_)
+- Casey Davidson (`@davidsoncasey <https://github.com/davidsoncasey>`_)
+- Andrii Soldatenko (`@a_soldatenko <https://github.com/andriisoldatenko>`_)
+- Moinuddin Quadri <moin18@gmail.com> (`@moin18 <https://github.com/moin18>`_)
+- Matt Kohl (`@mattkohl <https://github.com/mattkohl>`_)
+- Jonathan Vanasco (`@jvanasco <https://github.com/jvanasco>`_)
+- David Fontenot (`@davidfontenot <https://github.com/davidfontenot>`_)
+- Shmuel Amar (`@shmuelamar <https://github.com/shmuelamar>`_)
+- Gary Wu (`@garywu <https://github.com/garywu>`_)
+- Ryan Pineo (`@ryanpineo <https://github.com/ryanpineo>`_)
+- Ed Morley (`@edmorley <https://github.com/edmorley>`_)
+- Matt Liu <liumatt@gmail.com> (`@mlcrazy <https://github.com/mlcrazy>`_)
