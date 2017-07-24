@@ -40,7 +40,8 @@ netrc 认证
 ~~~~~~~~~~~~~~~~~~~~
 
 如果认证方法没有收到 ``auth`` 参数，Requests 将试图从用户的 netrc
-文件中获取 URL 的 hostname 需要的认证身份。
+文件中获取 URL 的 hostname 需要的认证身份。The netrc file overrides raw HTTP authentication headers
+set with `headers=`.
 
 如果找到了 hostname 对应的身份，就会以 HTTP Basic Auth 的形式发送请求。
 
@@ -70,7 +71,7 @@ Oauth 是一种常见的 Web API 认证方式。 ``requests-oauthlib``
 
     >>> url = 'https://api.twitter.com/1.1/account/verify_credentials.json'
     >>> auth = OAuth1('YOUR_APP_KEY', 'YOUR_APP_SECRET',
-                      'USER_OAUTH_TOKEN', 'USER_OAUTH_TOKEN_SECRET')
+    ...               'USER_OAUTH_TOKEN', 'USER_OAUTH_TOKEN_SECRET')
 
     >>> requests.get(url, auth=auth)
     <Response [200]>
@@ -78,6 +79,16 @@ Oauth 是一种常见的 Web API 认证方式。 ``requests-oauthlib``
 关于 OAuth 工作流程的更多信息，请参见 `OAuth`_ 官方网站。
 关于 requests-oauthlib 的文档和用例，请参见 GitHub 的 `requests_oauthlib`_ 代码库。
 
+OAuth 2 与 OpenID 连接认证
+-----------------------------------------
+
+``requests-oauthlib`` 库还可以处理 OAuth 2，OAuth 2 是 OpenID 连接的基础机制。
+请查看 `requests-oauthlib OAuth2 documentation`_ 文档以了解 OAuth 2 的各种认证管理流程：
+
+* `Web Application Flow`_
+* `Mobile Application Flow`_
+* `Legacy Application Flow`_
+* `Backend Application Flow`_
 
 其他身份认证形式
 --------------------
@@ -89,7 +100,7 @@ Requests 的设计允许其他形式的身份认证用简易的方式插入其�
 - Kerberos_
 - NTLM_
 
-如果你想使用其中任何一种身份认证形式，直接去它们的GitHub页面，依照说明进行。
+如果你想使用其中任何一种身份认证形式，直接去它们的 GitHub 页面，依照说明进行。
 
 新的身份认证形式
 -------------------
@@ -97,7 +108,7 @@ Requests 的设计允许其他形式的身份认证用简易的方式插入其�
 如果你找不到所需要的身份认证形式的一个良好实现，你也可以自己实现它。Requests 非常易于添加你\
 自己的身份认证形式。
 
-要想自己实现，就从 :class:`requests.auth.AuthBase` 继承一个子类，并实现 ``__call__()`` 方法：
+要想自己实现，就从 :class:`AuthBase <requests.auth.AuthBase>` 继承一个子类，并实现 ``__call__()`` 方法：
 
 ::
 
@@ -111,13 +122,18 @@ Requests 的设计允许其他形式的身份认证用简易的方式插入其�
     >>> requests.get(url, auth=MyAuth())
     <Response [200]>
 
-当一个身份认证模块被附加到一个请求上，在设置 request 期间就会调用该模块。因此 ``__call__`` 
+当一个身份认证模块被附加到一个请求上，在设置 request 期间就会调用该模块。因此 ``__call__``
 方法必须完成使得身份认证生效的所有事情。一些身份认证形式会额外地添加钩子来提供进一步的功能。
 
 你可以在 `Requests organization`_ 页面的 ``auth.py`` 文件中找到更多示例。
 
 .. _OAuth: http://oauth.net/
 .. _requests_oauthlib: https://github.com/requests/requests-oauthlib
+.. _requests-oauthlib OAuth2 documentation: http://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html
+.. _Web Application Flow: http://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html#web-application-flow
+.. _Mobile Application Flow: http://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html#mobile-application-flow
+.. _Legacy Application Flow:  http://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html#legacy-application-flow
+.. _Backend Application Flow:  http://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html#backend-application-flow
 .. _Kerberos: https://github.com/requests/requests-kerberos
 .. _NTLM: https://github.com/requests/requests-ntlm
 .. _Requests organization: https://github.com/requests

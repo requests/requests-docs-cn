@@ -32,7 +32,7 @@
 
     >>> r = requests.get('https://github.com/timeline.json')
 
-现在，我们有一个名为 ``r`` 的 :class:`Response <requests.Response>` 
+现在，我们有一个名为 ``r`` 的 :class:`Response <requests.Response>`
 对象。我们可以从这个对象中获取所有我们想要的信息。
 
 Requests 简便的 API 意味着所有 HTTP 请求类型都是显而易见的。例如，你可以这样发送一个
@@ -58,7 +58,7 @@ HTTP POST 请求：
 
 你也许经常想为 URL 的查询字符串(query string)传递某种数据。如果你是手工构建 URL，那么数据会以键/值\
 对的形式置于 URL 中，跟在一个问号的后面。例如， ``httpbin.org/get?key=val``\。
-Requests 允许你使用 ``params`` 关键字参数，以一个字典来提供这些参数。举例来说，如果你想传递
+Requests 允许你使用 ``params`` 关键字参数，以一个字符串字典来提供这些参数。举例来说，如果你想传递
 ``key1=value1`` 和 ``key2=value2`` 到 ``httpbin.org/get`` ，那么你可以使用如下代码：
 
 ::
@@ -110,8 +110,8 @@ Requests 会自动解码来自服务器的内容。大多数 unicode 字符集�
     >>> r.encoding = 'ISO-8859-1'
 
 如果你改变了编码，每当你访问 ``r.text`` ，Request 都将会使用 ``r.encoding``
-的新值。你可能希望在使用特殊逻辑计算出文本的编码的情况下来修改编码。比如 HTTP 和 XML 
-自身可以指定编码。这样的话，你应该使用 ``r.content`` 来找到编码，然后设置 ``r.encoding`` 
+的新值。你可能希望在使用特殊逻辑计算出文本的编码的情况下来修改编码。比如 HTTP 和 XML
+自身可以指定编码。这样的话，你应该使用 ``r.content`` 来找到编码，然后设置 ``r.encoding``
 为相应的编码。这样就能使用正确的编码解析 ``r.text`` 了。
 
 在你需要的情况下，Requests 也可以使用定制的编码。如果你创建了自己的编码，并使用
@@ -154,8 +154,12 @@ Requests 中也有一个内置的 JSON 解码器，助你处理 JSON 数据：
     >>> r.json()
     [{u'repository': {u'open_issues': 0, u'url': 'https://github.com/...
 
-如果 JSON 解码失败， ``r.json`` 就会抛出一个异常。例如，相应内容是 401 (Unauthorized)，\
-尝试访问 ``r.json`` 将会抛出 ``ValueError: No JSON object could be decoded`` 异常。
+如果 JSON 解码失败， ``r.json()`` 就会抛出一个异常。例如，响应内容是 401 (Unauthorized)，\
+尝试访问 ``r.json()`` 将会抛出 ``ValueError: No JSON object could be decoded`` 异常。
+
+需要注意的是，成功调用 ``r.json()`` 并\**不**\ 意味着响应的成功。有的服务器会在失败的响应中\
+包含一个 JSON 对象（比如 HTTP 500 的错误细节）。这种 JSON 会被解码返回。要检查请求是否\
+成功，请使用 ``r.raise_for_status()`` 或者检查 ``r.status_code`` 是否和你的期望相同。
 
 
 原始响应内容
@@ -181,7 +185,8 @@ Requests 中也有一个内置的 JSON 解码器，助你处理 JSON 数据：
             fd.write(chunk)
 
 使用 ``Response.iter_content`` 将会处理大量你直接使用 ``Response.raw`` 不得不处理的。
-当流下载时，上面是优先推荐的获取内容方式。
+当流下载时，上面是优先推荐的获取内容方式。 Note that ``chunk_size`` can be freely adjusted to a number that
+may better fit your use cases.
 
 定制请求头
 -------------
@@ -206,7 +211,7 @@ Requests 中也有一个内置的 JSON 解码器，助你处理 JSON 数据：
 更进一步讲，Requests 不会基于定制 header 的具体情况改变自己的行为。只不过在最后的请求中，所有的
 header 信息都会被传递进去。
 
-注意: 所有的 header 值必须是 ``string``、bytestring 或者 unicode。尽管传递 unicode 
+注意: 所有的 header 值必须是 ``string``、bytestring 或者 unicode。尽管传递 unicode
 header 也是允许的，但不建议这样做。
 
 更加复杂的 POST 请求
@@ -226,6 +231,24 @@ header 也是允许的，但不建议这样做。
       "form": {
         "key2": "value2",
         "key1": "value1"
+      },
+      ...
+    }
+
+你还可以为 ``data`` 参数传入一个元组列表。在表单中多个元素使用同一 key 的时候，这种方式尤其有效：
+
+::
+
+    >>> payload = (('key1', 'value1'), ('key1', 'value2'))
+    >>> r = requests.post('http://httpbin.org/post', data=payload)
+    >>> print(r.text)
+    {
+      ...
+      "form": {
+        "key1": [
+          "value1",
+          "value2"
+        ]
       },
       ...
     }
@@ -310,7 +333,7 @@ Requests 使得上传多部分编码文件变得很简单：
     }
 
 如果你发送一个非常大的文件作为 ``multipart/form-data`` 请求，你可能希望将请求做成数据流。\
-默认下 ``requests`` 不支持, 但有个第三方包 ``requests-toolbelt`` 是支持的。你可以阅读 
+默认下 ``requests`` 不支持, 但有个第三方包 ``requests-toolbelt`` 是支持的。你可以阅读
 `toolbelt 文档 <https://toolbelt.rtfd.org>`_ 来了解使用方法。
 
 在一个请求中发送多文件参考 :ref:`高级用法 <advanced>` 一节。
@@ -342,7 +365,7 @@ Requests 使得上传多部分编码文件变得很简单：
     >>> r.status_code == requests.codes.ok
     True
 
-如果发送了一个错误请求(一个 4XX 客户端错误，或者 5XX 服务器错误响应)，我们可以通过 
+如果发送了一个错误请求(一个 4XX 客户端错误，或者 5XX 服务器错误响应)，我们可以通过
 :meth:`Response.raise_for_status() <requests.Response.raise_for_status>`
 来抛出异常：
 
@@ -387,7 +410,7 @@ Requests 使得上传多部分编码文件变得很简单：
         'content-type': 'application/json'
     }
 
-但是这个字典比较特殊：它是仅为 HTTP 头部而生的。根据 
+但是这个字典比较特殊：它是仅为 HTTP 头部而生的。根据
 `RFC 2616 <http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html>`_\，
 HTTP 头部是大小写不敏感的。
 
@@ -409,7 +432,7 @@ HTTP 头部是大小写不敏感的。
     into one "field-name: field-value" pair, without changing the semantics
     of the message, by appending each subsequent field value to the combined
     field value in order, separated by a comma.
-    
+
     接收者可以合并多个相同名称的 header 栏位，把它们合为一个 "field-name: field-value"
     配对，将每个后续的栏位值依次追加到合并的栏位值中，用逗号隔开即可，这样做不会改变信息的语义。
 
@@ -437,6 +460,18 @@ Cookie
     >>> r.text
     '{"cookies": {"cookies_are": "working"}}'
 
+Cookie 的返回对象为 :class:`~requests.cookies.RequestsCookieJar`\，它的行为和字典\
+类似，但界面更为完整，适合跨域名跨路径使用。你还可以把 Cookie Jar 传到 Requests 中：
+
+::
+
+    >>> jar = requests.cookies.RequestsCookieJar()
+    >>> jar.set('tasty_cookie', 'yum', domain='httpbin.org', path='/cookies')
+    >>> jar.set('gross_cookie', 'blech', domain='httpbin.org', path='/elsewhere')
+    >>> url = 'http://httpbin.org/cookies'
+    >>> r = requests.get(url, cookies=jar)
+    >>> r.text
+    '{"cookies": {"tasty_cookie": "yum"}}'
 
 重定向与请求历史
 -------------------
@@ -445,7 +480,9 @@ Cookie
 
 可以使用响应对象的 ``history`` 方法来追踪重定向。
 
-:meth:`Response.history <requests.Response.history>` 是一个 :class:`Response <requests.Response>` 对象的列表，为了完成请求而创建了这些对象。这个对象列表按照从最老到最近的请求进行排序。
+:attr:`Response.history <requests.Response.history>` 是一个
+:class:`Response <requests.Response>` 对象的列表，为了完成请求而创建了这些对象。\
+这个对象列表按照从最老到最近的请求进行排序。
 
 例如，Github 将所有的 HTTP 请求重定向到 HTTPS：
 
@@ -463,7 +500,7 @@ Cookie
     [<Response [301]>]
 
 
-如果你使用的是GET、OPTIONS、POST、PUT、PATCH 或者 DELETE，那么你可以通过 ``allow_redirects`` 
+如果你使用的是GET、OPTIONS、POST、PUT、PATCH 或者 DELETE，那么你可以通过 ``allow_redirects``
 参数禁用重定向处理：
 
 ::
@@ -488,7 +525,8 @@ Cookie
 超时
 --------
 
-你可以告诉 requests 在经过以 ``timeout`` 参数设定的秒数时间之后停止等待响应：
+你可以告诉 requests 在经过以 ``timeout`` 参数设定的秒数时间之后停止等待响应。\
+基本上所有的生产代码都应该使用这一参数。如果不使用，你的程序可能会永远失去响应：
 
 ::
 
@@ -502,22 +540,23 @@ Cookie
 
     ``timeout`` 仅对连接过程有效，与响应体的下载无关。 ``timeout`` 并不是整个下载响应的\
     时间限制，而是如果服务器在 ``timeout`` 秒内没有应答，将会引发一个异常（更精确地说，是在
-    ``timeout`` 秒内没有从基础套接字上接收到任何字节的数据时）
+    ``timeout`` 秒内没有从基础套接字上接收到任何字节的数据时）If no timeout is specified explicitly, requests do
+    not time out.
 
 错误与异常
 --------------
 
-遇到网络问题（如：DNS 查询失败、拒绝连接等）时，Requests 会抛出一个 
-:class:`~requests.exceptions.ConnectionError` 异常。
+遇到网络问题（如：DNS 查询失败、拒绝连接等）时，Requests 会抛出一个
+:exc:`~requests.exceptions.ConnectionError` 异常。
 
-如果 HTTP 请求返回了不成功的状态码， :meth:`Response.raise_for_status() <requests.Response.raise_for_status>` 
-会抛出一个 :class:`~requests.exceptions.HTTPError` 异常。
+如果 HTTP 请求返回了不成功的状态码， :meth:`Response.raise_for_status() <requests.Response.raise_for_status>`
+会抛出一个 :exc:`~requests.exceptions.HTTPError` 异常。
 
-若请求超时，则抛出一个 :class:`~requests.exceptions.Timeout` 异常。
+若请求超时，则抛出一个 :exc:`~requests.exceptions.Timeout` 异常。
 
-若请求超过了设定的最大重定向次数，则会抛出一个 :class:`~requests.exceptions.TooManyRedirects` 异常。
+若请求超过了设定的最大重定向次数，则会抛出一个 :exc:`~requests.exceptions.TooManyRedirects` 异常。
 
-所有Requests显式抛出的异常都继承自 :class:`requests.exceptions.RequestException` 。
+所有Requests显式抛出的异常都继承自 :exc:`requests.exceptions.RequestException` 。
 
 -----------------------
 
