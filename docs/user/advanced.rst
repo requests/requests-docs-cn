@@ -184,8 +184,7 @@ body 或者 header （或者别的什么东西）做一些额外处理，下面�
 SSL 证书验证
 --------------
 
-Requests 可以为 HTTPS 请求验证 SSL 证书，就像 web 浏览器一样。By default, SSL verification is enabled, and Requests will throw a SSLError if
-it's unable to verify the certificate::
+Requests 可以为 HTTPS 请求验证 SSL 证书，就像 web 浏览器一样。SSL 验证默认是开启的，如果证书验证失败，Requests 会抛出 SSLError::
 
     >>> requests.get('https://requestb.in')
     requests.exceptions.SSLError: hostname 'requestb.in' doesn't match either of '*.herokuapp.com', 'herokuapp.com'
@@ -195,19 +194,22 @@ it's unable to verify the certificate::
     >>> requests.get('https://github.com', verify=True)
     <Response [200]>
 
-You can pass ``verify`` the path to a CA_BUNDLE file or directory with certificates of trusted CAs::
+你可以为 ``verify`` 传入 CA_BUNDLE 文件的路径，或者包含可信任 CA 证书文件的文件夹路径：
+
+::
 
     >>> requests.get('https://github.com', verify='/path/to/certfile')
 
-or persistent::
+或者将其保持在会话中：
+
+::
 
     s = requests.Session()
     s.verify = '/path/to/certfile'
 
-.. note:: If ``verify`` is set to a path to a directory, the directory must have been processed using
-  the c_rehash utility supplied with OpenSSL.
+.. note:: 如果 ``verify`` 设为文件夹路径，文件夹必须通过 OpenSSL 提供的 c_rehash 工具处理。
 
-This list of trusted CAs can also be specified through the ``REQUESTS_CA_BUNDLE`` environment variable.
+你还可以通过 ``REQUESTS_CA_BUNDLE`` 环境变量定义可信任 CA 列表。
 
 如果你将 ``verify`` 设置为 False，Requests 也能忽略对 SSL 证书的验证。
 
@@ -231,7 +233,9 @@ This list of trusted CAs can also be specified through the ``REQUESTS_CA_BUNDLE`
     >>> requests.get('https://kennethreitz.org', cert=('/path/client.cert', '/path/client.key'))
     <Response [200]>
 
-or persistent::
+或者保持在会话中：
+
+::
 
     s = requests.Session()
     s.cert = '/path/client.cert'
@@ -488,11 +492,12 @@ Requests 允许你使用自己指定的身份验证机制。
             decoded_line = line.decode('utf-8')
             print(json.loads(decoded_line))
 
-When using `decode_unicode=True` with
-:meth:`Response.iter_lines() <requests.Response.iter_lines>` or
-:meth:`Response.iter_content() <requests.Response.iter_content>`, you'll want
-to provide a fallback encoding in the event the server doesn't provide one::
+当使用 `decode_unicode=True` 在
+:meth:`Response.iter_lines() <requests.Response.iter_lines>` 或
+:meth:`Response.iter_content() <requests.Response.iter_content>` 中时，你需要提供\
+一个回退编码方式，以防服务器没有提供默认回退编码，从而导致错误：
 
+::
 
     r = requests.get('http://httpbin.org/stream/20', stream=True)
 
@@ -509,7 +514,7 @@ to provide a fallback encoding in the event the server doesn't provide one::
     会导致部分收到的数据丢失。如果你要在多处调用它，就应该使用生成的迭代器对象::
 
         lines = r.iter_lines()
-        # Save the first line for later or just skip it
+        # 保存第一行以供后面使用，或者直接跳过
 
         first_line = next(lines)
 
@@ -790,20 +795,20 @@ Cool，有 3 个评论。我们来看一下最后一个评论。
 
 很好。是时候写个 Python 程序以各种刺激的方式滥用 GitHub 的 API，还可以使用 4995 次呢。
 
-Custom Verbs
+定制动词
 ------------
 
-From time to time you may be working with a server that, for whatever reason,
-allows use or even requires use of HTTP verbs not covered above. One example of
-this would be the MKCOL method some WEBDAV servers use. Do not fret, these can
-still be used with Requests. These make use of the built-in ``.request``
-method. For example::
+有时候你会碰到一些服务器，处于某些原因，它们允许或者要求用户使用上述 HTTP 动词之外的\
+定制动词。比如说 WEBDAV 服务器会要求你使用 MKCOL 方法。别担心，Requests 一样可以搞定\
+它们。你可以使用内建的 ``.request`` 方法，例如：
+
+::
 
     >>> r = requests.request('MKCOL', url, data=data)
     >>> r.status_code
     200 # Assuming your call was correct
 
-Utilising this, you can make use of any method verb that your server allows.
+这样你就可以使用服务器要求的任意方法动词了。
 
 .. _link-headers:
 

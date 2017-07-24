@@ -79,12 +79,11 @@ Oauth 是一种常见的 Web API 认证方式。 ``requests-oauthlib``
 关于 OAuth 工作流程的更多信息，请参见 `OAuth`_ 官方网站。
 关于 requests-oauthlib 的文档和用例，请参见 GitHub 的 `requests_oauthlib`_ 代码库。
 
-OAuth 2 and OpenID Connect Authentication
+OAuth 2 与 OpenID 连接认证
 -----------------------------------------
 
-The ``requests-oauthlib`` library also handles OAuth 2, the authentication mechanism
-underpinning OpenID Connect. See the `requests-oauthlib OAuth2 documentation`_ for
-details of the various OAuth 2 credential management flows:
+``requests-oauthlib`` 库还可以处理 OAuth 2，OAuth 2 是 OpenID 连接的基础机制。
+请查看 `requests-oauthlib OAuth2 documentation`_ 文档以了解 OAuth 2 的各种认证管理流程：
 
 * `Web Application Flow`_
 * `Mobile Application Flow`_

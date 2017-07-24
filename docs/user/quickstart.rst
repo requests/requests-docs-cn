@@ -154,14 +154,13 @@ Requests 中也有一个内置的 JSON 解码器，助你处理 JSON 数据：
     >>> r.json()
     [{u'repository': {u'open_issues': 0, u'url': 'https://github.com/...
 
-如果 JSON 解码失败， ``r.json()`` 就会抛出一个异常。例如，相应内容是 401 (Unauthorized)，\
+如果 JSON 解码失败， ``r.json()`` 就会抛出一个异常。例如，响应内容是 401 (Unauthorized)，\
 尝试访问 ``r.json()`` 将会抛出 ``ValueError: No JSON object could be decoded`` 异常。
 
-It should be noted that the success of the call to ``r.json()`` does **not**
-indicate the success of the response. Some servers may return a JSON object in a
-failed response (e.g. error details with HTTP 500). Such JSON will be decoded
-and returned. To check that a request is successful, use
-``r.raise_for_status()`` or check ``r.status_code`` is what you expect.
+需要注意的是，成功调用 ``r.json()`` 并\**不**\ 意味着响应的成功。有的服务器会在失败的响应中\
+包含一个 JSON 对象（比如 HTTP 500 的错误细节）。这种 JSON 会被解码返回。要检查请求是否\
+成功，请使用 ``r.raise_for_status()`` 或者检查 ``r.status_code`` 是否和你的期望相同。
+
 
 原始响应内容
 ----------------
@@ -236,8 +235,9 @@ header 也是允许的，但不建议这样做。
       ...
     }
 
-You can also pass a list of tuples to the ``data`` argument. This is particularly
-useful when the form has multiple elements that use the same key::
+你还可以为 ``data`` 参数传入一个元组列表。在表单中多个元素使用同一 key 的时候，这种方式尤其有效：
+
+::
 
     >>> payload = (('key1', 'value1'), ('key1', 'value2'))
     >>> r = requests.post('http://httpbin.org/post', data=payload)
@@ -460,10 +460,10 @@ Cookie
     >>> r.text
     '{"cookies": {"cookies_are": "working"}}'
 
-Cookies are returned in a :class:`~requests.cookies.RequestsCookieJar`,
-which acts like a ``dict`` but also offers a more complete interface,
-suitable for use over multiple domains or paths.  Cookie jars can
-also be passed in to requests::
+Cookie 的返回对象为 :class:`~requests.cookies.RequestsCookieJar`\，它的行为和字典\
+类似，但界面更为完整，适合跨域名跨路径使用。你还可以把 Cookie Jar 传到 Requests 中：
+
+::
 
     >>> jar = requests.cookies.RequestsCookieJar()
     >>> jar.set('tasty_cookie', 'yum', domain='httpbin.org', path='/cookies')
@@ -526,9 +526,7 @@ also be passed in to requests::
 --------
 
 你可以告诉 requests 在经过以 ``timeout`` 参数设定的秒数时间之后停止等待响应。\
-Nearly all production code should use
-this parameter in nearly all requests. Failure to do so can cause your program
-to hang indefinitely::
+基本上所有的生产代码都应该使用这一参数。如果不使用，你的程序可能会永远失去响应：
 
 ::
 
