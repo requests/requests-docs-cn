@@ -30,7 +30,7 @@
 
 ::
 
-    >>> r = requests.get('https://github.com/timeline.json')
+    >>> r = requests.get('https://api.github.com/events')
 
 现在，我们有一个名为 ``r`` 的 :class:`Response <requests.Response>`
 对象。我们可以从这个对象中获取所有我们想要的信息。
@@ -40,16 +40,16 @@ HTTP POST 请求：
 
 ::
 
-    >>> r = requests.post("http://httpbin.org/post")
+    >>> r = requests.post('http://httpbin.org/post', data = {'key':'value'})
 
 漂亮，对吧？那么其他 HTTP 请求类型：PUT，DELETE，HEAD 以及 OPTIONS 又是如何的呢？都是一样的简单：
 
 ::
 
-    >>> r = requests.put("http://httpbin.org/put")
-    >>> r = requests.delete("http://httpbin.org/delete")
-    >>> r = requests.head("http://httpbin.org/get")
-    >>> r = requests.options("http://httpbin.org/get")
+    >>> r = requests.put('http://httpbin.org/put', data = {'key':'value'})
+    >>> r = requests.delete('http://httpbin.org/delete')
+    >>> r = requests.head('http://httpbin.org/get')
+    >>> r = requests.options('http://httpbin.org/get')
 
 都很不错吧，但这也仅是 Requests 的冰山一角呢。
 
@@ -93,7 +93,7 @@ Requests 允许你使用 ``params`` 关键字参数，以一个字符串字典�
 ::
 
     >>> import requests
-    >>> r = requests.get('https://github.com/timeline.json')
+    >>> r = requests.get('https://api.github.com/events')
     >>> r.text
     u'[{"repository":{"open_issues":0,"url":"https://github.com/...
 
@@ -150,7 +150,7 @@ Requests 中也有一个内置的 JSON 解码器，助你处理 JSON 数据：
 
     >>> import requests
 
-    >>> r = requests.get('https://github.com/timeline.json')
+    >>> r = requests.get('https://api.github.com/events')
     >>> r.json()
     [{u'repository': {u'open_issues': 0, u'url': 'https://github.com/...
 
@@ -170,7 +170,7 @@ Requests 中也有一个内置的 JSON 解码器，助你处理 JSON 数据：
 
 ::
 
-    >>> r = requests.get('https://github.com/timeline.json', stream=True)
+    >>> r = requests.get('https://api.github.com/events', stream=True)
     >>> r.raw
     <requests.packages.urllib3.response.HTTPResponse object at 0x101194810>
     >>> r.raw.read(10)
