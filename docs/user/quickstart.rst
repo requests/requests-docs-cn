@@ -461,7 +461,7 @@ Cookie
     '{"cookies": {"cookies_are": "working"}}'
 
 Cookie 的返回对象为 :class:`~requests.cookies.RequestsCookieJar`\，它的行为和字典\
-类似，但界面更为完整，适合跨域名跨路径使用。你还可以把 Cookie Jar 传到 Requests 中：
+类似，但接口更为完整，适合跨域名跨路径使用。你还可以把 Cookie Jar 传到 Requests 中：
 
 ::
 
