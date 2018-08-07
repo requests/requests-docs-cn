@@ -292,7 +292,7 @@ Requests 更新时才会更新。这意味着如果你固定使用某一版本�
 你可以进一步使用 :class:`Response.iter_content <requests.Response.iter_content>`
 和 :class:`Response.iter_lines <requests.Response.iter_lines>`
 方法来控制工作流，或者以 :class:`Response.raw <requests.Response.raw>`
-从底层 urllib3 的 :class:`urllib3.HTTPResponse <urllib3.response.HTTPResponse` 读取未解码的相应体。
+从底层 urllib3 的 :class:`urllib3.HTTPResponse <urllib3.response.HTTPResponse` 读取未解码的响应体。
 
 如果你在请求中把 ``stream`` 设为 ``True``，Requests 无法将连接释放回连接池，除非你
 消耗了所有的数据，或者调用了 :class:`Response.close <requests.Response.close>`。
