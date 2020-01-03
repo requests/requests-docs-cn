@@ -221,7 +221,7 @@ Requests 可以为 HTTPS 请求验证 SSL 证书，就像 web 浏览器一样。
 默认情况下， ``verify`` 是设置为 True 的。选项 ``verify`` 仅应用于主机证书。
 
 # 对于私有证书，你也可以传递一个 CA_BUNDLE 文件的路径给 ``verify``\。你也可以设置
-# ``REQUEST_CA_BUNDLE`` 环境变量。
+# ``REQUESTS_CA_BUNDLE`` 环境变量。
 
 客户端证书
 ------------------------
