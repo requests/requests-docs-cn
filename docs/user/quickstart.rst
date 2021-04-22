@@ -1,79 +1,76 @@
 .. _quickstart:
 
 快速上手
-==========
+=======
 
 .. module:: requests.models
 
-迫不及待了吗？本页内容为如何入门 Requests 提供了很好的指引。其假设你已经安装了 Requests。\
-如果还没有，去\ :ref:`安装 <install>`\ 一节看看吧。
+迫不及待了吗？本页内容为如何入门 Requests 提供了很好的指引。
 
 首先，确认一下：
 
-* Requests :ref:`已安装 <install>`
-* Requests :ref:`是最新的 <updates>`
+* Requests 是:ref:`已安装 <install>`
+* Requests 是:ref:`最新的 <updates>`
+
 
 让我们从一些简单的示例开始吧。
+
 
 发送请求
 ----------
 
 使用 Requests 发送网络请求非常简单。
 
-一开始要导入 Requests 模块：
-
-::
+一开始要导入 Requests 模块：::
 
     >>> import requests
 
-然后，尝试获取某个网页。本例子中，我们来获取 Github 的公共时间线：
+现在，尝试获取某个网页。本例子中，我们来获取 Github 的公共时间线：
 
 ::
 
     >>> r = requests.get('https://api.github.com/events')
 
-现在，我们有一个名为 ``r`` 的 :class:`Response <requests.Response>`
-对象。我们可以从这个对象中获取所有我们想要的信息。
+现在，我们有对象 :class:`Response <requests.Response>`叫做 ``r`` 。我们可以从这个对象中获取所有我们想要的信息。
 
 Requests 简便的 API 意味着所有 HTTP 请求类型都是显而易见的。例如，你可以这样发送一个
 HTTP POST 请求：
-
 ::
 
     >>> r = requests.post('http://httpbin.org/post', data = {'key':'value'})
 
 漂亮，对吧？那么其他 HTTP 请求类型：PUT，DELETE，HEAD 以及 OPTIONS 又是如何的呢？都是一样的简单：
-
 ::
 
-    >>> r = requests.put('http://httpbin.org/put', data = {'key':'value'})
-    >>> r = requests.delete('http://httpbin.org/delete')
-    >>> r = requests.head('http://httpbin.org/get')
-    >>> r = requests.options('http://httpbin.org/get')
+    >>> r = requests.put('https://httpbin.org/put', data = {'key':'value'})
+    >>> r = requests.delete('https://httpbin.org/delete')
+    >>> r = requests.head('https://httpbin.org/get')
+    >>> r = requests.options('https://httpbin.org/get')
 
 都很不错吧，但这也仅是 Requests 的冰山一角呢。
 
-传递 URL 参数
+
+在 URLs 传参
 -------------------
 
-你也许经常想为 URL 的查询字符串(query string)传递某种数据。如果你是手工构建 URL，那么数据会以键/值\
-对的形式置于 URL 中，跟在一个问号的后面。例如， ``httpbin.org/get?key=val``\。
+你经常想在 URL 的查询字符串(query string)传递某种数据。如果你是手工构建 URL，那么数据会在URL中以键/值\
+对的形式给出，跟在一个问号的后面。例如， ``httpbin.org/get?key=val``\。
 Requests 允许你使用 ``params`` 关键字参数，以一个字符串字典来提供这些参数。举例来说，如果你想传递
 ``key1=value1`` 和 ``key2=value2`` 到 ``httpbin.org/get`` ，那么你可以使用如下代码：
 
 ::
 
     >>> payload = {'key1': 'value1', 'key2': 'value2'}
-    >>> r = requests.get("http://httpbin.org/get", params=payload)
+    >>> r = requests.get('https://httpbin.org/get', params=payload)
 
 通过打印输出该 URL，你能看到 URL 已被正确编码：
 
 ::
 
     >>> print(r.url)
-    http://httpbin.org/get?key2=value2&key1=value1
+    https://httpbin.org/get?key2=value2&key1=value1
 
-注意字典里值为 ``None`` 的键都不会被添加到 URL 的查询字符串里。
+注意字典里值为 ``None`` 的键将不会被添加到 URL 的查询字符串里。
 
 你还可以将一个列表作为值传入：
 
@@ -81,12 +78,12 @@ Requests 允许你使用 ``params`` 关键字参数，以一个字符串字典�
 
   >>> payload = {'key1': 'value1', 'key2': ['value2', 'value3']}
 
-  >>> r = requests.get('http://httpbin.org/get', params=payload)
+  >>> r = requests.get('https://httpbin.org/get', params=payload)
   >>> print(r.url)
-  http://httpbin.org/get?key1=value1&key2=value2&key2=value3
+  https://httpbin.org/get?key1=value1&key2=value2&key2=value3
 
 响应内容
---------------
+--------
 
 我们能读取服务器响应的内容。再次以 GitHub 时间线为例：
 
@@ -95,11 +92,11 @@ Requests 允许你使用 ``params`` 关键字参数，以一个字符串字典�
     >>> import requests
     >>> r = requests.get('https://api.github.com/events')
     >>> r.text
-    u'[{"repository":{"open_issues":0,"url":"https://github.com/...
+    '[{"repository":{"open_issues":0,"url":"https://github.com/...
 
 Requests 会自动解码来自服务器的内容。大多数 unicode 字符集都能被无缝地解码。
 
-请求发出后，Requests 会基于 HTTP 头部对响应的编码作出有根据的推测。当你访问 ``r.text``
+当你请求发出后，Requests 会基于 HTTP 头部对响应的编码作出有根据的推测。当你访问 ``r.text``
 之时，Requests 会使用其推测的文本编码。你可以找出 Requests 使用了什么编码，并且能够使用
 ``r.encoding`` 属性来改变它：
 
@@ -109,18 +106,17 @@ Requests 会自动解码来自服务器的内容。大多数 unicode 字符集�
     'utf-8'
     >>> r.encoding = 'ISO-8859-1'
 
-如果你改变了编码，每当你访问 ``r.text`` ，Request 都将会使用 ``r.encoding``
-的新值。你可能希望在使用特殊逻辑计算出文本的编码的情况下来修改编码。比如 HTTP 和 XML
-自身可以指定编码。这样的话，你应该使用 ``r.content`` 来找到编码，然后设置 ``r.encoding``
-为相应的编码。这样就能使用正确的编码解析 ``r.text`` 了。
+如果你改变了编码 ，Request 都将会使用 ``r.encoding``
+的新值，每当你访问 ``r.text``。你可能希望在使用特殊逻辑计算出文本的编码的情况下来修改编码。
+比如 HTTP 和 XML在 body 块可以指定编码。这样的话，你应该使用 ``r.content`` 来找到编码，然后设置 ``r.encoding``为相应的编码。
+这样就能使用 ``r.text`` 正确解析编码。
 
 在你需要的情况下，Requests 也可以使用定制的编码。如果你创建了自己的编码，并使用
 ``codecs`` 模块进行注册，你就可以轻松地使用这个解码器名称作为 ``r.encoding`` 的值，
-然后由 Requests 来为你处理编码。
-
+Requests 将为你处理编码。
 
 二进制响应内容
--------------------
+-------------
 
 你也能以字节的方式访问请求响应体，对于非文本请求：
 
@@ -131,7 +127,7 @@ Requests 会自动解码来自服务器的内容。大多数 unicode 字符集�
 
 Requests 会自动为你解码 ``gzip`` 和 ``deflate`` 传输编码的响应数据。
 
-例如，以请求返回的二进制数据创建一张图片，你可以使用如下代码：
+例如，从请求返回的二进制数据打开（原文用得是creat）一张图片，你可以使用如下代码：
 
 ::
 
@@ -142,7 +138,7 @@ Requests 会自动为你解码 ``gzip`` 和 ``deflate`` 传输编码的响应数
 
 
 JSON 响应内容
----------------
+-------------
 
 Requests 中也有一个内置的 JSON 解码器，助你处理 JSON 数据：
 
@@ -152,18 +148,20 @@ Requests 中也有一个内置的 JSON 解码器，助你处理 JSON 数据：
 
     >>> r = requests.get('https://api.github.com/events')
     >>> r.json()
-    [{u'repository': {u'open_issues': 0, u'url': 'https://github.com/...
+    [{'repository': {'open_issues': 0, 'url': 'https://github.com/...
 
-如果 JSON 解码失败， ``r.json()`` 就会抛出一个异常。例如，响应内容是 401 (Unauthorized)，\
-尝试访问 ``r.json()`` 将会抛出 ``ValueError: No JSON object could be decoded`` 异常。
+如果 JSON 解码失败， ``r.json()`` 就会抛出一个异常。
+例如，如果响应是 204 （无内容），或者如果响应包含无效 JSON，尝试``r.json()`` 将会抛出 ``simplejson.JSONDecodeError`` 异常。
+如果simplejson已经安装了，
+在 Python 2中抛出``ValueError: No JSON object could be decoded``  或在 Python 3中抛出``json.JSONDecodeError`` .
 
 需要注意的是，成功调用 ``r.json()`` 并\**不**\ 意味着响应的成功。有的服务器会在失败的响应中\
 包含一个 JSON 对象（比如 HTTP 500 的错误细节）。这种 JSON 会被解码返回。要检查请求是否\
 成功，请使用 ``r.raise_for_status()`` 或者检查 ``r.status_code`` 是否和你的期望相同。
 
 
-原始响应内容
-----------------
+原始响应内容（翻译至此处2021年4月21日21:04:28）
+-----------
 
 在罕见的情况下，你可能想获取来自服务器的原始套接字响应，那么你可以访问 ``r.raw``\。
 如果你确实想这么干，那请你确保在初始请求中设置了 ``stream=True``\。具体你可以这么做：
