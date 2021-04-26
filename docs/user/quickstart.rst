@@ -160,51 +160,63 @@ Requests 中也有一个内置的 JSON 解码器，助你处理 JSON 数据：
 成功，请使用 ``r.raise_for_status()`` 或者检查 ``r.status_code`` 是否和你的期望相同。
 
 
-原始响应内容（翻译至此处2021年4月21日21:04:28）
+原始响应内容
 -----------
 
-在罕见的情况下，你可能想获取来自服务器的原始套接字响应，那么你可以访问 ``r.raw``\。
+在罕见的情况下，你可能想获取来自服务器的原始 socket 响应，那么你可以访问 ``r.raw``\。
 如果你确实想这么干，那请你确保在初始请求中设置了 ``stream=True``\。具体你可以这么做：
 
 ::
 
     >>> r = requests.get('https://api.github.com/events', stream=True)
+
     >>> r.raw
-    <requests.packages.urllib3.response.HTTPResponse object at 0x101194810>
+    <urllib3.response.HTTPResponse object at 0x101194810>
     >>> r.raw.read(10)
     '\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\x03'
 
-但一般情况下，你应该以下面的模式将文本流保存到文件：
+但一般情况下，你应该以下面的模式将数据流保存到文件：
 
 ::
 
     with open(filename, 'wb') as fd:
-        for chunk in r.iter_content(chunk_size):
+        for chunk in r.iter_content(chunk_size=128):
             fd.write(chunk)
 
-使用 ``Response.iter_content`` 将会处理大量你直接使用 ``Response.raw`` 不得不处理的。
-当流下载时，上面是优先推荐的获取内容方式。 Note that ``chunk_size`` can be freely adjusted to a number that
-may better fit your use cases.
+使用 ``Response.iter_content`` 将会处理
+当你直接使用 ``Response.raw`` 大量不得不处理的内容。
+当流下载时，上面是优先推荐的获取内容方式。 
+提示： ``chunk_size`` 可以被自行调整
+为一个更适合你使用情况的数字。
+
+.. 提示::
+
+    一个重要的提示关于使用 ``Response.iter_content`` VS ``Response.raw``.
+    ``Response.iter_content`` 将自动解码 ``gzip`` and ``deflate``
+    transfer-encodings.  ``Response.raw`` 是原始的字节流——它没有转换response的内容.  如果你真的需要得到返回的字节, 用 ``Response.raw``.
+ 
 
 定制请求头
 -------------
 
-如果你想为请求添加 HTTP 头部，只要简单地传递一个 ``dict`` 给 ``headers`` 参数就可以了。
+如果你想为request添加 HTTP headers，只要简单地传递一个 ``dict`` 给 ``headers`` 参数。
 
-例如，在前一个示例中我们没有指定 content-type::
+例如，在前一个示例中我们没有指定 user-agent::
 
     >>> url = 'https://api.github.com/some/endpoint'
     >>> headers = {'user-agent': 'my-app/0.0.1'}
 
     >>> r = requests.get(url, headers=headers)
 
-注意: 定制 header 的优先级低于某些特定的信息源，例如：
+注意: 定制 header 的优先级低于某些特定的信息源。例如：
 
-* 如果在 ``.netrc`` 中设置了用户认证信息，使用 `headers=` 设置的授权就不会生效。而如果设置了
-  ``auth=`` 参数，\``.netrc`` 的设置就无效了。
-* 如果被重定向到别的主机，授权 header 就会被删除。
+* 如果在 ``.netrc`` 中设置了用户认证信息，使用 `headers=` 设置的授权就不会生效。
+* 而如果设置了
+  ``auth=`` 参数，``.netrc`` 的设置就无效了。
+  Requests 将会在 `~/.netrc`, `~/_netrc`搜索netrc文件,  或者在 `NETRC` 环境变量的路径。
+* 如果被重定向到别的主机，授权 header 将会被删除。
 * 代理授权 header 会被 URL 中提供的代理身份覆盖掉。
-* 在我们能判断内容长度的情况下，header 的 Content-Length 会被改写。
+* 在我们能决定内容长度的情况下，header 的 Content-Length 会被改写。
 
 更进一步讲，Requests 不会基于定制 header 的具体情况改变自己的行为。只不过在最后的请求中，所有的
 header 信息都会被传递进去。
@@ -215,14 +227,14 @@ header 也是允许的，但不建议这样做。
 更加复杂的 POST 请求
 ----------------------
 
-通常，你想要发送一些编码为表单形式的数据——非常像一个 HTML 表单。要实现这个，只需简单地传递\
+通常，你想要发送一些 form-encoded 的数据——非常像一个 HTML 表单。要实现这个，只需简单地传递
 一个字典给 `data` 参数。你的数据字典在发出请求时会自动编码为表单形式：
 
 ::
 
     >>> payload = {'key1': 'value1', 'key2': 'value2'}
 
-    >>> r = requests.post("http://httpbin.org/post", data=payload)
+    >>> r = requests.post("https://httpbin.org/post", data=payload)
     >>> print(r.text)
     {
       ...
@@ -233,14 +245,18 @@ header 也是允许的，但不建议这样做。
       ...
     }
 
-你还可以为 ``data`` 参数传入一个元组列表。在表单中多个元素使用同一 key 的时候，这种方式尤其有效：
+``data`` 参数也可以为每个key传入多个值（values）。
+这可以通过 ``data`` 参数传入一个多元组的列表或一个多个列表的字典来实现。
+在表单中多个元素使用同一 key 的时候，这种方式尤其有效：
 
 ::
 
-    >>> payload = (('key1', 'value1'), ('key1', 'value2'))
-    >>> r = requests.post('http://httpbin.org/post', data=payload)
-    >>> print(r.text)
-    {
+>>> payload_tuples = [('key1', 'value1'), ('key1', 'value2')]
+>>> r1 = requests.post('https://httpbin.org/post', data=payload_tuples)
+>>> payload_dict = {'key1': ['value1', 'value2']}
+>>> r2 = requests.post('https://httpbin.org/post', data=payload_dict)
+>>> print(r1.text)
+{
       ...
       "form": {
         "key1": [
@@ -250,11 +266,16 @@ header 也是允许的，但不建议这样做。
       },
       ...
     }
+    >>> r1.text == r2.text
+    True
+    
+很多时候你想要发送非form-encoded（编码为表单形式）的数据。
+如果你传递一个 ``string`` 而不是一个 ``dict``，
+那么数据会被直接posted。
 
-很多时候你想要发送的数据并非编码为表单形式的。如果你传递一个 ``string`` 而不是一个 ``dict``\，\
-那么数据会被直接发布出去。
 
-例如，Github API v3 接受编码为 JSON 的 POST/PATCH 数据：
+
+例如，GitHub API v3 接受编码为 JSON 的 POST/PATCH 数据：
 
 ::
 
@@ -265,8 +286,7 @@ header 也是允许的，但不建议这样做。
 
     >>> r = requests.post(url, data=json.dumps(payload))
 
-此处除了可以自行对 ``dict`` 进行编码，你还可以使用 ``json`` 参数直接传递，然后它就会被自动\
-编码。这是 2.4.2 版的新加功能：
+除了可以自行对 ``dict`` 进行编码，你还可以直接使用 ``json`` 参数传递（于 2.4.2 版新增），然后它就会被自动编码：
 
 ::
 
@@ -275,15 +295,19 @@ header 也是允许的，但不建议这样做。
 
     >>> r = requests.post(url, json=payload)
 
+提示：如果 ``data`` or ``files`` 被传参，the ``json`` 参数会被忽略。
+
+
+在请求中使用``json`` 参数将把请求头中的``Content-Type``变为 ``application/json``.
 
 POST一个多部分编码(Multipart-Encoded)的文件
----------------------------------------------
+-----------------------------------------
 
 Requests 使得上传多部分编码文件变得很简单：
 
 ::
 
-    >>> url = 'http://httpbin.org/post'
+    >>> url = 'https://httpbin.org/post'
     >>> files = {'file': open('report.xls', 'rb')}
 
     >>> r = requests.post(url, files=files)
@@ -296,11 +320,11 @@ Requests 使得上传多部分编码文件变得很简单：
       ...
     }
 
-你可以显式地设置文件名，文件类型和请求头：
+你可以明确地设置文件名，文件类型和请求头：
 
 ::
 
-    >>> url = 'http://httpbin.org/post'
+    >>> url = 'https://httpbin.org/post'
     >>> files = {'file': ('report.xls', open('report.xls', 'rb'), 'application/vnd.ms-excel', {'Expires': '0'})}
 
     >>> r = requests.post(url, files=files)
@@ -313,11 +337,11 @@ Requests 使得上传多部分编码文件变得很简单：
       ...
     }
 
-如果你想，你也可以发送作为文件来接收的字符串：
+如果你想，你也可以发送作为文件被接收的字符串：
 
 ::
 
-    >>> url = 'http://httpbin.org/post'
+    >>> url = 'https://httpbin.org/post'
     >>> files = {'file': ('report.csv', 'some,data,to,send\nanother,row,to,send\n')}
 
     >>> r = requests.post(url, files=files)
@@ -330,29 +354,27 @@ Requests 使得上传多部分编码文件变得很简单：
       ...
     }
 
-如果你发送一个非常大的文件作为 ``multipart/form-data`` 请求，你可能希望将请求做成数据流。\
+如果你 post 一个非常大的文件作为 ``multipart/form-data`` 请求，你可能希望将请求做成数据流。
 默认下 ``requests`` 不支持, 但有个第三方包 ``requests-toolbelt`` 是支持的。你可以阅读
-`toolbelt 文档 <https://toolbelt.rtfd.org>`_ 来了解使用方法。
+`toolbelt 文档 <https://toolbelt.readthedocs.io>`_ 来了解使用方法的更多细节。
 
 在一个请求中发送多文件参考 :ref:`高级用法 <advanced>` 一节。
 
-.. admonition:: 警告
-
-    我们强烈建议你用二进制模式(`binary mode`_)打开文件。这是因为 Requests 可能会试图为你提供
+.. 警告::我们强烈建议你用二进制模式(`binary mode`_)打开文件。 
+    这是因为 Requests 可能会试图为你提供
     ``Content-Length`` header，在它这样做的时候，这个值会被设为文件的字节数（*bytes*）。\
-    如果用文本模式(text mode)打开文件，就可能会发生错误。
+    如果用文本模式(*text mode*)打开文件，就可能会发生错误。
 
-.. _binary mode: https://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+
 
 
 响应状态码
 --------------
 
 我们可以检测响应状态码：
-
 ::
 
-    >>> r = requests.get('http://httpbin.org/get')
+    >>> r = requests.get('https://httpbin.org/get')
     >>> r.status_code
     200
 
@@ -369,7 +391,7 @@ Requests 使得上传多部分编码文件变得很简单：
 
 ::
 
-    >>> bad_r = requests.get('http://httpbin.org/status/404')
+    >>> bad_r = requests.get('https://httpbin.org/status/404')
     >>> bad_r.status_code
     404
 
@@ -393,7 +415,7 @@ Requests 使得上传多部分编码文件变得很简单：
 响应头
 ----------
 
-我们可以查看以一个 Python 字典形式展示的服务器响应头：
+我们可以查看以一个 Python 字典形式查看的服务器响应头：
 
 ::
 
@@ -408,11 +430,11 @@ Requests 使得上传多部分编码文件变得很简单：
         'content-type': 'application/json'
     }
 
-但是这个字典比较特殊：它是仅为 HTTP 头部而生的。根据
-`RFC 2616 <http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html>`_\，
+但是这个字典比较特殊：它是仅为 HTTP headers 而生的。根据
+`RFC 7230 <https://tools.ietf.org/html/rfc7230#section-3.2>`_\，
 HTTP 头部是大小写不敏感的。
 
-因此，我们可以使用任意大写形式来访问这些响应头字段：
+因此，我们可以使用任意大写形式来访问这些响应头：
 
 ::
 
@@ -434,10 +456,10 @@ HTTP 头部是大小写不敏感的。
     接收者可以合并多个相同名称的 header 栏位，把它们合为一个 "field-name: field-value"
     配对，将每个后续的栏位值依次追加到合并的栏位值中，用逗号隔开即可，这样做不会改变信息的语义。
 
-Cookie
----------
+Cookies
+-------
 
-如果某个响应中包含一些 cookie，你可以快速访问它们：
+如果某个响应中包含一些 cookies，你可以快速访问它们：
 
 ::
 
@@ -451,7 +473,7 @@ Cookie
 
 ::
 
-    >>> url = 'http://httpbin.org/cookies'
+    >>> url = 'https://httpbin.org/cookies'
     >>> cookies = dict(cookies_are='working')
 
     >>> r = requests.get(url, cookies=cookies)
@@ -466,27 +488,31 @@ Cookie 的返回对象为 :class:`~requests.cookies.RequestsCookieJar`\，它的
     >>> jar = requests.cookies.RequestsCookieJar()
     >>> jar.set('tasty_cookie', 'yum', domain='httpbin.org', path='/cookies')
     >>> jar.set('gross_cookie', 'blech', domain='httpbin.org', path='/elsewhere')
-    >>> url = 'http://httpbin.org/cookies'
+    >>> url = 'https://httpbin.org/cookies'
     >>> r = requests.get(url, cookies=jar)
     >>> r.text
     '{"cookies": {"tasty_cookie": "yum"}}'
 
+
 重定向与请求历史
--------------------
+---------------
+
 
 默认情况下，除了 HEAD, Requests 会自动处理所有重定向。
 
-可以使用响应对象的 ``history`` 方法来追踪重定向。
+
+我们可以使用响应对象的 ``history`` 方法来追踪重定向。
 
 :attr:`Response.history <requests.Response.history>` 是一个
 :class:`Response <requests.Response>` 对象的列表，为了完成请求而创建了这些对象。\
 这个对象列表按照从最老到最近的请求进行排序。
 
+
 例如，Github 将所有的 HTTP 请求重定向到 HTTPS：
 
 ::
 
-    >>> r = requests.get('http://github.com')
+    >>> r = requests.get('http://github.com/')
 
     >>> r.url
     'https://github.com/'
@@ -500,20 +526,20 @@ Cookie 的返回对象为 :class:`~requests.cookies.RequestsCookieJar`\，它的
 
 如果你使用的是GET、OPTIONS、POST、PUT、PATCH 或者 DELETE，那么你可以通过 ``allow_redirects``
 参数禁用重定向处理：
-
 ::
 
-    >>> r = requests.get('http://github.com', allow_redirects=False)
+    >>> r = requests.get('http://github.com/', allow_redirects=False)
+    
     >>> r.status_code
     301
     >>> r.history
     []
 
 如果你使用了 HEAD，你也可以启用重定向：
-
 ::
 
-    >>> r = requests.head('http://github.com', allow_redirects=True)
+    >>> r = requests.head('http://github.com/', allow_redirects=True)
+    
     >>> r.url
     'https://github.com/'
     >>> r.history
@@ -521,14 +547,11 @@ Cookie 的返回对象为 :class:`~requests.cookies.RequestsCookieJar`\，它的
 
 
 超时
---------
-
+----
 你可以告诉 requests 在经过以 ``timeout`` 参数设定的秒数时间之后停止等待响应。\
 基本上所有的生产代码都应该使用这一参数。如果不使用，你的程序可能会永远失去响应：
-
 ::
-
-    >>> requests.get('http://github.com', timeout=0.001)
+    >>> requests.get('https://github.com/', timeout=0.001)
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
     requests.exceptions.Timeout: HTTPConnectionPool(host='github.com', port=80): Request timed out. (timeout=0.001)
@@ -559,3 +582,4 @@ Cookie 的返回对象为 :class:`~requests.cookies.RequestsCookieJar`\，它的
 -----------------------
 
 准备好学习更多内容了吗？去 :ref:`高级用法 <advanced>` 一节看看吧。
+如果你在就业市场, consider taking `this programming quiz <https://triplebyte.com/a/b1i2FB8/requests-docs-1>`_. 如果你通过这个平台找到工作，重大的捐赠将为这个项目提供。
