@@ -43,18 +43,23 @@ Chris Adams 给出了一个很好的总结
 支持 Python 3 吗?
 -----------------
 
-当然！下面是官方支持的python平台列表:
+当然！Requests官方支持 Python 2.7 & 3.5+ 和 PyPy.
 
-* Python 2.6
-* Python 2.7
-* Python 3.3
-* Python 3.4
-* Python 3.5
-* Python 3.6
-* PyPy
+支持 Python 2 吗?
+-----------------
+
+Yes! We do not have immediate plans to `sunset
+<https://www.python.org/doc/sunset-python-2/>`_ our support for Python
+2.7. We understand that we have a large user base with varying needs,
+and intend to maintain Python 2.7 support within Requests until `pip
+stops supporting Python 2.7 (there's no estimated date on that yet)
+<https://pip.pypa.io/en/latest/development/release-process/#python-2-support>`_.
+
+也就是说, *强烈* 建议用户使用Python 3.6+ 因为从2020年1月1日开始Python 2.7不再有bug维修或安全更新。
+
 
 "hostname doesn't match" 错误是怎么回事？
---------------------------------------------
+-----------------------------------------
 
 当 :ref:`SSL certificate verification <verification>` 发现服务器响应的认证\
 和它认为自己连接的主机名不匹配时，就会发生这样的错误。如果你确定服务器的 SSL 设置\

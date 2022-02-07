@@ -6,18 +6,27 @@
 如果你想和社区以及开发版的 Requests 保持最新的联系，
 这有几种方式:
 
+Stack Overflow
+--------------
+
+如果您的问题不包含敏感
+信息或可以适当匿名，请提问在
+`Stack Overflow <https://stackoverflow.com/questions/tagged/python-requests>`_
+并且使用标签 ``python-requests``.
+
 GitHub
 ------
 
-最好的方式是追踪 Requests 开发版本的
+如果里注意到一些不符预期的行为在Requests上，或者想看看新特性的支持。
 `GitHub 库 <https://github.com/requests/requests>`_.
 
-Twitter
+发个Twitter
 -------
 
-我经常推送关于 Requests 的新功能和新版本.
-
-关注 `@kennethreitz <https://twitter.com/kennethreitz>`_ 即可获得更新。
+如果你的问题少于280个词，发个推特给
+`@nateprewitt <https://twitter.com/nateprewitt>`_,
+`@sethmlarson <https://twitter.com/sethmlarson>`_, or
+`@sigmavirus24 <https://twitter.com/sigmavirus24>`_.
 
 
 版本历史

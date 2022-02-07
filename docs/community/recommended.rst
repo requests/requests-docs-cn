@@ -27,8 +27,15 @@ Requests-Toolbelt
 `Requests-Toolbelt`_ 使一些有用工具的集合，有的用户会觉得它们很有用，但 Requests
 中不适合将它们包进去。Requests 的核心组积极维护着这个库，它反映了社区用户最想要的\
 一些功能。
-
 .. _Requests-Toolbelt: http://toolbelt.readthedocs.io/en/latest/index.html
+
+Requests-Threads
+----------------
+
+`Requests-Threads`_ is a Requests session that returns the amazing Twisted's awaitable Deferreds instead of Response objects. This allows the use of ``async``/``await`` keyword usage on Python 3, or Twisted's style of programming, if desired.
+
+.. _Requests-Threads: https://github.com/requests/requests-threads
+
 
 Requests-OAuthlib
 -----------------

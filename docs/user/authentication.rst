@@ -25,36 +25,34 @@
     <Response [200]>
 
 
-事实上，HTTP Basic Auth 如此常见，Requests 就提供了一种简写的使用方式：
+事实上，HTTP Basic Auth 如此常见，以至于 Requests 就提供了一种简写的使用方式：
 
 ::
 
     >>> requests.get('https://api.github.com/user', auth=('user', 'pass'))
     <Response [200]>
 
-
 像这样在一个元组中提供认证信息与前一个 ``HTTPBasicAuth`` 例子是完全相同的。
 
 
 netrc 认证
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~
 
 如果认证方法没有收到 ``auth`` 参数，Requests 将试图从用户的 netrc
-文件中获取 URL 的 hostname 需要的认证身份。The netrc file overrides raw HTTP authentication headers
-set with `headers=`.
+文件中获取 URL 的 hostname 需要的认证身份。The netrc 文件通过`headers=`改写了原始的 HTTP 身份认证头。
 
 如果找到了 hostname 对应的身份，就会以 HTTP Basic Auth 的形式发送请求。
 
 
-摘要式身份认证
+摘要认证
 ---------------------
 
-另一种非常流行的 HTTP 身份认证形式是摘要式身份认证，Requests 对它的支持也是开箱即可用的：
+另一种非常流行的 HTTP 身份认证形式是摘要认证，Requests 对它的支持也是开箱即可用的：
 
 ::
 
     >>> from requests.auth import HTTPDigestAuth
-    >>> url = 'http://httpbin.org/digest-auth/auth/user/pass'
+    >>> url = 'https://httpbin.org/digest-auth/auth/user/pass'
     >>> requests.get(url, auth=HTTPDigestAuth('user', 'pass'))
     <Response [200]>
 
@@ -62,8 +60,8 @@ set with `headers=`.
 OAuth 1 认证
 ----------------------
 
-Oauth 是一种常见的 Web API 认证方式。 ``requests-oauthlib``
-库可以让 Requests 用户简单地创建 OAuth 认证的请求：
+OAuth 是一种常见的 Web API 认证方式。 ``requests-oauthlib``
+库可以让 Requests 用户简单地创建 OAuth 1 认证的请求：
 
 ::
     >>> import requests
@@ -80,7 +78,7 @@ Oauth 是一种常见的 Web API 认证方式。 ``requests-oauthlib``
 关于 requests-oauthlib 的文档和用例，请参见 GitHub 的 `requests_oauthlib`_ 代码库。
 
 OAuth 2 与 OpenID 连接认证
------------------------------------------
+-------------------------
 
 ``requests-oauthlib`` 库还可以处理 OAuth 2，OAuth 2 是 OpenID 连接的基础机制。
 请查看 `requests-oauthlib OAuth2 documentation`_ 文档以了解 OAuth 2 的各种认证管理流程：
@@ -103,7 +101,7 @@ Requests 的设计允许其他形式的身份认证用简易的方式插入其�
 如果你想使用其中任何一种身份认证形式，直接去它们的 GitHub 页面，依照说明进行。
 
 新的身份认证形式
--------------------
+---------------
 
 如果你找不到所需要的身份认证形式的一个良好实现，你也可以自己实现它。Requests 非常易于添加你\
 自己的身份认证形式。
@@ -118,7 +116,7 @@ Requests 的设计允许其他形式的身份认证用简易的方式插入其�
     ...         # Implement my authentication
     ...         return r
     ...
-    >>> url = 'http://httpbin.org/get'
+    >>> url = 'https://httpbin.org/get'
     >>> requests.get(url, auth=MyAuth())
     <Response [200]>
 
@@ -127,13 +125,13 @@ Requests 的设计允许其他形式的身份认证用简易的方式插入其�
 
 你可以在 `Requests organization`_ 页面的 ``auth.py`` 文件中找到更多示例。
 
-.. _OAuth: http://oauth.net/
+.. _OAuth: https://oauth.net/
 .. _requests_oauthlib: https://github.com/requests/requests-oauthlib
-.. _requests-oauthlib OAuth2 documentation: http://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html
-.. _Web Application Flow: http://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html#web-application-flow
-.. _Mobile Application Flow: http://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html#mobile-application-flow
-.. _Legacy Application Flow:  http://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html#legacy-application-flow
-.. _Backend Application Flow:  http://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html#backend-application-flow
+.. _requests-oauthlib OAuth2 documentation: https://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html
+.. _Web Application Flow: https://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html#web-application-flow
+.. _Mobile Application Flow: https://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html#mobile-application-flow
+.. _Legacy Application Flow: https://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html#legacy-application-flow
+.. _Backend Application Flow: https://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html#backend-application-flow
 .. _Kerberos: https://github.com/requests/requests-kerberos
 .. _NTLM: https://github.com/requests/requests-ntlm
 .. _Requests organization: https://github.com/requests

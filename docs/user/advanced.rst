@@ -20,14 +20,14 @@
 
     s = requests.Session()
 
-    s.get('http://httpbin.org/cookies/set/sessioncookie/123456789')
-    r = s.get("http://httpbin.org/cookies")
+    s.get('https://httpbin.org/cookies/set/sessioncookie/123456789')
+    r = s.get('https://httpbin.org/cookies')
 
     print(r.text)
     # '{"cookies": {"sessioncookie": "123456789"}}'
 
 
-会话也可用来为请求方法提供缺省数据。这是通过为会话对象的属性提供数据来实现的：
+会话也可用来为请求方法提供默认数据。这是通过为会话对象的属性提供数据来实现的：
 
 ::
 
@@ -36,10 +36,10 @@
     s.headers.update({'x-test': 'true'})
 
     # both 'x-test' and 'x-test2' are sent
-    s.get('http://httpbin.org/headers', headers={'x-test2': 'true'})
+    s.get('https://httpbin.org/headers', headers={'x-test2': 'true'})
 
 
-任何你传递给请求方法的字典都会与已设置会话层数据合并。方法层的参数覆盖会话的参数。
+你传递给请求方法的任何字典都会与已设置会话层数据合并。方法层的参数覆盖会话的参数。
 
 不过需要注意，就算使用了会话，方法级别的参数也不会被跨请求保持。下面的例子只会和第一个请求发送 cookie
 ，而非第二个：
